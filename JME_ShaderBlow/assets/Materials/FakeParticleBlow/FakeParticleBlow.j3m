@@ -1,0 +1,14 @@
+Material Fake_Particle_Blow : MatDefs/FakeParticleBlow/FakeParticleBlow.j3md {
+     MaterialParameters {
+        MaskMap : Flip Models/FakeParticleBlow/mask.png
+        AniTexMap : Flip Models/FakeParticleBlow/particles.png
+        BaseColor : 2.0 1.0 0.5 1.0
+        Change_Direction : true
+        Animation_Y : true
+        TimeSpeed : 0.5
+     }
+    AdditionalRenderState {
+      FaceCull Off
+      Blend Additive
+    }
+}
