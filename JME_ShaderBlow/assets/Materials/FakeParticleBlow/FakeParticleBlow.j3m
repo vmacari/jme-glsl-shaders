@@ -10,5 +10,6 @@ Material Fake_Particle_Blow : MatDefs/FakeParticleBlow/FakeParticleBlow.j3md {
     AdditionalRenderState {
       FaceCull Off
       Blend Additive
+      
     }
 }

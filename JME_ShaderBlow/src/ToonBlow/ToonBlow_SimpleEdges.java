@@ -26,20 +26,20 @@ public class ToonBlow_SimpleEdges extends SimpleApplication {
 
          
        Spatial toon = assetManager.loadModel("Models/ToonBlow/toon.obj");
-       Material mat = (Material) assetManager.loadAsset(new AssetKey("Materials/ToonBlow/ToonBlow_SimpleEdges.j3m"));
+       Material mat = assetManager.loadMaterial("Materials/ToonBlow/ToonBlow_SimpleEdges.j3m");
        toon.setMaterial(mat);
        TangentBinormalGenerator.generate(toon);
        rootNode.attachChild(toon);
        
        Spatial toon2 = assetManager.loadModel("Models/ToonBlow/toon.obj");
-       Material mat2 = (Material) assetManager.loadAsset(new AssetKey("Materials/ToonBlow/ToonBlow_Base_Specular.j3m"));
+       Material mat2 = assetManager.loadMaterial("Materials/ToonBlow/ToonBlow_Base_Specular.j3m");
        toon2.setMaterial(mat2);
        TangentBinormalGenerator.generate(toon2);
        toon2.setLocalTranslation(-2f, 0, 0);
        rootNode.attachChild(toon2);
 
        Spatial toon3 = assetManager.loadModel("Models/ToonBlow/toon.obj");
-       Material mat3 = (Material) assetManager.loadAsset(new AssetKey("Materials/ToonBlow/ToonBlow_Base.j3m"));
+       Material mat3 = assetManager.loadMaterial("Materials/ToonBlow/ToonBlow_Base.j3m");
        toon3.setMaterial(mat3);
        TangentBinormalGenerator.generate(toon3);
        toon3.setLocalTranslation(-4f, 0, 0);

@@ -45,25 +45,29 @@ public class LightBlow_Lighting_System extends SimpleApplication {
          
          
     Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
-    char_boy.setMaterial( (Material) assetManager.loadAsset(new AssetKey("Materials/LightBlow/Lighting_System/LightBlow_Base.j3m")));
+    Material mat = assetManager.loadMaterial("Materials/LightBlow/Lighting_System/LightBlow_Base.j3m");
+    char_boy.setMaterial(mat);
     TangentBinormalGenerator.generate(char_boy);
     rootNode.attachChild(char_boy);
 
     Spatial char_boy2 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
-    char_boy2.setMaterial( (Material) assetManager.loadAsset(new AssetKey("Materials/LightBlow/Lighting_System/LightBlow_HemiLighting_1.j3m")));
+    Material mat2 = assetManager.loadMaterial("Materials/LightBlow/Lighting_System/LightBlow_HemiLighting_1.j3m");
+    char_boy2.setMaterial(mat2);
     char_boy2.setLocalTranslation(-2f, 0, 0);
     TangentBinormalGenerator.generate(char_boy2);
     rootNode.attachChild(char_boy2);
     
     
     Spatial char_boy3 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
-    char_boy3.setMaterial( (Material) assetManager.loadAsset(new AssetKey("Materials/LightBlow/Lighting_System/LightBlow_HemiLighting_2.j3m")));  
+    Material mat3 = assetManager.loadMaterial("Materials/LightBlow/Lighting_System/LightBlow_HemiLighting_2.j3m");
+    char_boy3.setMaterial(mat3);
     char_boy3.setLocalTranslation(-4f, 0, 0);
     TangentBinormalGenerator.generate(char_boy3);
     rootNode.attachChild(char_boy3);
     
     Spatial char_boy4 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
-    char_boy4.setMaterial( (Material) assetManager.loadAsset(new AssetKey("Materials/LightBlow/Lighting_System/LightBlow_Base_Specular.j3m")));  
+    Material mat4 = assetManager.loadMaterial("Materials/LightBlow/Lighting_System/LightBlow_Base_Specular.j3m");
+    char_boy4.setMaterial(mat4);
     char_boy4.setLocalTranslation(-6f, 0, 0);
     TangentBinormalGenerator.generate(char_boy4);
     rootNode.attachChild(char_boy4);

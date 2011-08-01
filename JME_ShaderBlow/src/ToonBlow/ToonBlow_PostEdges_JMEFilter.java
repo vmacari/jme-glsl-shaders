@@ -45,7 +45,7 @@ public class ToonBlow_PostEdges_JMEFilter extends SimpleApplication {
 
          
        toon = assetManager.loadModel("Models/ToonBlow/toon.obj");
-       Material mat = (Material) assetManager.loadAsset(new AssetKey("Materials/ToonBlow/ToonBlow_PostEdges_JMEFilter.j3m"));
+       Material mat = assetManager.loadMaterial("Materials/ToonBlow/ToonBlow_PostEdges.j3m");
        toon.setMaterial(mat);
        TangentBinormalGenerator.generate(toon);
        rootNode.attachChild(toon);

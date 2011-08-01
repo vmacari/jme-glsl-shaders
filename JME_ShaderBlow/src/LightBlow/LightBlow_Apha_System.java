@@ -2,7 +2,6 @@
 package LightBlow;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
@@ -45,25 +44,29 @@ public class LightBlow_Apha_System extends SimpleApplication {
          
          
     Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
-    char_boy.setMaterial( (Material) assetManager.loadAsset(new AssetKey("Materials/LightBlow/Alpha_System/LightBlow_AlphaDiffuseMap.j3m")));
+    Material mat = assetManager.loadMaterial("Materials/LightBlow/Alpha_System/LightBlow_AlphaDiffuseMap.j3m");
+    char_boy.setMaterial(mat);
     TangentBinormalGenerator.generate(char_boy);
     rootNode.attachChild(char_boy);
 
     Spatial char_boy2 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
-    char_boy2.setMaterial( (Material) assetManager.loadAsset(new AssetKey("Materials/LightBlow/Alpha_System/LightBlow_AlphaDiffuseMap_Threshould.j3m")));
+    Material mat2 = assetManager.loadMaterial("Materials/LightBlow/Alpha_System/LightBlow_AlphaDiffuseMap_Threshould.j3m");
+    char_boy2.setMaterial(mat2);
     char_boy2.setLocalTranslation(-2f, 0, 0);
     TangentBinormalGenerator.generate(char_boy2);
     rootNode.attachChild(char_boy2);
     
     
     Spatial char_boy3 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
-    char_boy3.setMaterial( (Material) assetManager.loadAsset(new AssetKey("Materials/LightBlow/Alpha_System/LightBlow_AlphaNormalMap.j3m")));  
+    Material mat3 = assetManager.loadMaterial("Materials/LightBlow/Alpha_System/LightBlow_AlphaNormalMap.j3m");
+    char_boy3.setMaterial(mat3);
     char_boy3.setLocalTranslation(-4f, 0, 0);
     TangentBinormalGenerator.generate(char_boy3);
     rootNode.attachChild(char_boy3);
     
     Spatial char_boy4 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
-    char_boy4.setMaterial( (Material) assetManager.loadAsset(new AssetKey("Materials/LightBlow/Alpha_System/LightBlow_AlphaNormalMap_Threshould.j3m")));  
+    Material mat4 = assetManager.loadMaterial("Materials/LightBlow/Alpha_System/LightBlow_AlphaNormalMap_Threshould.j3m");
+    char_boy4.setMaterial(mat4);
     char_boy4.setLocalTranslation(-6f, 0, 0);
     TangentBinormalGenerator.generate(char_boy4);
     rootNode.attachChild(char_boy4);
