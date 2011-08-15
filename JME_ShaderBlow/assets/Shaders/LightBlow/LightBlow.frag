@@ -178,7 +178,7 @@ void main(){
   vec2 newTexCoord;
 
  
-    #if defined(PARALLAXMAP) || defined(PARALLAX_A_NOR)
+    #if defined(PARALLAXMAP) || defined(PARALLAX_A_NOR) && !defined(VERTEX_LIGHTING)
        float h;
        #if defined (PARALLAXMAP)
           h = texture2D(m_ParallaxMap, texCoord).r;
@@ -189,7 +189,7 @@ void main(){
        float heightBias = heightScale * -0.5;
        vec3 normView = normalize(vViewDir);
        h = (h * heightScale + heightBias) * normView.z;
-       newTexCoord = texCoord + (h * -normView.xy);
+       newTexCoord = texCoord + (h * normView.xy);
     #else
        newTexCoord = texCoord;
     #endif
@@ -369,11 +369,14 @@ light.x = max(light.x, refGet* refTex * 0.5);
 #endif
 
     #ifdef HAS_LIGHTMAP
-        #ifdef SEPERATE_TEXCOORD
-            diffuseColor.rgb *= texture2D(m_LightMap, texCoord2).rgb * m_LightMapIntensity;
+     vec3 lightMapColor;
+   #ifdef SEPERATE_TEXCOORD
+            lightMapColor = texture2D(m_LightMap, texCoord2).rgb * m_LightMapIntensity;
         #else
-            diffuseColor.rgb *= texture2D(m_LightMap, texCoord1).rgb * m_LightMapIntensity;
+            lightMapColor = texture2D(m_LightMap, texCoord1).rgb * m_LightMapIntensity;
         #endif
+specularColor.rgb *= lightMapColor;
+diffuseColor.rgb  *= lightMapColor;
     #endif
 
 
