@@ -46,7 +46,8 @@ public class FakeParticleBlow1 extends SimpleApplication {
 
        Material mat = assetManager.loadMaterial("Materials/FakeParticleBlow/FakeParticleBlow.j3m");
        fire.setMaterial(mat);
-        
+       
+       
     fire.setQueueBucket(Bucket.Transparent); 
 
 

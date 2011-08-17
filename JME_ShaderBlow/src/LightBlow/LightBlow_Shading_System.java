@@ -2,7 +2,6 @@
 package LightBlow;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
