@@ -65,23 +65,7 @@ attribute vec3 inNormal;
 
 
 
-#if defined (REFLECTION) || defined (IBL)
-//Reflection vectors calculation
-void computeRef(){
 
-vec3 worldPos = (g_WorldMatrix * pos).xyz;
-
-       vec3 I = normalize( g_CameraPosition -  worldPos  ).xyz;
-       vec3 N = normalize( (g_WorldMatrix * vec4(inNormal, 0.0)).xyz );      
-
-        refVec.xyz = reflect(I, N);
-  
-
-        iblVec.xyz = refVec.xyz;
-        
-         m_FresnelParams.z);
-   }
-    #endif 
 
 
 
@@ -135,6 +119,10 @@ float specularFactor = lightComputeSpecular(wvNorm, wvViewDir, lightDir.xyz, m_S
 
 }
 #endif
+
+
+ 
+
 
 
 void main(){
@@ -194,13 +182,13 @@ vec4  temp;
 
 
    #ifdef MATERIAL_COLORS
-      AmbientSum  = m_Ambient  * g_AmbientLightColor;
+      AmbientSum  = m_Ambient.rgb  * g_AmbientLightColor.rgb;
       DiffuseSum  = m_Diffuse  * lightColor;
-      SpecularSum = m_Specular * lightColor;
+      SpecularSum = m_Specular.rgb * lightColor.rgb;
     #else
       AmbientSum  = vec3(0.2, 0.2, 0.2) * g_AmbientLightColor.rgb; // Default: ambient color is dark gray
       DiffuseSum  = lightColor;
-      SpecularSum = m_Specular * lightColor;
+      SpecularSum = m_Specular.rgb * lightColor.rgb;
     #endif
 
 
@@ -219,10 +207,21 @@ vec4  temp;
 
 
 
-    #if defined (REFLECTION) || defined (IBL)
+#if defined (REFLECTION) || defined (IBL)
 //Reflection vectors calculation
 
-computeRef();
 
-    #endif 
+vec3 worldPos = (g_WorldMatrix * pos).xyz;
+
+       vec3 I = normalize( g_CameraPosition -  worldPos  ).xyz;
+       vec3 N = normalize( (g_WorldMatrix * vec4(inNormal, 0.0)).xyz );      
+
+        refVec.xyz = reflect(I, N);
+  
+
+        iblVec.xyz = refVec.xyz;
+        
+        
+
+    #endif
 }
