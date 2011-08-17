@@ -4,9 +4,9 @@
 
 varying vec2 texCoord;
 
-varying vec4 AmbientSum;
+varying vec3 AmbientSum;
 varying vec4 DiffuseSum;
-varying vec4 SpecularSum;
+varying vec3 SpecularSum;
 
 
 #ifdef HAS_LIGHTMAP
@@ -261,7 +261,7 @@ void main(){
 
 
     #ifdef VERTEX_LIGHTING
-       vec2 light = vec2(AmbientSum.a, SpecularSum.a);
+      // vec2 light = vec2(AmbientSum.a, SpecularSum.a);
        #ifdef COLORRAMP
            light.x = texture2D(m_ColorRamp, vec2(light.x, 0.0)).r;
            light.y = texture2D(m_ColorRamp, vec2(light.y, 0.0)).r;
@@ -292,7 +292,7 @@ void main(){
 
 
        // Workaround, since it is not possible to modify varying variables
-       vec4 SpecularSum2 = SpecularSum;
+       vec4 SpecularSum2 = vec4(SpecularSum, 1.0);
 
 
 
@@ -307,7 +307,7 @@ void main(){
            #endif
         
         //Albedo 
-        AmbientSum +=  iblLight * m_iblIntensity;
+        AmbientSum.rgb +=  iblLight.rgb * m_iblIntensity;
         
 
         #endif
@@ -342,9 +342,9 @@ light.x = light.x + 1.1 * emissiveTex;
     diffuseColor += refColor * refTex;
     #elif defined(REF_A_DIF) && !defined(REF_A_NOR) && defined(DIFFUSEMAP)
     refTex = texture2D(m_DiffuseMap, texCoord).a * m_RefIntensity;
-    diffuseColor += refColor * refTex;
+    diffuseColor.rgb += refColor.rgb * refTex;
     #else
-    diffuseColor += refColor;
+    diffuseColor.rgb += refColor.rgb;
     #endif
 
 light.x = max(light.x, refGet* refTex * 0.5);
@@ -354,7 +354,7 @@ light.x = max(light.x, refGet* refTex * 0.5);
 // if (length(g_AmbientLightColor.xyz) != 0.0) { // 1st pass only
         vec4 minnaert = pow( 1.0 - dot( normal, vViewDir.xyz ), 2.0 ) * m_Minnaert * m_Minnaert.w;
         minnaert.a = 0.0;
-       diffuseColor += minnaert*diffuseColor;
+       diffuseColor.rgb += minnaert.rgb*diffuseColor.rgb;
     //   light.x += minnaert*0.1;
 // }
 #endif
@@ -363,7 +363,7 @@ light.x = max(light.x, refGet* refTex * 0.5);
 // if (length(g_AmbientLightColor.xyz) != 0.0) { // 1st pass only
         vec4 rim = pow( 1.0 - dot( normal, vViewDir.xyz ), 1.5 ) * m_RimLighting * m_RimLighting.w;
         rim.a = 0.0;
-       AmbientSum += rim*diffuseColor;
+       AmbientSum.rgb += rim.rgb*diffuseColor.rgb;
     //   light.x += rim*0.1;
 // }
 #endif
@@ -381,14 +381,14 @@ diffuseColor.rgb  *= lightMapColor;
 
 
         #if defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING)
-       gl_FragColor =  AmbientSum * diffuseColor +
-                       DiffuseSum * diffuseColor  * light.x +
-                       SpecularSum2 * specularColor * light.y;       
+       gl_FragColor.rgb =  AmbientSum * diffuseColor.rgb +
+                       DiffuseSum.rgb * diffuseColor.rgb  * light.x +
+                       SpecularSum2 * specularColor.rgb * light.y;       
         #endif
 
 #if !defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING)
-                        gl_FragColor = AmbientSum * diffuseColor +
-                                       DiffuseSum * diffuseColor  * light.x;
+                        gl_FragColor.rgb = AmbientSum * diffuseColor.rgb +
+                                       DiffuseSum.rgb * diffuseColor.rgb  * light.x;
     #endif
 
 
@@ -397,7 +397,7 @@ diffuseColor.rgb  *= lightMapColor;
 // if (length(g_AmbientLightColor.xyz) != 0.0) { // 1st pass only
         vec4 rim2 = pow( 1.0 - dot( normal, vViewDir.xyz ), 1.5 ) * m_RimLighting2 * m_RimLighting2.w;
         rim2.a = 0.0;
-       gl_FragColor += rim2*diffuseColor;
+       gl_FragColor.rgb += rim2.rgb*diffuseColor.rgb;
     //   light.x += rim2*0.1;
 // }
 #endif
