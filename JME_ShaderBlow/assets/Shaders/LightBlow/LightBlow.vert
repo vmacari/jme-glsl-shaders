@@ -26,9 +26,9 @@ uniform vec4 g_AmbientLightColor;
 
 varying vec2 texCoord;
 
-varying vec4 AmbientSum;
+varying vec3 AmbientSum;
 varying vec4 DiffuseSum;
-varying vec4 SpecularSum;
+varying vec3 SpecularSum;
 
 attribute vec3 inPosition;
 attribute vec2 inTexCoord;
@@ -61,6 +61,27 @@ attribute vec3 inNormal;
     varying vec4 refVec;
     varying vec4 iblVec;
 #endif 
+
+
+
+
+#if defined (REFLECTION) || defined (IBL)
+//Reflection vectors calculation
+void computeRef(){
+
+vec3 worldPos = (g_WorldMatrix * pos).xyz;
+
+       vec3 I = normalize( g_CameraPosition -  worldPos  ).xyz;
+       vec3 N = normalize( (g_WorldMatrix * vec4(inNormal, 0.0)).xyz );      
+
+        refVec.xyz = reflect(I, N);
+  
+
+        iblVec.xyz = refVec.xyz;
+        
+         m_FresnelParams.z);
+   }
+    #endif 
 
 
 
@@ -115,6 +136,7 @@ float specularFactor = lightComputeSpecular(wvNorm, wvViewDir, lightDir.xyz, m_S
 }
 #endif
 
+
 void main(){
 
 #ifdef SEPERATE_TEXCOORD
@@ -136,7 +158,7 @@ vec4  temp;
        //vec4 wvLightPos = (g_ViewMatrix * vec4(lightPos.xyz, lightColor.w));
        //wvLightPos.w = lightPos.w;
 
-   vec4 wvLightPos = (g_ViewMatrix * vec4(g_LightPosition.xyz, g_LightColor.w));
+   vec4 wvLightPos = (g_ViewMatrix * vec4(g_LightPosition.xyz,clamp(g_LightColor.w,0.0,1.0)));
    wvLightPos.w = g_LightPosition.w;
    vec4 lightColor = g_LightColor;
 
@@ -146,7 +168,7 @@ vec4  temp;
 
 
      mat3 tbnMat = mat3(wvTangent, wvBinormal * -inTangent.w,wvNormal);
-     mat3 tbnMat2 = mat3(wvTangent, wvBinormal * -inTangent, wvNormal);
+
      
      mat = vec3(1.0) * tbnMat;
      mat = normalize(mat);
@@ -172,18 +194,18 @@ vec4  temp;
 
 
    #ifdef MATERIAL_COLORS
-   //   AmbientSum  = m_Ambient  * g_AmbientLightColor;
+      AmbientSum  = m_Ambient  * g_AmbientLightColor;
       DiffuseSum  = m_Diffuse  * lightColor;
       SpecularSum = m_Specular * lightColor;
     #else
-      AmbientSum  = vec4(0.2, 0.2, 0.2, 1.0) * g_AmbientLightColor; // Default: ambient color is dark gray
+      AmbientSum  = vec3(0.2, 0.2, 0.2) * g_AmbientLightColor.rgb; // Default: ambient color is dark gray
       DiffuseSum  = lightColor;
       SpecularSum = m_Specular * lightColor;
     #endif
 
 
     #ifdef VERTEX_COLOR
-      AmbientSum *= inColor;
+      AmbientSum *= inColor.rgb;
       DiffuseSum *= inColor;
     #endif
 
@@ -200,17 +222,7 @@ vec4  temp;
     #if defined (REFLECTION) || defined (IBL)
 //Reflection vectors calculation
 
-vec3 worldPos = (g_WorldMatrix * pos).xyz;
+computeRef();
 
-       vec3 I = normalize( g_CameraPosition -  worldPos  ).xyz;
-       vec3 N = normalize( (g_WorldMatrix * vec4(inNormal, 0.0)).xyz );      
-
-        refVec.xyz = reflect(I, N);
-     //   refVec.xyz = normalize(refVec.xyz);
-
-        iblVec.xyz = refVec.xyz;
-        
-        //refVec.w   = m_FresnelParams.x + m_FresnelParams.y * pow(1.0 + dot(I, N), m_FresnelParams.z);
-   
     #endif 
 }
