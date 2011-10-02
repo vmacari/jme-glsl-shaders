@@ -37,13 +37,8 @@ public class LightBlow_GlowBlow extends SimpleApplication {
         skyhi.setAsCube(true);
       final  Texture texhi = assetManager.loadTexture(skyhi);
 
-      
-//      TextureKey skylow = new TextureKey("Textures/Water32.dds", true);
-//        skylow.setGenerateMips(true);
-//        skylow.setAsCube(true);
       final  Texture texlow = assetManager.loadTexture(skyhi);
          rootNode.attachChild(SkyFactory.createSky(assetManager, texlow, false));
-
          
          
     Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
@@ -108,18 +103,10 @@ public class LightBlow_GlowBlow extends SimpleApplication {
         bloom.setExposurePower(2.9f);
         bloom.setExposureCutOff(0.1f);
         bloom.setBloomIntensity(2.3f);
- //       BloomUI ui=new BloomUI(inputManager, bloom);        
-
-        
+ 
         fpp.addFilter(bloom);
         viewPort.addProcessor(fpp);
-        
- //       initInputs();
-        
-
-        
-        
-        
+         
   }
   
 
