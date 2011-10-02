@@ -24,36 +24,36 @@ public class ToonBlow_SimpleEdges extends SimpleApplication {
   public void simpleInitApp() {
 
          
-//       Spatial toon = assetManager.loadModel("Models/ToonBlow/toon.obj");
-//       Material mat = assetManager.loadMaterial("Materials/ToonBlow/ToonBlow_SimpleEdges.j3m");
-//       toon.setMaterial(mat);
-//       TangentBinormalGenerator.generate(toon);
-//       rootNode.attachChild(toon);
-//       
-//       Spatial toon2 = assetManager.loadModel("Models/ToonBlow/toon.obj");
-//       Material mat2 = assetManager.loadMaterial("Materials/ToonBlow/ToonBlow_Base_Specular.j3m");
-//       toon2.setMaterial(mat2);
-//       TangentBinormalGenerator.generate(toon2);
-//       toon2.setLocalTranslation(-2f, 0, 0);
-//       rootNode.attachChild(toon2);
-//
-//       Spatial toon3 = assetManager.loadModel("Models/ToonBlow/toon.obj");
-//       Material mat3 = assetManager.loadMaterial("Materials/ToonBlow/ToonBlow_Base.j3m");
-//       toon3.setMaterial(mat3);
-//       TangentBinormalGenerator.generate(toon3);
-//       toon3.setLocalTranslation(-4f, 0, 0);
-//       rootNode.attachChild(toon3);       
-//
-//   
-//        DirectionalLight dl = new DirectionalLight();
-//        dl.setDirection(new Vector3f(-0.8f, -0.6f, -0.08f).normalizeLocal());
-//        dl.setColor(new ColorRGBA(1,1,1,1));
-//        rootNode.addLight(dl);
+       Spatial toon = assetManager.loadModel("Models/ToonBlow/toon.obj");
+       Material mat = assetManager.loadMaterial("Materials/ToonBlow/ToonBlow_SimpleEdges.j3m");
+       toon.setMaterial(mat);
+       TangentBinormalGenerator.generate(toon);
+       rootNode.attachChild(toon);
+       
+       Spatial toon2 = assetManager.loadModel("Models/ToonBlow/toon.obj");
+       Material mat2 = assetManager.loadMaterial("Materials/ToonBlow/ToonBlow_Base_Specular.j3m");
+       toon2.setMaterial(mat2);
+       TangentBinormalGenerator.generate(toon2);
+       toon2.setLocalTranslation(-2f, 0, 0);
+       rootNode.attachChild(toon2);
+
+       Spatial toon3 = assetManager.loadModel("Models/ToonBlow/toon.obj");
+       Material mat3 = assetManager.loadMaterial("Materials/ToonBlow/ToonBlow_Base.j3m");
+       toon3.setMaterial(mat3);
+       TangentBinormalGenerator.generate(toon3);
+       toon3.setLocalTranslation(-4f, 0, 0);
+       rootNode.attachChild(toon3);       
+
+   
+        DirectionalLight dl = new DirectionalLight();
+        dl.setDirection(new Vector3f(-0.8f, -0.6f, -0.08f).normalizeLocal());
+        dl.setColor(new ColorRGBA(1,1,1,1));
+        rootNode.addLight(dl);
  
   
 
-//        flyCam.setMoveSpeed(5);   
-//        viewPort.setBackgroundColor(ColorRGBA.Gray);        
+        flyCam.setMoveSpeed(5);   
+        viewPort.setBackgroundColor(ColorRGBA.Gray);        
 
         
 
