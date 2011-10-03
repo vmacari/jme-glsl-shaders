@@ -92,7 +92,7 @@ public class Dissolve extends SimpleApplication {
         Geometry geom = new Geometry("Box", b);
         geom.setLocalTranslation(new Vector3f(xPos,yPos,0));
 
-        Material mat = new Material(assetManager, "Materials/Dissolve/Lighting.j3md");
+        Material mat = new Material(assetManager, "MatDefs/Dissolve/Lighting.j3md");
         mat.setColor("Ambient",  ColorRGBA.Blue);
         mat.setColor("Diffuse",  ColorRGBA.White);
         mat.setColor("Specular", ColorRGBA.Black);
