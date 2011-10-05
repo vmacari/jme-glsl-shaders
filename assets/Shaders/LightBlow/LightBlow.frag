@@ -255,9 +255,9 @@ void main(){
      float alpha = DiffuseSum.a;
 
     #if defined (ALPHA_A_DIF) && defined (DIFFUSEMAP)
-       alpha = DiffuseSum.a * diffuseColor.a;
+       alpha *=  diffuseColor.a;
     #elif defined (ALPHA_A_NOR) && defined (NORMALMAP)
-       alpha = DiffuseSum.a * normalHeight.a;   
+       alpha *= normalHeight.a;   
     #endif
     if(alpha < m_AlphaDiscardThreshold){
         discard;
