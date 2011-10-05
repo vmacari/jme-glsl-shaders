@@ -1,8 +1,12 @@
+#import "Common/ShaderLib/Parallax.glsllib"
 #import "Common/ShaderLib/Optics.glsllib"
 #define ATTENUATION
 //#define HQ_ATTENUATION
 
 varying vec2 texCoord;
+    #ifdef SEPERATE_TEXCOORD
+        varying vec2 texCoord2;
+    #endif
 
 varying vec3 AmbientSum;
 varying vec4 DiffuseSum;
@@ -12,17 +16,18 @@ varying vec3 SpecularSum;
 #ifdef HAS_LIGHTMAP
     uniform float m_LightMapIntensity;
     uniform sampler2D m_LightMap;
-    #ifdef SEPERATE_TEXCOORD
-        varying vec2 texCoord2;
-    #endif
 #endif
 
 
 #ifndef VERTEX_LIGHTING
+  uniform vec4 g_LightDirection;
   varying vec3 vPosition;
   varying vec3 vViewDir;
   varying vec4 vLightDir;
   varying vec3 mat;
+  varying vec3 lightVec;
+#else
+  varying vec2 vertexLightValues;
 #endif
 
 #ifdef DIFFUSEMAP
@@ -63,7 +68,6 @@ uniform float m_SpecIntensity;
 
 #ifdef HQ_ATTENUATION
 uniform vec4 g_LightPosition;
-varying vec3 lightVec;
 #endif
 
 #if defined RIM_LIGHTING || RIM_LIGHTING_2
@@ -117,8 +121,10 @@ float lightComputeDiffuse(in vec3 norm, in vec3 lightdir, in vec3 viewdir){
 }
 
 
-#if defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING)
+#if defined(SPECULAR_LIGHTING)
 float lightComputeSpecular(in vec3 norm, in vec3 viewdir, in vec3 lightdir, in float shiny){
+    // NOTE: check for shiny <= 1 removed since shininess is now 
+    // 1.0 by default (uses matdefs default vals)
     #ifdef LOW_QUALITY
        // Blinn-Phong
        // Note: preferably, H should be computed in the vertex shader
@@ -147,6 +153,14 @@ float lightComputeSpecular(in vec3 norm, in vec3 viewdir, in vec3 lightdir, in f
 vec2 computeLighting(in vec3 wvPos, in vec3 wvNorm, in vec3 wvViewDir, in vec3 wvLightDir){
    
 float diffuseFactor = lightComputeDiffuse(wvNorm, wvLightDir, wvViewDir);
+float specularFactor;
+    
+    #ifdef SPECULAR_LIGHTING
+    specularFactor = lightComputeSpecular(wvNorm, wvViewDir, wvLightDir, m_Shininess);
+    specularFactor =  (specularFactor * step(1.0, m_Shininess)) * m_SpecIntensity;
+     #else
+   specularFactor = 0.0;
+     #endif
 
    #ifdef HQ_ATTENUATION
     float att = clamp(1.0 - g_LightPosition.w * length(lightVec), 0.0, 1.0);
@@ -155,18 +169,8 @@ float diffuseFactor = lightComputeDiffuse(wvNorm, wvLightDir, wvViewDir);
    #else
     float att = vLightDir.w;
    #endif
-    
-    #if defined(SPECULAR_LIGHTING)
-    float specularFactor = lightComputeSpecular(wvNorm, wvViewDir, wvLightDir, m_Shininess);
-    specularFactor =  (specularFactor * step(1.0, m_Shininess)) * m_SpecIntensity;
- 
-    return vec2(diffuseFactor, specularFactor) * vec2(att);
-    #endif
 
-     #if !defined(SPECULAR_LIGHTING)
-   return vec2(diffuseFactor, 0.0) * vec2(att);
-    #endif
-
+return vec2(diffuseFactor, specularFactor) * vec2(att);
 }
 #endif
 
@@ -177,7 +181,9 @@ void main(){
     
   vec2 newTexCoord;
 
- 
+
+
+
     #if defined(PARALLAXMAP) || defined(PARALLAX_A_NOR) && !defined(VERTEX_LIGHTING)
        float h;
        #if defined (PARALLAXMAP)
@@ -194,18 +200,12 @@ void main(){
        newTexCoord = texCoord;
     #endif
 
-
     
    #ifdef DIFFUSEMAP
       vec4 diffuseColor = texture2D(m_DiffuseMap, newTexCoord);
     #else
       vec4 diffuseColor = vec4(0.6, 0.6, 0.6, 1.0);
     #endif
-
-
-
-
-
 
     #if defined(NORMALMAP) && !defined(VERTEX_LIGHTING)
       vec4 normalHeight = texture2D(m_NormalMap, newTexCoord);
@@ -228,8 +228,12 @@ void main(){
  
           #elif !defined(VERTEX_LIGHTING)
       vec3 normal = vNormal;
+ 
+#if !defined(LOW_QUALITY) && !defined(V_TANGENT)
+         normal = normalize(normal);
+      #endif
     #endif
-
+ 
 
 
     #ifdef SPECULARMAP 
@@ -247,6 +251,7 @@ void main(){
     #endif
 
 
+
      float alpha = DiffuseSum.a;
 
     #if defined (ALPHA_A_DIF) && defined (DIFFUSEMAP)
@@ -259,42 +264,72 @@ void main(){
     }
 
 
+     #ifndef VERTEX_LIGHTING
+        float spotFallOff = 1.0;
+
+        #if __VERSION__ >= 110
+          // allow use of control flow
+          if(g_LightDirection.w != 0.0){
+        #endif
+
+          vec3 L       = normalize(lightVec.xyz);
+          vec3 spotdir = normalize(g_LightDirection.xyz);
+          float curAngleCos = dot(-L, spotdir);             
+          float innerAngleCos = floor(g_LightDirection.w) * 0.001;
+          float outerAngleCos = fract(g_LightDirection.w);
+          float innerMinusOuter = innerAngleCos - outerAngleCos;
+          spotFallOff = (curAngleCos - outerAngleCos) / innerMinusOuter;
+
+          #if __VERSION__ >= 110
+              if(spotFallOff <= 0.0){
+                  gl_FragColor.rgb = AmbientSum * diffuseColor.rgb;
+                  gl_FragColor.a   = alpha;
+                  return;
+              }else{
+                  spotFallOff = clamp(spotFallOff, 0.0, 1.0);
+              }
+             }
+          #else
+             spotFallOff = clamp(spotFallOff, step(g_LightDirection.w, 0.001), 1.0);
+          #endif
+     #endif
+
+
 
     #ifdef VERTEX_LIGHTING
-      // vec2 light = vec2(AmbientSum.a, SpecularSum.a);
+      vec2 light = vertexLightValues.xy;
        #ifdef COLORRAMP
            light.x = texture2D(m_ColorRamp, vec2(light.x, 0.0)).r;
            light.y = texture2D(m_ColorRamp, vec2(light.y, 0.0)).r;
        #endif
 
      #if defined(SPECULAR_LIGHTING) && defined(VERTEX_LIGHTING)
-       gl_FragColor =  AmbientSum * diffuseColor + 
-                       DiffuseSum * diffuseColor  * light.x +
-                       SpecularSum * specularColor * light.y;       
+       gl_FragColor.rgb =  AmbientSum     * diffuseColor.rgb + 
+                           DiffuseSum.rgb * diffuseColor.rgb  * vec3(light.x) +
+                           SpecularSum.rgb    * specularColor.rgb * vec3(light.y);
         #endif
 
 
     #if !defined(SPECULAR_LIGHTING) && defined(VERTEX_LIGHTING)
-                        gl_FragColor = AmbientSum * diffuseColor + 
-                                       DiffuseSum * diffuseColor  * light.x;
+                        gl_FragColor.rgb = AmbientSum * diffuseColor.rgb + 
+                                       DiffuseSum.rgb * diffuseColor.rgb  * vec3(light.x);
         #endif
+
     #else
        vec4 lightDir = vLightDir;
        lightDir.xyz = normalize(lightDir.xyz);
 
-       vec2 light = computeLighting(vPosition, normal, vViewDir.xyz, lightDir.xyz);
+       vec2   light = computeLighting(vPosition, normal, vViewDir.xyz, lightDir.xyz) * spotFallOff;
 
        #ifdef COLORRAMP
-           diffuseColor.rgb  *= texture2D(m_ColorRamp, vec2(light.x, 0.0)).rgb;
-           specularColor.rgb *= texture2D(m_ColorRamp, vec2(light.y, 0.0)).rgb;
+           light.x = texture2D(m_ColorRamp, vec2(light.x, 0.0)).r;
+           light.y = texture2D(m_ColorRamp, vec2(light.y, 0.0)).r;
        #endif
 
 
 
        // Workaround, since it is not possible to modify varying variables
        vec4 SpecularSum2 = vec4(SpecularSum, 1.0);
-
-
 
 
 
@@ -317,7 +352,7 @@ void main(){
         //Illumination based on diffuse map alpha chanel.
 	float emissiveTex = texture2D(m_DiffuseMap, texCoord).a;
 	
-	//diffuseColor = max(diffuseColor, emissiveSum); 
+	//diffuseColor.rgb = max(diffuseColor, emissiveSum); 
 	
 light.x = light.x + 1.1 * emissiveTex;
 //light.x = max(light.x,  emissiveTex);
@@ -335,11 +370,11 @@ light.x = light.x + 1.1 * emissiveTex;
     #endif
 
     vec4 refColor = refGet * m_RefPower;
-    float refTex = 1.0;
+    float refTex;
 
     #if defined(REF_A_NOR) && defined(NORMALMAP)
     refTex = texture2D(m_NormalMap, texCoord).a * m_RefIntensity;
-    diffuseColor += refColor * refTex;
+    diffuseColor.rgb += refColor * refTex;
     #elif defined(REF_A_DIF) && !defined(REF_A_NOR) && defined(DIFFUSEMAP)
     refTex = texture2D(m_DiffuseMap, texCoord).a * m_RefIntensity;
     diffuseColor.rgb += refColor.rgb * refTex;
@@ -350,10 +385,11 @@ light.x = light.x + 1.1 * emissiveTex;
 light.x = max(light.x, refGet* refTex * 0.5);
  #endif
 
+
 #ifdef MINNAERT
 // if (length(g_AmbientLightColor.xyz) != 0.0) { // 1st pass only
-        vec4 minnaert = pow( 1.0 - dot( normal, vViewDir.xyz ), 2.0 ) * m_Minnaert * m_Minnaert.w;
-        minnaert.a = 0.0;
+        vec3 minnaert = pow( 1.0 - dot( normal.xyz, vViewDir.xyz ), 2.0 ) * m_Minnaert.xyz * m_Minnaert.w;
+      //  minnaert.a = 0.0;
        diffuseColor.rgb += minnaert.rgb*diffuseColor.rgb;
     //   light.x += minnaert*0.1;
 // }
@@ -363,7 +399,7 @@ light.x = max(light.x, refGet* refTex * 0.5);
 // if (length(g_AmbientLightColor.xyz) != 0.0) { // 1st pass only
         vec4 rim = pow( 1.0 - dot( normal, vViewDir.xyz ), 1.5 ) * m_RimLighting * m_RimLighting.w;
         rim.a = 0.0;
-       AmbientSum.rgb += rim.rgb*diffuseColor.rgb;
+       AmbientSum += rim.rgb*diffuseColor.rgb;
     //   light.x += rim*0.1;
 // }
 #endif
@@ -373,7 +409,7 @@ light.x = max(light.x, refGet* refTex * 0.5);
    #ifdef SEPERATE_TEXCOORD
             lightMapColor = texture2D(m_LightMap, texCoord2).rgb * m_LightMapIntensity;
         #else
-            lightMapColor = texture2D(m_LightMap, texCoord1).rgb * m_LightMapIntensity;
+            lightMapColor = texture2D(m_LightMap, texCoord).rgb * m_LightMapIntensity;
         #endif
 specularColor.rgb *= lightMapColor;
 diffuseColor.rgb  *= lightMapColor;
@@ -382,21 +418,21 @@ diffuseColor.rgb  *= lightMapColor;
 
         #if defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING)
        gl_FragColor.rgb =  AmbientSum * diffuseColor.rgb +
-                       DiffuseSum.rgb * diffuseColor.rgb  * light.x +
-                       SpecularSum2 * specularColor.rgb * light.y;       
+                       DiffuseSum.rgb * diffuseColor.rgb  * vec3(light.x) +
+                       SpecularSum2.rgb * specularColor.rgb * vec3(light.y);       
         #endif
 
 #if !defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING)
                         gl_FragColor.rgb = AmbientSum * diffuseColor.rgb +
-                                       DiffuseSum.rgb * diffuseColor.rgb  * light.x;
+                                       DiffuseSum.rgb * diffuseColor.rgb  * vec3(light.x);
     #endif
 
 
 
 #ifdef RIM_LIGHTING_2
 // if (length(g_AmbientLightColor.xyz) != 0.0) { // 1st pass only
-        vec4 rim2 = pow( 1.0 - dot( normal, vViewDir.xyz ), 1.5 ) * m_RimLighting2 * m_RimLighting2.w;
-        rim2.a = 0.0;
+        vec3 rim2 = pow( 1.0 - dot( normal, vViewDir.xyz ), 1.5 ) * m_RimLighting2.xyz * m_RimLighting2.w;
+      //  rim2.a = 0.0;
        gl_FragColor.rgb += rim2.rgb*diffuseColor.rgb;
     //   light.x += rim2*0.1;
 // }

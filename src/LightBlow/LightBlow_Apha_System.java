@@ -7,6 +7,7 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
@@ -47,6 +48,7 @@ public class LightBlow_Apha_System extends SimpleApplication {
     Material mat = assetManager.loadMaterial("Materials/LightBlow/Alpha_System/LightBlow_AlphaDiffuseMap.j3m");
     char_boy.setMaterial(mat);
     TangentBinormalGenerator.generate(char_boy);
+    char_boy.setQueueBucket(Bucket.Transparent); 
     rootNode.attachChild(char_boy);
 
     Spatial char_boy2 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
@@ -54,6 +56,7 @@ public class LightBlow_Apha_System extends SimpleApplication {
     char_boy2.setMaterial(mat2);
     char_boy2.setLocalTranslation(-2f, 0, 0);
     TangentBinormalGenerator.generate(char_boy2);
+    char_boy2.setQueueBucket(Bucket.Transparent);
     rootNode.attachChild(char_boy2);
     
     
@@ -62,6 +65,7 @@ public class LightBlow_Apha_System extends SimpleApplication {
     char_boy3.setMaterial(mat3);
     char_boy3.setLocalTranslation(-4f, 0, 0);
     TangentBinormalGenerator.generate(char_boy3);
+    char_boy3.setQueueBucket(Bucket.Transparent);
     rootNode.attachChild(char_boy3);
     
     Spatial char_boy4 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
@@ -69,6 +73,7 @@ public class LightBlow_Apha_System extends SimpleApplication {
     char_boy4.setMaterial(mat4);
     char_boy4.setLocalTranslation(-6f, 0, 0);
     TangentBinormalGenerator.generate(char_boy4);
+    char_boy4.setQueueBucket(Bucket.Transparent);
     rootNode.attachChild(char_boy4);
     
 
