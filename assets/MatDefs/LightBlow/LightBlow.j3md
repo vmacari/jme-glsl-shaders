@@ -5,17 +5,16 @@ MaterialDef LightBlow {
         // Color of RimLighting2
         Color RimLighting2
 
-
         // Color of RimLighting
         Color RimLighting
 
         // Light Map
-        Float LightMapIntensity
+        Float LightMapIntensity : 1.0
         Boolean SeperateTexCoord
         Texture2D LightMap
 
         // Glow intensity
-        Float GlowIntensity
+        Float GlowIntensity : 1.0
 
         // No attenuation increases fps
         Boolean No_Attenuation
@@ -38,7 +37,7 @@ MaterialDef LightBlow {
         TextureCubeMap IblMap
 
         // Image Based Lighting Intensity
-        Float iblIntensity
+        Float iblIntensity : 1.0
 
         // Switch Hemispherical Lighting on/off
         Boolean Hemi_Lighting_1
@@ -48,7 +47,7 @@ MaterialDef LightBlow {
         Boolean Specular_Lighting
 
         // Specular intensity
-        Float SpecIntensity
+        Float SpecIntensity : 1.0
 
         // Output specular from the normal map alpha channel
         Boolean Spec_A_Nor
@@ -63,10 +62,10 @@ MaterialDef LightBlow {
         Boolean Ref_A_Dif
 
         // Reflection Intensity
-        Float RefPower
+        Float RefPower : 1.0
 
         // Reflection normal map alpha channel Intensity
-        Float RefIntensity
+        Float RefIntensity : 1.0
 
         // Output parallax map from the normal map alpha channel
         Boolean Parallax_A_Nor
@@ -126,6 +125,15 @@ MaterialDef LightBlow {
 
         // Parallax/height map
         Texture2D ParallaxMap
+
+        //Set to true is parallax map is stored in the alpha channel of the normal map
+        Boolean PackedNormalParallax   
+
+        //Sets the relief height for parallax mapping
+        Float ParallaxHeight : 0.05       
+
+        //Set to true to activate Steep Parallax mapping
+        Boolean SteepParallax
 
         // Color ramp, will map diffuse and specular values through it.
         Texture2D ColorRamp
@@ -203,6 +211,8 @@ MaterialDef LightBlow {
             NORMALMAP : NormalMap
             SPECULARMAP : SpecularMap
             PARALLAXMAP : ParallaxMap
+            NORMALMAP_PARALLAX : PackedNormalParallax
+            STEEP_PARALLAX : SteepParallax
             COLORRAMP : ColorRamp
             REFLECTION : RefMap
             SPHERE_MAP : SphereMap
