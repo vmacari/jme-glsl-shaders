@@ -1,0 +1,39 @@
+MaterialDef FakeParticleBlow {
+ 
+    MaterialParameters {
+
+        Texture2D DiffuseMap
+        Texture2D NormalMap
+
+
+        // Switch Normal Map xyz(rgb) channels
+        Boolean Nor_Inv_X
+        Boolean Nor_Inv_Y
+        Boolean Nor_Inv_Z
+        
+    }
+ 
+    Technique {
+          VertexShader GLSL100:   Shaders/MatCap/MatCap.vert
+          FragmentShader GLSL100: Shaders/MatCap/MatCap.frag
+ 
+        WorldParameters {
+            WorldViewProjectionMatrix
+            NormalMatrix
+            WorldViewMatrix
+            
+        }
+ 
+        Defines {
+
+            NORMALMAP : NormalMap
+            NOR_INV_X : Nor_Inv_X
+            NOR_INV_Y : Nor_Inv_Y
+            NOR_INV_Z : Nor_Inv_Z
+        }
+    }
+ 
+    Technique FixedFunc {
+    }
+ 
+}
