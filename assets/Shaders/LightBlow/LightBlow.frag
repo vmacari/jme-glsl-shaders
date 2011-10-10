@@ -121,7 +121,7 @@ float lightComputeDiffuse(in vec3 norm, in vec3 lightdir, in vec3 viewdir){
 }
 
 
-#if defined(SPECULAR_LIGHTING)
+#if defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING)
 float lightComputeSpecular(in vec3 norm, in vec3 viewdir, in vec3 lightdir, in float shiny){
     // NOTE: check for shiny <= 1 removed since shininess is now 
     // 1.0 by default (uses matdefs default vals)
