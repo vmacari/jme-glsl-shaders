@@ -62,8 +62,8 @@ varying vec3 lightVec;
 #if defined(REFLECTION) || defined(IBL)
     uniform vec3 g_CameraPosition;
     uniform mat4 g_WorldMatrix;
-    varying vec4 refVec;
-    varying vec4 iblVec;
+    varying vec3 refVec;
+    varying vec3 iblVec;
 #endif 
 
 
@@ -232,9 +232,9 @@ vec3 worldPos = (g_WorldMatrix * pos).xyz;
        vec3 I = normalize( g_CameraPosition -  worldPos  ).xyz;
        vec3 N = normalize( (g_WorldMatrix * vec4(inNormal, 0.0)).xyz );      
 
-        refVec.xyz = reflect(I, N);
+        refVec = -reflect(I, N);
  
-        iblVec.xyz = refVec.xyz;
+        iblVec = refVec;
  
     #endif
 

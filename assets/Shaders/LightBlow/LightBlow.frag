@@ -77,7 +77,7 @@ uniform vec4 m_RimLighting2;
 #endif
 
 #ifdef IBL 
-varying vec4 iblVec;
+varying vec3 iblVec;
 uniform ENVMAP m_IblMap;
 uniform float m_iblIntensity;
 #endif
@@ -88,7 +88,7 @@ uniform float m_iblIntensity;
 
     uniform float m_RefPower;
     uniform float m_RefIntensity;
-    varying vec4 refVec;
+    varying vec3 refVec;
     uniform ENVMAP m_RefMap;
 #endif
 
@@ -336,9 +336,9 @@ void main(){
         #ifdef IBL
        // IBL - Image Based Lighting. The lighting based on either cube map or sphere map.
            #if  defined (IBL) && defined (NORMALMAP)
-            vec4 iblLight = Optics_GetEnvColor(m_IblMap, (iblVec.xyz - mat.xyz * normal.xyz)*-1.5);
+            vec4 iblLight = Optics_GetEnvColor(m_IblMap, (iblVec + mat * normal*1.5));
            #elif  defined (IBL) && !defined (NORMALMAP)
-            vec4 iblLight = Optics_GetEnvColor(m_IblMap,  iblVec.xyz);
+            vec4 iblLight = Optics_GetEnvColor(m_IblMap,  iblVec);
            #endif
         
         //Albedo 
@@ -364,12 +364,13 @@ light.x = light.x + 1.1 * emissiveTex;
     // Reflection based on either cube map or sphere map.
 
     #if  defined (REFLECTION) && defined (NORMALMAP)
-    vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec.xyz - mat.xyz * normal.xyz)*-1.5);
+  //  vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec.xyz - mat.xyz * normal.xyz)*-1.5);
+vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec + mat * normal*1.5));
   #elif defined (REFLECTION) && !defined (NORMALMAP)
-    vec4 refGet = Optics_GetEnvColor(m_RefMap, refVec.xyz);
+    vec4 refGet = Optics_GetEnvColor(m_RefMap, refVec);
     #endif
 
-    vec4 refColor = refGet * m_RefPower;
+    vec3 refColor = refGet.xyz * m_RefPower;
     float refTex = 0.9;
 
     #if defined(REF_A_NOR) && defined(NORMALMAP)

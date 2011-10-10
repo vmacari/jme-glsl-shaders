@@ -1,7 +1,6 @@
 Material LightBlow_2 : MatDefs/LightBlow/LightBlow.j3md {
      MaterialParameters {
         DiffuseMap : Flip Models/LightBlow/jme_lightblow_dif.png
-        NormalMap : Flip Models/LightBlow/jme_lightblow_nor.png
         RefMap : Textures/Water256.dds
 
         EmissiveMap : true
@@ -19,6 +18,7 @@ Material LightBlow_2 : MatDefs/LightBlow/LightBlow.j3md {
         RefIntensity : 1.0
         GlowMap : Flip Models/LightBlow/jme_lightblow_dif.png
 
+        NormalMap : Flip Models/LightBlow/jme_lightblow_nor.png
 }
     AdditionalRenderState {
 
