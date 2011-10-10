@@ -4,7 +4,8 @@ MaterialDef FakeParticleBlow {
 
         Texture2D DiffuseMap
         Texture2D NormalMap
-
+        
+        Float NormalMapPower : 0.6
 
         // Switch Normal Map xyz(rgb) channels
         Boolean Nor_Inv_X
@@ -25,7 +26,7 @@ MaterialDef FakeParticleBlow {
         }
  
         Defines {
-
+        
             NORMALMAP : NormalMap
             NOR_INV_X : Nor_Inv_X
             NOR_INV_Y : Nor_Inv_Y

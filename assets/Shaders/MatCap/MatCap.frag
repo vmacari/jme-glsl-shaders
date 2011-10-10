@@ -7,6 +7,7 @@ uniform float m_texturesize;
 
 #ifdef NORMALMAP
   uniform sampler2D m_NormalMap;
+ uniform float  m_NormalMapPower;    
   varying vec3 mat;
   varying vec4 refVec;
   varying vec3 I;  
@@ -51,7 +52,7 @@ vec3 coords = (vmr);
 vec3 diffuseColor;
     #if defined (NORMALMAP)
 vec3  normalz = mat.xyz*normal.xyz;
-diffuseColor = texture2D(m_DiffuseMap, vec2((coords*vec2(0.495) + vec3(0.5))+(normalz)*0.65).xy).rgb;
+diffuseColor = texture2D(m_DiffuseMap, vec2((coords*vec2(0.495) + vec3(0.5))+(normalz)*m_NormalMapPower).xy).rgb;
 #else
     diffuseColor = texture2D(m_DiffuseMap, vec2(coords*vec2(0.495) + vec3(0.5)).xy).rgb;
 //    diffuseColor = (diffuseColor - vec3(0.5, 0.5, 0.5) * 2.0);
