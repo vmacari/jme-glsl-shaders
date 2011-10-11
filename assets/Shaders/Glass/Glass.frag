@@ -18,7 +18,8 @@ uniform float m_texturesize;
 #endif
   varying vec3 vNormal;
 
-
+uniform vec4 m_colorMultiply;
+uniform float m_colorIntensity;
 
     uniform float m_RefPower;
     uniform float m_RefIntensity;
@@ -57,7 +58,7 @@ newTexCoord = texCoord;
  vec3  vmr = vNormal.xyz;
 vec3 coords = (vmr);
 
-vec3 diffuseColor;
+
 
 
     #if defined (NORMALMAP)
@@ -65,11 +66,11 @@ vec3  normalz = mat.xyz*normal.xyz;
 vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec + normalz*m_NormalMapPower));
 #else
  vec4 refGet = Optics_GetEnvColor(m_RefMap, refVec);
-//    diffuseColor = (diffuseColor - vec3(0.5, 0.5, 0.5) * 2.0);
+
 #endif
     
 
-    gl_FragColor.rgb = refGet.rgb;
-    gl_FragColor.a = 1.0;
+    gl_FragColor.rgb = refGet.xyz * m_colorMultiply.xyz*m_colorIntensity;
+    gl_FragColor.a = m_colorMultiply.w;
 
 }

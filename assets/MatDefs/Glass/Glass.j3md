@@ -7,7 +7,6 @@ MaterialDef FakeParticleBlow {
 
         // Ref Map for refraction
         TextureCubeMap RefMap
-
         
         Float NormalMapPower : 0.6
 
@@ -15,6 +14,13 @@ MaterialDef FakeParticleBlow {
         Boolean Nor_Inv_X
         Boolean Nor_Inv_Y
         Boolean Nor_Inv_Z
+
+        // Color manipulations
+        Color colorMultiply : 1.0 1.0 1.0 1.0
+        Float colorIntensity : 1.0   
+
+        // Refraction Index 
+        Float refIndex : 0.66
         
     }
  

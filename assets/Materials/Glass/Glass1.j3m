@@ -2,6 +2,10 @@ Material My Material : MatDefs/Glass/Glass.j3md {
      MaterialParameters {
         RefMap : Flip Textures/Water256.dds
         Nor_Inv_Y : true
+
+        colorMultiply : 1.0 2.0 2.0 1.0
+        colorIntensity : 0.79999995
+        refIndex : 0.3
      }
     AdditionalRenderState {
     }
