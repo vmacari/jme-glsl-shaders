@@ -371,7 +371,7 @@ vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec + mat * normal));
     #endif
 
     vec3 refColor = refGet.xyz * m_RefPower;
-    float refTex = 0.9;
+    float refTex = 1.0;
 
     #if defined(REF_A_NOR) && defined(NORMALMAP)
     refTex = texture2D(m_NormalMap, texCoord).a * m_RefIntensity;
@@ -383,7 +383,7 @@ vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec + mat * normal));
     diffuseColor.rgb += refColor.rgb;
     #endif
 
-light.x = max(light.x, refGet* refTex * 0.5);
+ light.x = max(light.x, refGet* refTex * 0.85);
  #endif
 
 

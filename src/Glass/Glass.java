@@ -43,18 +43,18 @@ public class Glass extends SimpleApplication {
       
       
     Spatial char_boy1 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
-    Material mat1 = assetManager.loadMaterial("Materials/Glass/Glass.j3m");
+    Material mat1 = assetManager.loadMaterial("Materials/Glass/Glass1.j3m");
     char_boy1.setMaterial(mat1);
     char_boy1.setLocalTranslation(0,0,0);
     TangentBinormalGenerator.generate(char_boy1);
     rootNode.attachChild(char_boy1);
 
-//    Spatial char_boy2 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
-//    Material mat2 = assetManager.loadMaterial("Materials/MatCap/MatCapBump1.j3m");
-//    char_boy2.setMaterial(mat2);
-//    char_boy2.setLocalTranslation(1,0,0);
-//    TangentBinormalGenerator.generate(char_boy2);
-//    rootNode.attachChild(char_boy2);    
+    Spatial char_boy2 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
+    Material mat2 = assetManager.loadMaterial("Materials/Glass/Glass1_bump.j3m");
+    char_boy2.setMaterial(mat2);
+    char_boy2.setLocalTranslation(1,0,0);
+    TangentBinormalGenerator.generate(char_boy2);
+    rootNode.attachChild(char_boy2);    
 //
 //        Spatial char_boy3 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
 //    Material mat3 = assetManager.loadMaterial("Materials/MatCap/MatCap2.j3m");

@@ -1,0 +1,8 @@
+Material My Material : MatDefs/Glass/Glass.j3md {
+     MaterialParameters {
+        RefMap : Flip Textures/Water256.dds
+        Nor_Inv_Y : true
+     }
+    AdditionalRenderState {
+    }
+}
