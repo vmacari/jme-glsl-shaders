@@ -69,6 +69,12 @@ vec3 worldPos = (g_WorldMatrix * pos).xyz;
        vec3 I = normalize( g_CameraPosition -  worldPos  ).xyz;
        vec3 N = normalize( (g_WorldMatrix * vec4(inNormal, 0.0)).xyz );      
 
-        refVec = refract(N, I, 0.7);
-        refVec = normalize(refVec);
+
+      // refVec = reflect(I, N);
+
+        refVec = -refract(N, I, 0.66);
+ //       refVec.y = -refVec.y;
+    //  refVec = vec3(gl_TextureMatrix[0] * vec4(refVec, 1.0));
+        
+   //     refVec = normalize(refVec);
 }

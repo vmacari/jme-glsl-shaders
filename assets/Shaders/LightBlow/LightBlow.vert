@@ -232,7 +232,8 @@ vec3 worldPos = (g_WorldMatrix * pos).xyz;
        vec3 I = normalize( g_CameraPosition -  worldPos  ).xyz;
        vec3 N = normalize( (g_WorldMatrix * vec4(inNormal, 0.0)).xyz );      
 
-        refVec = -reflect(I, N);
+        refVec = reflect(I, N);
+
  
         iblVec = refVec;
  

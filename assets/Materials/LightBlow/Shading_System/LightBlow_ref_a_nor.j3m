@@ -2,7 +2,7 @@ Material LightBlow_3 : MatDefs/LightBlow/LightBlow.j3md {
      MaterialParameters {
         DiffuseMap : Flip Models/LightBlow/jme_lightblow_dif.png
         NormalMap : Flip Models/LightBlow/jme_lightblow_nor.png
-        RefMap : Textures/Water256.dds
+        RefMap : Flip Textures/Water256.dds
 
         EmissiveMap : true
         Specular_Lighting : false

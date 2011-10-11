@@ -71,7 +71,7 @@ public class Glass extends SimpleApplication {
 //    rootNode.attachChild(char_boy4);    
 
 
-      flyCam.setMoveSpeed(20);   
+      flyCam.setMoveSpeed(10);   
       viewPort.setBackgroundColor(ColorRGBA.Gray);      
   
   }

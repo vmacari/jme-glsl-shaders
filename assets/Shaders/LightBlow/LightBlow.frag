@@ -336,7 +336,7 @@ void main(){
         #ifdef IBL
        // IBL - Image Based Lighting. The lighting based on either cube map or sphere map.
            #if  defined (IBL) && defined (NORMALMAP)
-            vec4 iblLight = Optics_GetEnvColor(m_IblMap, (iblVec + mat * normal*1.3));
+            vec4 iblLight = Optics_GetEnvColor(m_IblMap, (iblVec + mat * normal));
            #elif  defined (IBL) && !defined (NORMALMAP)
             vec4 iblLight = Optics_GetEnvColor(m_IblMap,  iblVec);
            #endif
@@ -365,7 +365,7 @@ light.x = light.x + 1.1 * emissiveTex;
 
     #if  defined (REFLECTION) && defined (NORMALMAP)
   //  vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec.xyz - mat.xyz * normal.xyz)*-1.5);
-vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec + mat * normal*1.3));
+vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec + mat * normal));
   #elif defined (REFLECTION) && !defined (NORMALMAP)
     vec4 refGet = Optics_GetEnvColor(m_RefMap, refVec);
     #endif
