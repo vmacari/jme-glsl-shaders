@@ -1,0 +1,13 @@
+Material My Material : MatDefs/Glass/Glass.j3md {
+     MaterialParameters {
+        Nor_Inv_Y : true
+        colorMultiply : 1.2 1.0 1.5 1.0
+        refIndex : 1.0
+        NormalMapPower : 1.1
+        colorIntensity : 1.0
+        RefMap : Flip Textures/Water32.dds
+        NormalMap : Flip Models/LightBlow/jme_lightblow_nor.png
+     }
+    AdditionalRenderState {
+    }
+}

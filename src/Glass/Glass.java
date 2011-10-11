@@ -55,13 +55,13 @@ public class Glass extends SimpleApplication {
     char_boy2.setLocalTranslation(1,0,0);
     TangentBinormalGenerator.generate(char_boy2);
     rootNode.attachChild(char_boy2);    
-//
-//        Spatial char_boy3 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
-//    Material mat3 = assetManager.loadMaterial("Materials/MatCap/MatCap2.j3m");
-//    char_boy3.setMaterial(mat3);
-//    char_boy3.setLocalTranslation(-1,0,0);
-//    TangentBinormalGenerator.generate(char_boy3);
-//    rootNode.attachChild(char_boy3);
+
+        Spatial char_boy3 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
+    Material mat3 = assetManager.loadMaterial("Materials/Glass/Glass2_low.j3m");
+    char_boy3.setMaterial(mat3);
+    char_boy3.setLocalTranslation(-1,0,0);
+    TangentBinormalGenerator.generate(char_boy3);
+    rootNode.attachChild(char_boy3);
 //
 //    Spatial char_boy4 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
 //    Material mat4 = assetManager.loadMaterial("Materials/MatCap/MatCapBump2.j3m");

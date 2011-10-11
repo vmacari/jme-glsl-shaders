@@ -2,7 +2,6 @@ MaterialDef FakeParticleBlow {
  
     MaterialParameters {
 
-        Texture2D DiffuseMap
         Texture2D NormalMap
 
         // Ref Map for refraction

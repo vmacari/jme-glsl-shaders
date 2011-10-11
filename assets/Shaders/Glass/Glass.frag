@@ -4,8 +4,6 @@ uniform float m_texturesize;
   varying vec3 vPosition;
   varying vec3 vViewDir;
 
-  uniform sampler2D m_DiffuseMap;
-
 #ifdef NORMALMAP
   uniform sampler2D m_NormalMap;
  uniform float  m_NormalMapPower;    
