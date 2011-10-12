@@ -90,6 +90,7 @@ uniform float m_iblIntensity;
     uniform float m_RefIntensity;
     varying vec3 refVec;
     uniform ENVMAP m_RefMap;
+    varying float refTex;
 #endif
 
 #ifdef MINNAERT
@@ -180,9 +181,6 @@ return vec2(diffuseFactor, specularFactor) * vec2(att);
 void main(){
     
   vec2 newTexCoord;
-
-
-
 
     #if defined(PARALLAXMAP) || defined(PARALLAX_A_NOR) && !defined(VERTEX_LIGHTING)
        float h;
@@ -336,13 +334,13 @@ void main(){
         #ifdef IBL
        // IBL - Image Based Lighting. The lighting based on either cube map or sphere map.
            #if  defined (IBL) && defined (NORMALMAP)
-            vec4 iblLight = Optics_GetEnvColor(m_IblMap, (iblVec + mat * normal));
+            vec3 iblLight = Optics_GetEnvColor(m_IblMap, (iblVec + mat * normal)).rgb;
            #elif  defined (IBL) && !defined (NORMALMAP)
-            vec4 iblLight = Optics_GetEnvColor(m_IblMap,  iblVec);
+            vec3 iblLight = Optics_GetEnvColor(m_IblMap,  iblVec).rgb;
            #endif
         
         //Albedo 
-        AmbientSum.rgb +=  iblLight.rgb * m_iblIntensity;
+        AmbientSum.rgb +=  iblLight * m_iblIntensity;
         
 
         #endif
@@ -350,12 +348,13 @@ void main(){
 
 #if defined(EMISSIVEMAP) && defined(DIFFUSEMAP)
         //Illumination based on diffuse map alpha chanel.
-	float emissiveTex = texture2D(m_DiffuseMap, texCoord).a;
-	
-	//diffuseColor.rgb = max(diffuseColor, emissiveSum); 
-	
-light.x = light.x + 1.1 * emissiveTex;
-//light.x = max(light.x,  emissiveTex);
+	float emissiveTex = diffuseColor.a;
+
+          AmbientSum.rgb = AmbientSum.rgb + 2.0 * emissiveTex;  
+//        AmbientSum.rgb = max(AmbientSum.rgb, emissiveTex);
+    //    light.x = light.x + 1.1 * emissiveTex;
+        //light.x = max(light.x,  emissiveTex);
+        //diffuseColor.rgb = max(diffuseColor, emissiveTex); 
 
         #endif
 
@@ -365,19 +364,19 @@ light.x = light.x + 1.1 * emissiveTex;
 
     #if  defined (REFLECTION) && defined (NORMALMAP)
   //  vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec.xyz - mat.xyz * normal.xyz)*-1.5);
-vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec + mat * normal));
+vec3 refGet = Optics_GetEnvColor(m_RefMap, (refVec + mat * normal)).rgb;
   #elif defined (REFLECTION) && !defined (NORMALMAP)
-    vec4 refGet = Optics_GetEnvColor(m_RefMap, refVec);
+    vec3 refGet = Optics_GetEnvColor(m_RefMap, refVec).rgb;
     #endif
 
-    vec3 refColor = refGet.xyz * m_RefPower;
-    float refTex = 1.0;
+    vec3 refColor = refGet * m_RefPower;
+    refTex = 1.0;
 
     #if defined(REF_A_NOR) && defined(NORMALMAP)
-    refTex = texture2D(m_NormalMap, texCoord).a * m_RefIntensity;
+    refTex = normalHeight.a * m_RefIntensity;
     diffuseColor.rgb += refColor * refTex;
     #elif defined(REF_A_DIF) && !defined(REF_A_NOR) && defined(DIFFUSEMAP)
-    refTex = texture2D(m_DiffuseMap, texCoord).a * m_RefIntensity;
+    refTex = diffuseColor.a * m_RefIntensity;
     diffuseColor.rgb += refColor.rgb * refTex;
     #else
     diffuseColor.rgb += refColor.rgb;
