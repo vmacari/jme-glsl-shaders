@@ -62,13 +62,20 @@ public class Glass extends SimpleApplication {
     char_boy3.setLocalTranslation(-1,0,0);
     TangentBinormalGenerator.generate(char_boy3);
     rootNode.attachChild(char_boy3);
-//
-//    Spatial char_boy4 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
-//    Material mat4 = assetManager.loadMaterial("Materials/MatCap/MatCapBump2.j3m");
-//    char_boy4.setMaterial(mat4);
-//    char_boy4.setLocalTranslation(-2,0,0);
-//    TangentBinormalGenerator.generate(char_boy4);
-//    rootNode.attachChild(char_boy4);    
+
+    Spatial char_boy4 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
+    Material mat4 = assetManager.loadMaterial("Materials/Glass/Glass3_color.j3m");
+    char_boy4.setMaterial(mat4);
+    char_boy4.setLocalTranslation(-2,0,0);
+    TangentBinormalGenerator.generate(char_boy4);
+    rootNode.attachChild(char_boy4);    
+    
+        Spatial char_boy5 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
+    Material mat5 = assetManager.loadMaterial("Materials/Glass/Glass4_specular.j3m");
+    char_boy5.setMaterial(mat5);
+    char_boy5.setLocalTranslation(-3,0,0);
+    TangentBinormalGenerator.generate(char_boy5);
+    rootNode.attachChild(char_boy5);    
 
 
       flyCam.setMoveSpeed(10);   

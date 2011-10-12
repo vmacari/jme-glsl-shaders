@@ -4,6 +4,9 @@ MaterialDef FakeParticleBlow {
 
         Texture2D NormalMap
 
+        Texture2D MatCapSpecular // matcap fake specularity texture
+        Float specularIntensity : 1.0 // matcap fake specular intensity
+
         // Ref Map for refraction
         TextureCubeMap RefMap
         
@@ -20,6 +23,10 @@ MaterialDef FakeParticleBlow {
 
         // Refraction Index 
         Float refIndex : 0.66
+        
+        // Chromatic Abberation
+        Boolean ChromaticAbberation
+        Float abberIndex : 0.05    // Use between 0.01 - 0.1
         
     }
  
@@ -38,10 +45,13 @@ MaterialDef FakeParticleBlow {
  
         Defines {
 
+            SPECULAR : MatCapSpecular
             NORMALMAP : NormalMap
             NOR_INV_X : Nor_Inv_X
             NOR_INV_Y : Nor_Inv_Y
             NOR_INV_Z : Nor_Inv_Z
+            CHROMATIC_ABERRATION : ChromaticAbberation
+            
         }
     }
  

@@ -11,10 +11,15 @@ uniform float m_texturesize;
   varying vec3 I;  
   varying vec3 N;   
   varying vec3 worldPos; 
-
-
 #endif
+
   varying vec3 vNormal;
+
+#ifdef SPECULAR
+  varying vec3 specularColor;
+  uniform sampler2D m_MatCapSpecular;
+  uniform float m_specularIntensity;
+#endif
 
 uniform vec4 m_colorMultiply;
 uniform float m_colorIntensity;
@@ -24,7 +29,10 @@ uniform float m_colorIntensity;
     varying vec3 refVec;
     uniform ENVMAP m_RefMap;
 
-
+#ifdef CHROMATIC_ABERRATION
+varying vec3 refVecG;
+varying vec3 refVecB;
+#endif
 
 void main(){
 
@@ -53,7 +61,7 @@ newTexCoord = texCoord;
       vec3 normal = vNormal;
     #endif
 
- vec3  vmr = vNormal.xyz;
+vec3  vmr = vNormal.xyz;
 vec3 coords = (vmr);
 
 
@@ -62,13 +70,34 @@ vec3 coords = (vmr);
     #if defined (NORMALMAP)
 vec3  normalz = mat.xyz*normal.xyz;
 vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec + normalz*m_NormalMapPower));
+#ifdef CHROMATIC_ABERRATION
+refGet.g = Optics_GetEnvColor(m_RefMap, (refVecG + normalz*m_NormalMapPower)).g;
+refGet.b = Optics_GetEnvColor(m_RefMap, (refVecB + normalz*m_NormalMapPower)).b;
+#endif 
+    #if defined (SPECULAR) 
+specularColor = texture2D(m_MatCapSpecular, vec2((coords*vec3(0.495) + vec3(0.5))+(normalz)*m_NormalMapPower).xy).rgb;
+#endif
+
 #else
  vec4 refGet = Optics_GetEnvColor(m_RefMap, refVec);
+#ifdef CHROMATIC_ABERRATION
+refGet.g = Optics_GetEnvColor(m_RefMap, refVecG).g;
+refGet.b = Optics_GetEnvColor(m_RefMap, refVecB).b;
+#endif  
+#if defined (SPECULAR)
+    specularColor = texture2D(m_MatCapSpecular, vec2(coords*vec3(0.495) + vec3(0.5)).xy).rgb;
 
 #endif
-    
+#endif
+ 
 
-    gl_FragColor.rgb = refGet.xyz * m_colorMultiply.xyz*m_colorIntensity;
+vec3 color = refGet.xyz * m_colorMultiply.xyz*m_colorIntensity;
+ 
+#ifdef SPECULAR
+    gl_FragColor.rgb = color+specularColor*m_specularIntensity;
+#else
+    gl_FragColor.rgb = color;
+#endif
     gl_FragColor.a = m_colorMultiply.w;
 
 }

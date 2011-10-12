@@ -1,9 +1,8 @@
 Material My Material : MatDefs/Glass/Glass.j3md {
      MaterialParameters {
+        MatCapSpecular : Flip Textures/Glass/glass_specular.jpg
         RefMap : Flip Textures/Water256.dds
-        Nor_Inv_Y : true
-        NormalMap : Flip Models/LightBlow/jme_lightblow_nor.png
-        ChromaticAbberation : true
+        specularIntensity : 0.5
      }
     AdditionalRenderState {
     }

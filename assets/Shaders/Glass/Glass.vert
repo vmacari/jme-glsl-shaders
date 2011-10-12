@@ -17,10 +17,14 @@ varying vec3 mat;
     varying vec3 vNormal;
 
 
-// #if defined(NORMALMAP)
-//    uniform vec3 g_CameraPosition;
-//    uniform mat4 g_WorldMatrix;
-// #endif 
+#ifdef CHROMATIC_ABERRATION
+// varying float refIndexR;
+varying float refIndexG;    
+varying float refIndexB;
+varying vec3 refVecG;
+varying vec3 refVecB;
+uniform float m_abberIndex;
+#endif
 
   varying vec3 vPosition;
   varying vec3 vViewDir;
@@ -73,4 +77,13 @@ vec3 worldPos = (g_WorldMatrix * pos).xyz;
         refVec = -refract(N, I, m_refIndex);
     //  refVec = vec3(gl_TextureMatrix[0] * vec4(refVec, 1.0));
       // refVec = reflect(I, N);
+
+#ifdef CHROMATIC_ABERRATION
+//    refIndexR = m_refIndex;
+    refIndexG = m_refIndex + m_abberIndex;    
+    refIndexB = m_refIndex + (m_abberIndex*2.0);
+refVecG = -refract(N, I, refIndexG);
+refVecB = -refract(N, I, refIndexB);
+#endif
+
 }
