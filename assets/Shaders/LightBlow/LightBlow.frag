@@ -350,10 +350,10 @@ void main(){
         //Illumination based on diffuse map alpha chanel.
 	float emissiveTex = diffuseColor.a;
 
-          AmbientSum.rgb = AmbientSum.rgb + 2.0 * emissiveTex;  
+//          AmbientSum.rgb = AmbientSum.rgb + 2.0 * emissiveTex;  
 //        AmbientSum.rgb = max(AmbientSum.rgb, emissiveTex);
-    //    light.x = light.x + 1.1 * emissiveTex;
-        //light.x = max(light.x,  emissiveTex);
+        light.x = light.x + 1.1 * emissiveTex;
+   //     light.x = max(light.x,  emissiveTex);
         //diffuseColor.rgb = max(diffuseColor, emissiveTex); 
 
         #endif
