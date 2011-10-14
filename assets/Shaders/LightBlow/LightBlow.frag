@@ -404,6 +404,17 @@ vec3 refGet = Optics_GetEnvColor(m_RefMap, (refVec + mat * normal)).rgb;
 // }
 #endif
 
+#ifdef RIM_LIGHTING_2
+// if (length(g_AmbientLightColor.xyz) != 0.0) { // 1st pass only
+        vec3 rim2 = pow( 1.0 - dot( normal, vViewDir.xyz ), 1.5 ) * m_RimLighting2.xyz * m_RimLighting2.w;
+
+        AmbientSum += rim2;
+      //  rim2.a = 0.0;
+     //  gl_FragColor.rgb += rim2.rgb*diffuseColor.rgb;
+    //   light.x += rim2*0.1;
+// }
+#endif
+
     #ifdef HAS_LIGHTMAP
      vec3 lightMapColor;
    #ifdef SEPERATE_TEXCOORD
@@ -414,6 +425,7 @@ vec3 refGet = Optics_GetEnvColor(m_RefMap, (refVec + mat * normal)).rgb;
 specularColor.rgb *= lightMapColor;
 diffuseColor.rgb  *= lightMapColor;
     #endif
+
 
 
         #if defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING)
@@ -429,14 +441,7 @@ diffuseColor.rgb  *= lightMapColor;
 
 
 
-#ifdef RIM_LIGHTING_2
-// if (length(g_AmbientLightColor.xyz) != 0.0) { // 1st pass only
-        vec3 rim2 = pow( 1.0 - dot( normal, vViewDir.xyz ), 1.5 ) * m_RimLighting2.xyz * m_RimLighting2.w;
-      //  rim2.a = 0.0;
-       gl_FragColor.rgb += rim2.rgb*diffuseColor.rgb;
-    //   light.x += rim2*0.1;
-// }
-#endif
+
 
  #endif
     gl_FragColor.a = alpha;
