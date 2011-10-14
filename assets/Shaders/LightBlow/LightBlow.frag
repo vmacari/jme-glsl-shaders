@@ -352,7 +352,7 @@ void main(){
 
 //          AmbientSum.rgb = AmbientSum.rgb + 2.0 * emissiveTex;  
 //        AmbientSum.rgb = max(AmbientSum.rgb, emissiveTex);
-        light.x = light.x + 1.1 * emissiveTex;
+        light.x = light.x + emissiveTex;
    //     light.x = max(light.x,  emissiveTex);
         //diffuseColor.rgb = max(diffuseColor, emissiveTex); 
 
@@ -388,9 +388,9 @@ vec3 refGet = Optics_GetEnvColor(m_RefMap, (refVec + mat * normal)).rgb;
 
 #ifdef MINNAERT
 // if (length(g_AmbientLightColor.xyz) != 0.0) { // 1st pass only
-        vec3 minnaert = pow( 1.0 - dot( normal.xyz, vViewDir.xyz ), 2.0 ) * m_Minnaert.xyz * m_Minnaert.w;
+        vec3 minnaert = pow( 1.0 - dot( normal.xyz, vViewDir.xyz ), 1.7 ) * m_Minnaert.xyz * m_Minnaert.w;
       //  minnaert.a = 0.0;
-       diffuseColor.rgb += minnaert.rgb*diffuseColor.rgb;
+       AmbientSum += minnaert.rgb*light.x;
     //   light.x += minnaert*0.1;
 // }
 #endif

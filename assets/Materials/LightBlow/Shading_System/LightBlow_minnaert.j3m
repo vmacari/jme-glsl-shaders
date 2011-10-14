@@ -18,7 +18,7 @@ Material LightBlow_4 : MatDefs/LightBlow/LightBlow.j3md {
         RefIntensity : 1.5
         Ref_A_Nor : false
         GlowMap : Flip Models/LightBlow/jme_lightblow_dif.png
-        Minnaert : 1.0 0.95 0.8 5.5
+        Minnaert : 1.0 1.0 0.95 5.0
 
 }
     AdditionalRenderState {
