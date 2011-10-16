@@ -68,14 +68,16 @@ public class ForceShieldTest extends SimpleApplication {
     rootNode.attachChild(shootables);
     shootables.attachChild(shield1);
    
-    fsc = new ForceShieldControl(assetManager);
-    fsc.setSpatial(shield1);
+    fsc = new ForceShieldControl(assetManager, 0.5f);
+  //  fsc.setSpatial(shield1);
+    shield1.addControl(fsc);
     fsc.setEffectSize(1.2f);
-    fsc.setColor( new ColorRGBA(1.0f,0.2f,0.2f,0.9f));
+    fsc.setColor( new ColorRGBA(1.0f,0.0f,0.0f,0.9f));
     fsc.setVisibility(0.1f);
     fsc.getMaterial();
     fsc.setTexture(tx);
     fsc.setEnabled(true);
+    
 
     
     
@@ -194,9 +196,9 @@ public class ForceShieldTest extends SimpleApplication {
         @Override
 public void simpleUpdate(float tpf)
 {
-                  
-          fsc.updateCollisionAlpha();
-          fsc.updateCollisionPoints();
+//                  
+//          fsc.updateCollisionAlpha();
+//          fsc.updateCollisionPoints();
        
 
 }
