@@ -11,8 +11,8 @@ MaterialDef Solid Color {
         Int CollisionNum
     }
     Technique {
-        VertexShader GLSL100:   Shaders/ForfceShield/Shield.vert
-        FragmentShader GLSL100: Shaders/ForfceShield/Shield.frag
+        VertexShader GLSL100:   Shaders/ForceShield/Shield.vert
+        FragmentShader GLSL100: Shaders/ForceShield/Shield.frag
 
         WorldParameters {
             WorldViewProjectionMatrix

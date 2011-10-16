@@ -38,7 +38,7 @@ public class ForceShieldControl implements Control {
 	
 
 	public ForceShieldControl(AssetManager assetManager){
-		material = new Material(assetManager,"Shaders/ForfceShield/ForceShield.j3md");
+		material = new Material(assetManager,"MatDefs/ForceShield/ForceShield.j3md");
 		material.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 		material.setFloat("MaxDistance", 1);
 	}
@@ -68,7 +68,7 @@ public class ForceShieldControl implements Control {
 		}
 		if (numChanged)
 			updateCollisionPoints();
-		updateCollisionAlpha();
+                        updateCollisionAlpha();
 		
 		numChanged = false;
 	}
