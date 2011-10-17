@@ -208,7 +208,7 @@ void main(){
     #if defined(NORMALMAP) && !defined(VERTEX_LIGHTING)
       vec4 normalHeight = texture2D(m_NormalMap, newTexCoord);
       vec3 normal = (normalHeight.xyz * vec3(2.0) - vec3(1.0));
-      normal = normalize(normal);
+  //    normal = normalize(normal);
      #ifdef LATC
         normal.z = sqrt(1.0 - (normal.x * normal.x) - (normal.y * normal.y));
       #endif

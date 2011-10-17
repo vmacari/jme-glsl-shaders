@@ -1,5 +1,3 @@
-
-
 package MatCap;
 
 import com.jme3.app.SimpleApplication;
