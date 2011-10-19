@@ -75,7 +75,7 @@ refGet.g = Optics_GetEnvColor(m_RefMap, (refVecG - normalz*m_NormalMapPower)).g;
 refGet.b = Optics_GetEnvColor(m_RefMap, (refVecB - normalz*m_NormalMapPower)).b;
 #endif 
     #if defined (SPECULAR) 
-specularColor = texture2D(m_MatCapSpecular, ((coords))+(normalz)*m_NormalMapPower)).rgb;
+specularColor = texture2D(m_MatCapSpecular, vec2((coords*vec3(0.495) + vec3(0.5))+(normalz)*m_NormalMapPower).xy).rgb;
 #endif
 
 #else
@@ -85,7 +85,7 @@ refGet.g = Optics_GetEnvColor(m_RefMap, refVecG).g;
 refGet.b = Optics_GetEnvColor(m_RefMap, refVecB).b;
 #endif  
 #if defined (SPECULAR)
-    specularColor = texture2D(m_MatCapSpecular, (coords)).rgb;
+    specularColor = texture2D(m_MatCapSpecular, vec2(coords*vec3(0.495) + vec3(0.5)).xy).rgb;
 
 #endif
 #endif
