@@ -8,10 +8,6 @@ uniform mat4 g_ViewMatrix;
 
 varying vec3 mat;
 
-
-
-
-
 uniform vec4 m_Ambient;
 uniform vec4 m_Diffuse;
 uniform vec4 m_Specular;
@@ -58,13 +54,22 @@ varying vec3 lightVec;
   uniform vec4 g_LightDirection;
 #endif
 
-
-#if defined(REFLECTION) || defined(IBL)
+#if defined(REFLECTION) || defined(IBL) || defined(FOG_SKY)
+    varying vec3 I;
     uniform vec3 g_CameraPosition;
     uniform mat4 g_WorldMatrix;
+#endif 
+
+#if defined(REFLECTION) || defined(IBL)
     varying vec3 refVec;
     varying vec3 iblVec;
 #endif 
+
+#ifdef FOG
+    varying float fog_z;
+#endif
+
+
 
 
 
@@ -222,14 +227,14 @@ void main(){
     #endif
 
 
+#if defined (REFLECTION) || defined (IBL) || defined(FOG_SKY)
+       vec3 worldPos = (g_WorldMatrix * pos).xyz;
+       I = normalize( g_CameraPosition -  worldPos  ).xyz;
+#endif
 
 #if defined (REFLECTION) || defined (IBL) 
 //Reflection vectors calculation
 
-
-vec3 worldPos = (g_WorldMatrix * pos).xyz;
-
-       vec3 I = normalize( g_CameraPosition -  worldPos  ).xyz;
        vec3 N = normalize( (g_WorldMatrix * vec4(inNormal, 0.0)).xyz );      
 
         refVec = reflect(I, N);
@@ -238,5 +243,10 @@ vec3 worldPos = (g_WorldMatrix * pos).xyz;
         iblVec = refVec;
  
     #endif
+
+
+#ifdef FOG
+    fog_z = gl_Position.z;
+#endif
 
 }

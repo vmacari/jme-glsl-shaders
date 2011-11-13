@@ -13,6 +13,16 @@ varying vec4 DiffuseSum;
 varying vec3 SpecularSum;
 
 
+#ifdef FOG
+    varying float fog_z;
+    uniform vec4 m_FogColor;
+#endif
+  #ifdef FOG_SKY
+    uniform ENVMAP m_FogSkyBox;
+    varying vec3 I;
+  #endif
+
+
 #ifdef HAS_LIGHTMAP
     uniform float m_LightMapIntensity;
     uniform sampler2D m_LightMap;
@@ -69,6 +79,11 @@ uniform float m_SpecIntensity;
 #ifdef HQ_ATTENUATION
 uniform vec4 g_LightPosition;
 #endif
+
+#ifdef EMISSIVEMAP
+uniform float m_EmissiveIntensity;
+#endif
+
 
 #if defined RIM_LIGHTING || RIM_LIGHTING_2
 uniform vec4 m_RimLighting;
@@ -352,7 +367,7 @@ void main(){
 
 //          AmbientSum.rgb = AmbientSum.rgb + 2.0 * emissiveTex;  
 //        AmbientSum.rgb = max(AmbientSum.rgb, emissiveTex);
-        light.x = light.x + emissiveTex;
+        light.x = light.x + emissiveTex*m_EmissiveIntensity;
    //     light.x = max(light.x,  emissiveTex);
         //diffuseColor.rgb = max(diffuseColor, emissiveTex); 
 
@@ -364,7 +379,7 @@ void main(){
 
     #if  defined (REFLECTION) && defined (NORMALMAP)
   //  vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec.xyz - mat.xyz * normal.xyz)*-1.5);
-vec3 refGet = Optics_GetEnvColor(m_RefMap, (refVec - mat * normal)).rgb;
+vec3 refGet = Optics_GetEnvColor(m_RefMap, (refVec - (mat * normal))).rgb;
   #elif defined (REFLECTION) && !defined (NORMALMAP)
     vec3 refGet = Optics_GetEnvColor(m_RefMap, refVec).rgb;
     #endif
@@ -382,8 +397,15 @@ vec3 refGet = Optics_GetEnvColor(m_RefMap, (refVec - mat * normal)).rgb;
     diffuseColor.rgb += refColor.rgb;
     #endif
 
- light.x = max(light.x, refGet* refTex * 0.85);
+#ifdef ADDITIVE_REFLECTION
+AmbientSum.rgb +=  refGet* refTex;
+//AmbientSum.rgb = max(AmbientSum.rgb, refGet* refTex);
+#else
+ light.x = max(light.x, refGet* refTex);
  #endif
+
+#endif
+
 
 
 #ifdef MINNAERT
@@ -428,6 +450,8 @@ diffuseColor.rgb  *= lightMapColor;
 
 
 
+
+
         #if defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING)
        gl_FragColor.rgb =  AmbientSum * diffuseColor.rgb +
                        DiffuseSum.rgb * diffuseColor.rgb  * vec3(light.x) +
@@ -441,6 +465,23 @@ diffuseColor.rgb  *= lightMapColor;
 
 
 
+#ifdef FOG
+
+vec4 fogColor = m_FogColor;
+
+#ifdef FOG_SKY
+fogColor.rgb = Optics_GetEnvColor(m_FogSkyBox, I).rgb;
+#endif
+
+float fogDensity = 1.2;
+float fogDistance = fogColor.a;
+float depth = fog_z / fogDistance;
+float LOG2 = 1.442695;
+ 
+float fogFactor = exp2( -fogDensity * fogDensity * depth *  depth * LOG2 );
+fogFactor = clamp(fogFactor, 0.0, 1.0);
+gl_FragColor.rgb =mix(fogColor.rgb,gl_FragColor.rgb,vec3(fogFactor));
+#endif
 
 
  #endif
