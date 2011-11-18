@@ -130,7 +130,7 @@ MaterialDef LightBlow {
 
         // Parallax/height map
         Texture2D ParallaxMap
-        Boolean Parallax_A_Nor  // Output parallax map from the normal map alpha channel
+        Boolean NORMAL_PARALLAX  // Output parallax map from the normal map alpha channel
         Boolean PackedNormalParallax  // Set to true is parallax map is stored in the alpha channel of the normal map
         Float ParallaxHeight : 0.05   // Sets the relief height for parallax mapping
         Boolean SteepParallax  // Set to true to activate Steep Parallax mapping
@@ -191,8 +191,7 @@ MaterialDef LightBlow {
             SPEC_A_DIF : Spec_A_Dif
             REF_A_NOR : Ref_A_Nor 
             REF_A_DIF : Ref_A_Dif
-            PARALLAX_A_NOR : Parallax_A_Nor
-
+            
             LATC : LATC
             VERTEX_COLOR : UseVertexColor
             VERTEX_LIGHTING : VertexLighting
@@ -215,6 +214,7 @@ MaterialDef LightBlow {
             NORMALMAP_3 : NormalMap_3
             SPECULARMAP : SpecularMap
             PARALLAXMAP : ParallaxMap
+            NORMAL_PARALLAX : NORMAL_PARALLAX
             NORMALMAP_PARALLAX : PackedNormalParallax
             STEEP_PARALLAX : SteepParallax
             COLORRAMP : ColorRamp

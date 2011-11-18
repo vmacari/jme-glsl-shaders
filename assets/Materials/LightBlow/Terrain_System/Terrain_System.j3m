@@ -13,12 +13,13 @@ Material My Material : MatDefs/LightBlow/LightBlow.j3md {
         NormalMap_1 : Flip Repeat Textures/Terrain_Textures/pattern_88/pattern_88_normal.png
         NormalMap_2 : Flip Repeat Textures/Terrain_Textures/pattern_87/pattern_87_normal.png
         NormalMap_3 : Flip Repeat Textures/Terrain_Textures/pattern_71/pattern_71_normal.png
-        Nor_Inv_Y : false
         Spec_A_Dif : true
         Specular_Lighting : true
         SpecIntensity : 1.0
         Shininess : 1.6999999
-        Specular : 0.7254902 0.6156863 0.44313726 1.0
+        Specular : 1.0 0.9137255 0.78039217 1.0
+        Nor_Inv_X : true
+
      }
     AdditionalRenderState {
     }

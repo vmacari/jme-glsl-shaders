@@ -65,10 +65,6 @@ varying vec3 lightVec;
     varying vec3 iblVec;
 #endif 
 
-#ifdef TRI_PLANAR_MAPPING
-  varying vec4 wVertex;
-  varying vec3 wNormal;
-#endif
 
 #ifdef FOG
     varying float fog_z;
@@ -249,10 +245,6 @@ void main(){
  
     #endif
 
-#ifdef TRI_PLANAR_MAPPING
-    wVertex = vec4(inPosition,0.0);
-    wNormal = inNormal;
-#endif
 
 #ifdef FOG
     fog_z = gl_Position.z;

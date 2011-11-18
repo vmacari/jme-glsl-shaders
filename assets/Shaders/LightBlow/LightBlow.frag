@@ -35,8 +35,9 @@ varying vec3 SpecularSum;
   uniform sampler2D m_SpecularMap;
 #endif
 
-#ifdef PARALLAXMAP
+#if (defined(PARALLAXMAP) || (defined(NORMALMAP_PARALLAX) && defined(NORMALMAP))) && !defined(VERTEX_LIGHTING) 
   uniform sampler2D m_ParallaxMap;
+  float m_ParallaxHeight;
 #endif
 
 
@@ -149,10 +150,6 @@ uniform float m_iblIntensity;
 uniform vec4 m_Minnaert;
 #endif
 
-#ifdef TRI_PLANAR_MAPPING
-  varying vec4 wVertex;
-  varying vec3 wNormal;
-#endif
 
 #ifdef FOG
     varying float fog_z;
@@ -243,67 +240,62 @@ return vec2(diffuseFactor, specularFactor) * vec2(att);
 #endif
 
 
-#ifdef TEXTURE_MASK
-vec4 textureBlend   = texture2D( m_TextureMask, texCoord.xy );
-#endif
 
-
-
-#if defined(NORMALMAP) && !defined(VERTEX_LIGHTING)
-vec4 calculateNormal(in vec2 texCoord) {  
-
-vec4 normalHeightCalc = texture2D(m_NormalMap, texCoord* m_uv_0_scale);
-
-    #if defined(NORMALMAP_1) && defined(TEXTURE_MASK)
-vec4 normalHeight1 = texture2D(m_NormalMap_1, texCoord * m_uv_1_scale);
-normalHeightCalc.rgb = mix( normalHeightCalc.rgb, normalHeight1.rgb, textureBlend.r ).rgb;
-#endif
-    #if defined(NORMALMAP_2) && defined(TEXTURE_MASK)
-vec4 normalHeight2 = texture2D(m_NormalMap_2, texCoord * m_uv_2_scale);
-normalHeightCalc.rgb = mix( normalHeightCalc.rgb, normalHeight2.rgb, textureBlend.g ).rgb;
-#endif
-    #if defined(NORMALMAP_3) && defined(TEXTURE_MASK)
-vec4 normalHeight3 = texture2D(m_NormalMap_3, texCoord * m_uv_3_scale);
-normalHeightCalc.rgb = mix( normalHeightCalc.rgb, normalHeight3.rgb, textureBlend.b ).rgb;
-#endif
-
-return normalHeightCalc;
-}
-#endif
 
 
 
 
 void main(){
     
-  vec2 newTexCoord;
+  vec2 newTexCoord = texCoord;
 
 
-    #if defined(PARALLAXMAP) || defined(PARALLAX_A_NOR) && !defined(VERTEX_LIGHTING)
-       float h;
-       #if defined (PARALLAXMAP)
-          h = texture2D(m_ParallaxMap, texCoord).r;
-       #elif defined (PARALLAX_A_NOR) && defined (NORMALMAP)
-          h = normalHeight.a;
-    #if defined(NORMALMAP_1) && defined(TEXTURE_MASK) && defined(PARALLAX_A_NOR)
-      h = mix( h, normalHeight1.a, textureBlend.r );
-    #endif  
-      #if defined(NORMALMAP_2) && defined(TEXTURE_MASK) && defined(PARALLAX_A_NOR)
-      h = mix( h, normalHeight2.a, textureBlend.g );
-      #endif  
-        #if defined(NORMALMAP_2) && defined(TEXTURE_MASK) && defined(PARALLAX_A_NOR)
-      h = mix( h, normalHeight3.a, textureBlend.b );
-        #endif 
 
+#ifdef TEXTURE_MASK
+vec4 textureBlend   = texture2D( m_TextureMask, texCoord.xy );
+#endif
+
+
+#if defined(NORMALMAP) && !defined(VERTEX_LIGHTING)
+vec4 normalHeightCalc = texture2D(m_NormalMap, newTexCoord* m_uv_0_scale);
+#endif
+    #if defined(NORMALMAP_1) && defined(TEXTURE_MASK)
+vec4 normalHeight1 = texture2D(m_NormalMap_1, newTexCoord * m_uv_1_scale);
+normalHeightCalc.rgb = mix( normalHeightCalc.rgb, normalHeight1.rgb, textureBlend.r ).rgb;
+#endif
+    #if defined(NORMALMAP_2) && defined(TEXTURE_MASK)
+vec4 normalHeight2 = texture2D(m_NormalMap_2, newTexCoord * m_uv_2_scale);
+normalHeightCalc.rgb = mix( normalHeightCalc.rgb, normalHeight2.rgb, textureBlend.g ).rgb;
+#endif
+    #if defined(NORMALMAP_3) && defined(TEXTURE_MASK)
+vec4 normalHeight3 = texture2D(m_NormalMap_3, newTexCoord * m_uv_3_scale);
+normalHeightCalc.rgb = mix( normalHeightCalc.rgb, normalHeight3.rgb, textureBlend.b ).rgb;
+#endif
+
+
+   #if (defined(PARALLAXMAP) || (defined(NORMALMAP_PARALLAX) && defined(NORMALMAP))) && !defined(VERTEX_LIGHTING) 
+
+       #ifdef STEEP_PARALLAX
+           #ifdef NORMALMAP_PARALLAX
+               //parallax map is stored in the alpha channel of the normal map         
+               newTexCoord = steepParallaxOffset(m_NormalMap, vViewDir, texCoord, m_ParallaxHeight);
+           #else
+               //parallax map is a texture
+               newTexCoord = steepParallaxOffset(m_ParallaxMap, vViewDir, texCoord, m_ParallaxHeight);         
+           #endif
+       #else
+           #ifdef NORMALMAP_PARALLAX
+               //parallax map is stored in the alpha channel of the normal map         
+               newTexCoord = classicParallaxOffset(m_NormalMap, vViewDir, texCoord, m_ParallaxHeight);
+           #else
+               //parallax map is a texture
+               newTexCoord = classicParallaxOffset(m_ParallaxMap, vViewDir, texCoord, m_ParallaxHeight);
+           #endif
        #endif
-       float heightScale = 0.05;
-       float heightBias = heightScale * -0.5;
-       vec3 normView = normalize(vViewDir);
-       h = (h * heightScale + heightBias) * normView.z;
-       newTexCoord = texCoord + (h * normView.xy);
     #else
-       newTexCoord = texCoord;
+       newTexCoord = texCoord;    
     #endif
+
 
    #ifdef DIFFUSEMAP
    vec4 diffuseColor = texture2D(m_DiffuseMap, newTexCoord* m_uv_0_scale);
@@ -325,7 +317,7 @@ void main(){
 
 
     #if defined(NORMALMAP) && !defined(VERTEX_LIGHTING)
-      normalHeight = calculateNormal(newTexCoord);
+      normalHeight = normalHeightCalc;
       vec3 normal = (normalHeight.xyz * vec3(2.0) - vec3(1.0));
   //    normal = normalize(normal);
      #ifdef LATC
