@@ -65,6 +65,11 @@ varying vec3 lightVec;
     varying vec3 iblVec;
 #endif 
 
+#ifdef TRI_PLANAR_MAPPING
+  varying vec4 wVertex;
+  varying vec3 wNormal;
+#endif
+
 #ifdef FOG
     varying float fog_z;
 #endif
@@ -168,7 +173,7 @@ void main(){
    wvLightPos.w = g_LightPosition.w;
    vec4 lightColor = g_LightColor;
 
-   #if defined(NORMALMAP) && !defined(VERTEX_LIGHTING)
+   #if defined(NORMALMAP) || defined(NORMALMAP_1) || defined(NORMALMAP_2) || defined(NORMALMAP_3) && !defined(VERTEX_LIGHTING) 
      vec3 wvTangent = normalize(g_NormalMatrix * inTangent.xyz);
      vec3 wvBinormal = cross(wvNormal, wvTangent);
 
@@ -211,7 +216,7 @@ void main(){
     #else
       AmbientSum  = vec3(0.2, 0.2, 0.2) * g_AmbientLightColor.rgb; // Default: ambient color is dark gray
       DiffuseSum  = lightColor;
-      SpecularSum = m_Specular.rgb * lightColor.rgb;
+      SpecularSum = (m_Specular * lightColor).rgb;
   //    SpecularSum = vec3(0.0);
     #endif
 
@@ -244,6 +249,10 @@ void main(){
  
     #endif
 
+#ifdef TRI_PLANAR_MAPPING
+    wVertex = vec4(inPosition,0.0);
+    wNormal = inNormal;
+#endif
 
 #ifdef FOG
     fog_z = gl_Position.z;

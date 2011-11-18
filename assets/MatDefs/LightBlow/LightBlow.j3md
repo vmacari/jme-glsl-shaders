@@ -14,19 +14,19 @@ MaterialDef LightBlow {
         Color RimLighting
 
         // Light Map
-        Float LightMapIntensity : 1.0
+        Float LightMapIntensity : 1
         Boolean SeperateTexCoord
         Texture2D LightMap
 
         // Glow intensity
-        Float GlowIntensity : 1.0
+        Float GlowIntensity : 1
 
         // No attenuation increases fps
         Boolean No_Attenuation
 
      // Output emission from the diffuse map alpha channel
         Boolean EmissiveMap
-        Float EmissiveIntensity : 1.0
+        Float EmissiveIntensity : 1
 
 
      // Output alpha from the diffuse map
@@ -42,7 +42,7 @@ MaterialDef LightBlow {
 
         // IBL Map for Image Based Lighting
         TextureCubeMap IblMap
-        Float iblIntensity : 1.0
+        Float iblIntensity : 1
 
         // Switch Hemispherical Lighting on/off
         Boolean Hemi_Lighting_1
@@ -50,7 +50,7 @@ MaterialDef LightBlow {
 
         // Specular lighting
         Boolean Specular_Lighting
-        Float SpecIntensity : 1.0
+        Float SpecIntensity : 1
         Float Shininess (MaterialShininess) : 1 // Specular power/shininess
         Boolean Spec_A_Nor // Output specular from the normal map alpha channel
         Boolean Spec_A_Dif // Output specular from the diffuse map alpha channel
@@ -59,8 +59,8 @@ MaterialDef LightBlow {
         TextureCubeMap RefMap // Ref Map for reflection
         Boolean Ref_A_Nor // Output reflection from the normal map alpha channel
         Boolean Ref_A_Dif // Output reflection from the diffuse map alpha channel
-        Float RefPower : 1.0 // Reflection Intensity
-        Float RefIntensity : 1.0 // Reflection normal map alpha channel Intensity
+        Float RefPower : 1 // Reflection Intensity
+        Float RefIntensity : 1 // Reflection normal map alpha channel Intensity
         Boolean AdditiveReflection
 
         // Compute vertex lighting in the shader
@@ -104,11 +104,26 @@ MaterialDef LightBlow {
         // Specular color
         Color Specular (MaterialSpecular)
 
+
+        // Texture Mask for texture blending
+        Texture2D TextureMask
+
         // Diffuse map
         Texture2D DiffuseMap
+        Texture2D DiffuseMap_1
+        Texture2D DiffuseMap_2
+        Texture2D DiffuseMap_3
+
+        Float uv_0_scale : 1        
+        Float uv_1_scale : 1
+        Float uv_2_scale : 1
+        Float uv_3_scale : 1
 
         // Normal map
         Texture2D NormalMap
+        Texture2D NormalMap_1
+        Texture2D NormalMap_2
+        Texture2D NormalMap_3
 
         // Specular/gloss map
         Texture2D SpecularMap
@@ -189,8 +204,15 @@ MaterialDef LightBlow {
             LOW_QUALITY : LowQuality
             HQ_ATTENUATION : HighQuality
 
+            TEXTURE_MASK : TextureMask
             DIFFUSEMAP : DiffuseMap
+            DIFFUSEMAP_1 : DiffuseMap_1
+            DIFFUSEMAP_2 : DiffuseMap_2
+            DIFFUSEMAP_3 : DiffuseMap_3
             NORMALMAP : NormalMap
+            NORMALMAP_1 : NormalMap_1
+            NORMALMAP_2 : NormalMap_2
+            NORMALMAP_3 : NormalMap_3
             SPECULARMAP : SpecularMap
             PARALLAXMAP : ParallaxMap
             NORMALMAP_PARALLAX : PackedNormalParallax
@@ -201,6 +223,7 @@ MaterialDef LightBlow {
             SPHERE_MAP : SphereMap
             FOG : Fog
             FOG_SKY : FogSkyBox
+
         }
 
     }

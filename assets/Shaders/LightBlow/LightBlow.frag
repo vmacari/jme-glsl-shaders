@@ -13,16 +13,6 @@ varying vec4 DiffuseSum;
 varying vec3 SpecularSum;
 
 
-#ifdef FOG
-    varying float fog_z;
-    uniform vec4 m_FogColor;
-#endif
-  #ifdef FOG_SKY
-    uniform ENVMAP m_FogSkyBox;
-    varying vec3 I;
-  #endif
-
-
 #ifdef HAS_LIGHTMAP
     uniform float m_LightMapIntensity;
     uniform sampler2D m_LightMap;
@@ -40,9 +30,6 @@ varying vec3 SpecularSum;
   varying vec2 vertexLightValues;
 #endif
 
-#ifdef DIFFUSEMAP
-  uniform sampler2D m_DiffuseMap;
-#endif
 
 #ifdef SPECULARMAP
   uniform sampler2D m_SpecularMap;
@@ -51,16 +38,65 @@ varying vec3 SpecularSum;
 #ifdef PARALLAXMAP
   uniform sampler2D m_ParallaxMap;
 #endif
+
+
+#ifdef DIFFUSEMAP
+  uniform sampler2D m_DiffuseMap;
+  
+#endif
+#if defined(DIFFUSEMAP_1) && defined(TEXTURE_MASK)
+  uniform sampler2D m_DiffuseMap_1;
+#endif
+#if defined(DIFFUSEMAP_2) && defined(TEXTURE_MASK)
+  uniform sampler2D m_DiffuseMap_2;
+#endif
+#if defined(DIFFUSEMAP_3) && defined(TEXTURE_MASK)
+  uniform sampler2D m_DiffuseMap_3;
+#endif
+
   
 #ifdef NORMALMAP
   uniform sampler2D m_NormalMap;
+  vec4 normalHeight;
 #else
   varying vec3 vNormal;
 #endif
 
+
+#if defined(NORMALMAP_1) && defined(TEXTURE_MASK)
+  uniform sampler2D m_NormalMap_1;
+#endif
+#if defined(NORMALMAP_2) && defined(TEXTURE_MASK)
+  uniform sampler2D m_NormalMap_2;
+#endif
+#if defined(NORMALMAP_3) && defined(TEXTURE_MASK)
+  uniform sampler2D m_NormalMap_3;
+#endif
+
+
+#if defined(NORMALMAP) || defined(DIFFUSEMAP)
+  uniform float m_uv_0_scale;  
+#endif
+#if defined(NORMALMAP_1) || defined(DIFFUSEMAP_1)
+  uniform float m_uv_1_scale;  
+#endif
+#if defined(NORMALMAP_2) || defined(DIFFUSEMAP_2)
+  uniform float m_uv_2_scale;  
+#endif
+#if defined(NORMALMAP_3) || defined(DIFFUSEMAP_3)
+  uniform float m_uv_3_scale;  
+#endif
+
+
+#ifdef TEXTURE_MASK
+  uniform sampler2D m_TextureMask;
+#endif
+
+
 #ifdef ALPHAMAP
   uniform sampler2D m_AlphaMap;
 #endif
+
 
 #ifdef COLORRAMP
   uniform sampler2D m_ColorRamp;
@@ -91,12 +127,12 @@ uniform vec4 m_RimLighting2;
 // uniform vec4 g_AmbientLightColor;
 #endif
 
+
 #ifdef IBL 
 varying vec3 iblVec;
 uniform ENVMAP m_IblMap;
 uniform float m_iblIntensity;
 #endif
-
 
 
 #ifdef REFLECTION 
@@ -108,9 +144,25 @@ uniform float m_iblIntensity;
     varying float refTex;
 #endif
 
+
 #ifdef MINNAERT
 uniform vec4 m_Minnaert;
 #endif
+
+#ifdef TRI_PLANAR_MAPPING
+  varying vec4 wVertex;
+  varying vec3 wNormal;
+#endif
+
+#ifdef FOG
+    varying float fog_z;
+    uniform vec4 m_FogColor;
+#endif
+  #ifdef FOG_SKY
+    uniform ENVMAP m_FogSkyBox;
+    varying vec3 I;
+  #endif
+
 
 
 float tangDot(in vec3 v1, in vec3 v2){
@@ -191,18 +243,58 @@ return vec2(diffuseFactor, specularFactor) * vec2(att);
 #endif
 
 
+#ifdef TEXTURE_MASK
+vec4 textureBlend   = texture2D( m_TextureMask, texCoord.xy );
+#endif
+
+
+
+#if defined(NORMALMAP) && !defined(VERTEX_LIGHTING)
+vec4 calculateNormal(in vec2 texCoord) {  
+
+vec4 normalHeightCalc = texture2D(m_NormalMap, texCoord* m_uv_0_scale);
+
+    #if defined(NORMALMAP_1) && defined(TEXTURE_MASK)
+vec4 normalHeight1 = texture2D(m_NormalMap_1, texCoord * m_uv_1_scale);
+normalHeightCalc.rgb = mix( normalHeightCalc.rgb, normalHeight1.rgb, textureBlend.r ).rgb;
+#endif
+    #if defined(NORMALMAP_2) && defined(TEXTURE_MASK)
+vec4 normalHeight2 = texture2D(m_NormalMap_2, texCoord * m_uv_2_scale);
+normalHeightCalc.rgb = mix( normalHeightCalc.rgb, normalHeight2.rgb, textureBlend.g ).rgb;
+#endif
+    #if defined(NORMALMAP_3) && defined(TEXTURE_MASK)
+vec4 normalHeight3 = texture2D(m_NormalMap_3, texCoord * m_uv_3_scale);
+normalHeightCalc.rgb = mix( normalHeightCalc.rgb, normalHeight3.rgb, textureBlend.b ).rgb;
+#endif
+
+return normalHeightCalc;
+}
+#endif
+
+
 
 
 void main(){
     
   vec2 newTexCoord;
 
+
     #if defined(PARALLAXMAP) || defined(PARALLAX_A_NOR) && !defined(VERTEX_LIGHTING)
        float h;
        #if defined (PARALLAXMAP)
           h = texture2D(m_ParallaxMap, texCoord).r;
        #elif defined (PARALLAX_A_NOR) && defined (NORMALMAP)
-          h = texture2D(m_NormalMap, texCoord).a;
+          h = normalHeight.a;
+    #if defined(NORMALMAP_1) && defined(TEXTURE_MASK) && defined(PARALLAX_A_NOR)
+      h = mix( h, normalHeight1.a, textureBlend.r );
+    #endif  
+      #if defined(NORMALMAP_2) && defined(TEXTURE_MASK) && defined(PARALLAX_A_NOR)
+      h = mix( h, normalHeight2.a, textureBlend.g );
+      #endif  
+        #if defined(NORMALMAP_2) && defined(TEXTURE_MASK) && defined(PARALLAX_A_NOR)
+      h = mix( h, normalHeight3.a, textureBlend.b );
+        #endif 
+
        #endif
        float heightScale = 0.05;
        float heightBias = heightScale * -0.5;
@@ -213,15 +305,27 @@ void main(){
        newTexCoord = texCoord;
     #endif
 
-    
    #ifdef DIFFUSEMAP
-      vec4 diffuseColor = texture2D(m_DiffuseMap, newTexCoord);
+   vec4 diffuseColor = texture2D(m_DiffuseMap, newTexCoord* m_uv_0_scale);
+    #if defined(DIFFUSEMAP_1) && defined(TEXTURE_MASK)
+      vec4 diffuseColor1 = texture2D(m_DiffuseMap_1, newTexCoord * m_uv_1_scale);
+      diffuseColor.rgb = mix( diffuseColor.rgb, diffuseColor1.rgb, textureBlend.r ).rgb;
+    #endif  
+      #if defined(DIFFUSEMAP_2) && defined(TEXTURE_MASK)
+        vec4 diffuseColor2 = texture2D(m_DiffuseMap_2, newTexCoord * m_uv_2_scale);
+        diffuseColor.rgb = mix( diffuseColor.rgb, diffuseColor2.rgb, textureBlend.g ).rgb;
+      #endif  
+        #if defined(DIFFUSEMAP_3) && defined(TEXTURE_MASK)
+          vec4 diffuseColor3 = texture2D(m_DiffuseMap_3, newTexCoord * m_uv_3_scale);
+          diffuseColor.rgb = mix( diffuseColor.rgb, diffuseColor3.rgb, textureBlend.b ).rgb;
+        #endif  
     #else
       vec4 diffuseColor = vec4(0.6, 0.6, 0.6, 1.0);
     #endif
 
+
     #if defined(NORMALMAP) && !defined(VERTEX_LIGHTING)
-      vec4 normalHeight = texture2D(m_NormalMap, newTexCoord);
+      normalHeight = calculateNormal(newTexCoord);
       vec3 normal = (normalHeight.xyz * vec3(2.0) - vec3(1.0));
   //    normal = normalize(normal);
      #ifdef LATC
@@ -256,12 +360,29 @@ void main(){
     #endif
 
     #if defined(SPECULAR_LIGHTING) && defined(SPEC_A_NOR) && defined(NORMALMAP) && !defined(SPECULARMAP)
-    float specA = texture2D(m_NormalMap, newTexCoord).a;
+    float specA = normalHeight.a;
     specularColor =  vec4(specA);
+
+
     #elif defined(SPECULAR_LIGHTING) && defined(SPEC_A_DIF) && !defined(SPEC_A_NOR) && defined(DIFFUSEMAP) && !defined(SPECULARMAP)
-    float specA = texture2D(m_DiffuseMap, newTexCoord).a;
-    specularColor =  vec4(specA);    
+    float specA = diffuseColor.a;
+      
+
+    #if defined(DIFFUSEMAP_1) && defined(TEXTURE_MASK) && defined(SPEC_A_DIF)
+      specA = mix( specA, diffuseColor1.a, textureBlend.r );
+    #endif  
+      #if defined(DIFFUSEMAP_2) && defined(TEXTURE_MASK) && defined(SPEC_A_DIF)
+      specA = mix( specA, diffuseColor2.a, textureBlend.g );
+      #endif  
+        #if defined(DIFFUSEMAP_3) && defined(TEXTURE_MASK) && defined(SPEC_A_DIF)
+      specA = mix( specA, diffuseColor3.a, textureBlend.b );
+        #endif  
+
+ specularColor =  vec4(specA); 
     #endif
+
+
+
 
 
 
