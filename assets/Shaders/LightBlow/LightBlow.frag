@@ -241,10 +241,6 @@ return vec2(diffuseFactor, specularFactor) * vec2(att);
 
 
 
-
-
-
-
 void main(){
     
   vec2 newTexCoord = texCoord;
@@ -261,15 +257,15 @@ vec4 normalHeightCalc = texture2D(m_NormalMap, newTexCoord* m_uv_0_scale);
 #endif
     #if defined(NORMALMAP_1) && defined(TEXTURE_MASK)
 vec4 normalHeight1 = texture2D(m_NormalMap_1, newTexCoord * m_uv_1_scale);
-normalHeightCalc.rgb = mix( normalHeightCalc.rgb, normalHeight1.rgb, textureBlend.r ).rgb;
+normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight1.rg, textureBlend.r ).rg;
 #endif
     #if defined(NORMALMAP_2) && defined(TEXTURE_MASK)
 vec4 normalHeight2 = texture2D(m_NormalMap_2, newTexCoord * m_uv_2_scale);
-normalHeightCalc.rgb = mix( normalHeightCalc.rgb, normalHeight2.rgb, textureBlend.g ).rgb;
+normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight2.rg, textureBlend.g ).rg;
 #endif
     #if defined(NORMALMAP_3) && defined(TEXTURE_MASK)
 vec4 normalHeight3 = texture2D(m_NormalMap_3, newTexCoord * m_uv_3_scale);
-normalHeightCalc.rgb = mix( normalHeightCalc.rgb, normalHeight3.rgb, textureBlend.b ).rgb;
+normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight3.rg, textureBlend.b ).rg;
 #endif
 
 
