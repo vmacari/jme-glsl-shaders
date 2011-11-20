@@ -7,6 +7,10 @@ MaterialDef LightBlow {
         Color FogColor
         TextureCubeMap FogSkyBox
 
+        // Multiply Color system
+        Boolean Multiply_Color
+
+
         // Color of RimLighting2
         Color RimLighting2
 
@@ -221,6 +225,7 @@ MaterialDef LightBlow {
             REFLECTION : RefMap
             ADDITIVE_REFLECTION : AdditiveReflection
             SPHERE_MAP : SphereMap
+            MULTIPLY_COLOR : Multiply_Color
             FOG : Fog
             FOG_SKY : FogSkyBox
 
