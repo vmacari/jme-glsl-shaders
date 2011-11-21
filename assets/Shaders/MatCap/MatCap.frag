@@ -9,15 +9,36 @@ uniform float m_texturesize;
   uniform sampler2D m_NormalMap;
  uniform float  m_NormalMapPower;    
   varying vec3 mat;
-  varying vec4 refVec;
-  varying vec3 I;  
-  varying vec3 N;   
-  varying vec3 worldPos; 
-
-
 #endif
+
   varying vec3 vNormal;
   varying vec3 diffuseColor;
+
+
+#ifdef TOON_EDGES
+uniform vec4 m_EdgesColor;
+vec4 toonEdges;
+#endif
+
+
+#ifdef MULTIPLY_COLOR
+uniform vec4 m_Multiply_Color;
+#endif
+
+
+#ifdef FOG
+    varying float fog_z;
+    uniform vec4 m_FogColor;
+    vec4 fogColor;
+    float fogFactor;
+#endif
+
+#ifdef FOG_SKY
+#import "Common/ShaderLib/Optics.glsllib"
+    uniform ENVMAP m_FogSkyBox;
+    varying vec3 I;
+#endif
+
 
 void main(){
 
@@ -59,7 +80,32 @@ diffuseColor = texture2D(m_DiffuseMap, vec2((coords*vec3(0.495) + vec3(0.5))+(no
 #endif
     
 
+    #ifdef MULTIPLY_COLOR
+diffuseColor.rgb *= m_Multiply_Color.rgb;
+    #endif
+
     gl_FragColor.rgb = diffuseColor;
     gl_FragColor.a = 1.0;
+
+
+#ifdef FOG
+
+fogColor = m_FogColor;
+
+    #ifdef FOG_SKY
+fogColor.rgb = Optics_GetEnvColor(m_FogSkyBox, I).rgb;
+    #endif
+
+float fogDensity = 1.2;
+float fogDistance = fogColor.a;
+float depth = fog_z / fogDistance;
+float LOG2 = 1.442695;
+ 
+fogFactor = exp2( -fogDensity * fogDensity * depth *  depth * LOG2 );
+fogFactor = clamp(fogFactor, 0.0, 1.0);
+
+gl_FragColor.rgb = mix(fogColor.rgb,gl_FragColor.rgb,vec3(fogFactor));
+
+#endif
 
 }

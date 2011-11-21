@@ -29,7 +29,7 @@ public class LightBlow_Toon_PostEdges extends SimpleApplication {
 
         public void setupFilters(){
 
-        if (renderer.getCaps().contains(Caps.GLSL120)){
+        if (renderer.getCaps().contains(Caps.GLSL100)){
         CartoonEdgeProcessor cartoonEdgeProcess = new CartoonEdgeProcessor();
         viewPort.addProcessor(cartoonEdgeProcess);
         }

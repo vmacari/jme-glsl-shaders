@@ -34,6 +34,9 @@ uniform float m_abberIndex;
     uniform mat4 g_WorldMatrix;
     varying vec3 refVec;
 
+#ifdef FOG
+    varying float fog_z;
+#endif
 
 
 void main(){
@@ -84,6 +87,12 @@ vec3 worldPos = (g_WorldMatrix * pos).xyz;
     refIndexB = m_refIndex + (m_abberIndex*2.0);
 refVecG = -refract(N, I, refIndexG);
 refVecB = -refract(N, I, refIndexB);
+#endif
+
+
+
+#ifdef FOG
+    fog_z = gl_Position.z;
 #endif
 
 }

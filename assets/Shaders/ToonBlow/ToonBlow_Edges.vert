@@ -36,7 +36,7 @@ void main(){
      gl_Position = vec4(1000.0,1000.0,1000.0,1000.0);
    }
 
-#if defined (REFLECTION) || defined (IBL) || defined(FOG_SKY)
+#if defined(FOG_SKY)
        vec3 worldPos = (g_WorldMatrix * pos).xyz;
        I = normalize( g_CameraPosition -  worldPos  ).xyz;
 #endif

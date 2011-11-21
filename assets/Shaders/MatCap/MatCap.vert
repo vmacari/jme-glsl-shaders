@@ -11,10 +11,8 @@ attribute vec3 inNormal;
 
 attribute vec4 inTangent;
 varying vec3 mat;
-
-
   
-    varying vec3 vNormal;
+varying vec3 vNormal;
 
 
 #if defined(NORMALMAP)
@@ -24,6 +22,18 @@ varying vec3 mat;
 
   varying vec3 vPosition;
   varying vec3 vViewDir;
+
+
+#ifdef FOG
+    varying float fog_z;
+#endif
+
+#if defined(FOG_SKY)
+    varying vec3 I;
+    uniform vec3 g_CameraPosition;
+    uniform mat4 g_WorldMatrix;
+#endif 
+
 
 
 void main(){
@@ -55,5 +65,14 @@ void main(){
    #endif
 vNormal = wvNormal;
 
+
+#if defined(FOG_SKY)
+       vec3 worldPos = (g_WorldMatrix * pos).xyz;
+       I = normalize( g_CameraPosition -  worldPos  ).xyz;
+#endif
+
+#ifdef FOG
+    fog_z = gl_Position.z;
+#endif
 
 }

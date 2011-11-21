@@ -9,7 +9,7 @@ uniform float m_texturesize;
  uniform float  m_NormalMapPower;    
   varying vec3 mat;
   varying vec3 I;  
-  varying vec3 N;   
+//  varying vec3 N;   
   varying vec3 worldPos; 
 #endif
 
@@ -21,7 +21,7 @@ uniform float m_texturesize;
   uniform float m_specularIntensity;
 #endif
 
-uniform vec4 m_colorMultiply;
+uniform vec4 m_Multiply_Color;
 uniform float m_colorIntensity;
 
     uniform float m_RefPower;
@@ -33,6 +33,19 @@ uniform float m_colorIntensity;
 varying vec3 refVecG;
 varying vec3 refVecB;
 #endif
+
+
+#ifdef FOG
+    varying float fog_z;
+    uniform vec4 m_FogColor;
+    vec4 fogColor;
+    float fogFactor;
+#endif
+
+#ifdef FOG_SKY
+    uniform ENVMAP m_FogSkyBox;
+#endif
+
 
 void main(){
 
@@ -91,13 +104,36 @@ refGet.b = Optics_GetEnvColor(m_RefMap, refVecB).b;
 #endif
  
 
-vec3 color = refGet.xyz * m_colorMultiply.xyz*m_colorIntensity;
+vec3 color = refGet.xyz * m_Multiply_Color.xyz*m_colorIntensity;
+
  
 #ifdef SPECULAR
     gl_FragColor.rgb = color+specularColor*m_specularIntensity;
 #else
     gl_FragColor.rgb = color;
 #endif
-    gl_FragColor.a = m_colorMultiply.w;
+    gl_FragColor.a = m_Multiply_Color.w;
+
+
+#ifdef FOG
+
+fogColor = m_FogColor;
+
+    #ifdef FOG_SKY
+fogColor.rgb = Optics_GetEnvColor(m_FogSkyBox, I).rgb;
+    #endif
+
+float fogDensity = 1.2;
+float fogDistance = fogColor.a;
+float depth = fog_z / fogDistance;
+float LOG2 = 1.442695;
+ 
+fogFactor = exp2( -fogDensity * fogDensity * depth *  depth * LOG2 );
+fogFactor = clamp(fogFactor, 0.0, 1.0);
+
+gl_FragColor.rgb = mix(fogColor.rgb,gl_FragColor.rgb,vec3(fogFactor));
+
+#endif
+
 
 }

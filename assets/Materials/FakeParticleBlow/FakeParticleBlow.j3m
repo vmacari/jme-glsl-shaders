@@ -5,11 +5,10 @@ Material Fake_Particle_Blow : MatDefs/FakeParticleBlow/FakeParticleBlow.j3md {
         BaseColor : 2.0 1.0 0.5 1.0
         Change_Direction : true
         Animation_Y : true
-        TimeSpeed : 0.5
+        TimeSpeed : 1.2
      }
     AdditionalRenderState {
       FaceCull Off
       Blend Additive
-      
     }
 }

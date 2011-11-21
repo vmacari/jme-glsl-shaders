@@ -1,9 +1,3 @@
-#ifdef FOG_SKY
-#import "Common/ShaderLib/Optics.glsllib"
-    uniform ENVMAP m_FogSkyBox;
-    varying vec3 I;
-#endif
-
 #ifdef TOON_EDGES
 uniform vec4 m_EdgesColor;
 vec4 toonEdges;
@@ -14,6 +8,14 @@ vec4 toonEdges;
     vec4 fogColor;
     float fogFactor;
 #endif
+
+
+#ifdef FOG_SKY
+#import "Common/ShaderLib/Optics.glsllib"
+    uniform ENVMAP m_FogSkyBox;
+    varying vec3 I;
+#endif
+
 
 void main(){
 

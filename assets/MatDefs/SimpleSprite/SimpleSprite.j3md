@@ -1,0 +1,35 @@
+MaterialDef SimpleSprite {
+ 
+    MaterialParameters {
+
+        Texture2D AniTexMap
+        Color BaseColor
+        Float X_Images
+        Float Y_Images
+
+        // Multiply Color system
+        Color Multiply_Color
+
+    }
+ 
+    Technique {
+          VertexShader GLSL100:   Shaders/SimpleSprite/SimpleSprite.vert
+          FragmentShader GLSL100: Shaders/SimpleSprite/SimpleSprite.frag
+ 
+        WorldParameters {
+            WorldViewProjectionMatrix
+            Tpf
+            
+        }
+ 
+        Defines {
+
+            MULTIPLY_COLOR : Multiply_Color       
+
+        }
+    }
+ 
+    Technique FixedFunc {
+    }
+ 
+}

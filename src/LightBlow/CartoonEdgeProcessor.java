@@ -1,5 +1,5 @@
 package LightBlow;
-import ToonBlow.*;
+
 import com.jme3.post.SceneProcessor;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
