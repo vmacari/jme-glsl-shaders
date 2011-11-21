@@ -154,17 +154,11 @@ uniform vec4 m_Minnaert;
 #endif
 
 
-#ifdef TOON
-vec4 colour;
-    #ifdef SIMPLE_EDGES
-uniform float m_SimpleEdge;
-    #endif
-#endif
-
-
 #ifdef FOG
     varying float fog_z;
     uniform vec4 m_FogColor;
+    vec4 fogColor;
+    float fogFactor;
 #endif
   #ifdef FOG_SKY
     uniform ENVMAP m_FogSkyBox;
@@ -352,7 +346,7 @@ normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight3.rg, textureBlend.b
  
 
 
-    #ifdef SPECULARMAP 
+    #if defined(SPECULAR_LIGHTING) && defined(SPECULARMAP)
       vec4 specularColor = texture2D(m_SpecularMap, newTexCoord);
     #else
       vec4 specularColor = vec4(1.0);
@@ -574,41 +568,28 @@ diffuseColor.rgb *= m_Diffuse.rgb;
     #endif
 
 
-#ifdef TOON
-    #ifdef SIMPLE_EDGES
-if (dot(N, V) < m_SimpleEdge) colour = vec4(0,0,0,1);
-
-  else      colour.rgb =  (((AmbientSum + DiffuseSum.rgb) * diffuseColor.rgb)  +
+#if defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING) && !defined(TOON)
+    gl_FragColor.rgb =  AmbientSum * diffuseColor.rgb +
+                    DiffuseSum.rgb * diffuseColor.rgb  * vec3(light.x) +
+                    SpecularSum2.rgb * specularColor.rgb * vec3(light.y); 
+       
+#elif defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING) && defined(TOON)
+        gl_FragColor.rgb =  (((AmbientSum * 0.35 + DiffuseSum.rgb) * diffuseColor.rgb)  +
                        SpecularSum2.rgb * specularColor.rgb * vec3(light.y));
 
-#else
-colour.rgb =  (((AmbientSum + DiffuseSum.rgb) * diffuseColor.rgb)  +
-                       SpecularSum2.rgb * specularColor.rgb * vec3(light.y));
-    #endif
-#endif
-
-
-
-        #if defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING)
-       gl_FragColor.rgb =  AmbientSum * diffuseColor.rgb +
-                       DiffuseSum.rgb * diffuseColor.rgb  * vec3(light.x) +
-                       SpecularSum2.rgb * specularColor.rgb * vec3(light.y); 
-        #endif
-
-#if !defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING)
+    #elif !defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING)  && !defined(TOON)
                         gl_FragColor.rgb = AmbientSum * diffuseColor.rgb +
                                        DiffuseSum.rgb * diffuseColor.rgb  * vec3(light.x);
-    #endif
 
+#elif !defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING) && defined(TOON)
+        gl_FragColor.rgb =  (((AmbientSum * 0.35 + DiffuseSum.rgb) * diffuseColor.rgb));
 
-
-
-
+#endif
 
 
 #ifdef FOG
 
-vec4 fogColor = m_FogColor;
+fogColor = m_FogColor;
 
     #ifdef FOG_SKY
 fogColor.rgb = Optics_GetEnvColor(m_FogSkyBox, I).rgb;
@@ -619,9 +600,11 @@ float fogDistance = fogColor.a;
 float depth = fog_z / fogDistance;
 float LOG2 = 1.442695;
  
-float fogFactor = exp2( -fogDensity * fogDensity * depth *  depth * LOG2 );
+fogFactor = exp2( -fogDensity * fogDensity * depth *  depth * LOG2 );
 fogFactor = clamp(fogFactor, 0.0, 1.0);
-gl_FragColor.rgb =mix(fogColor.rgb,gl_FragColor.rgb,vec3(fogFactor));
+
+gl_FragColor.rgb = mix(fogColor.rgb,gl_FragColor.rgb,vec3(fogFactor));
+
 #endif
 
 

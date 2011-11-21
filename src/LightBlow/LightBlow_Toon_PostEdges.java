@@ -15,7 +15,7 @@ import com.jme3.util.TangentBinormalGenerator;
 
 public class LightBlow_Toon_PostEdges extends SimpleApplication {
 
-    Spatial toon;
+
 
     
   public static void main(String[] args) {
@@ -41,12 +41,25 @@ public class LightBlow_Toon_PostEdges extends SimpleApplication {
   public void simpleInitApp() {
 
          
-       toon = assetManager.loadModel("Models/ToonBlow/toon.obj");
-       Material mat = assetManager.loadMaterial("Materials/ToonBlow/ToonBlow_PostEdges.j3m");
+       Spatial toon = assetManager.loadModel("Models/ToonBlow/toon.obj");
+       Material mat = assetManager.loadMaterial("Materials/LightBlow/Toon_System/Toon_Base.j3m");
        toon.setMaterial(mat);
        TangentBinormalGenerator.generate(toon);
        rootNode.attachChild(toon);
-
+       
+       Spatial toon2 = assetManager.loadModel("Models/ToonBlow/toon.obj");
+       Material mat2 = assetManager.loadMaterial("Materials/LightBlow/Toon_System/Toon_Base_Specular.j3m");
+       toon2.setMaterial(mat2);
+       TangentBinormalGenerator.generate(toon2);
+       toon2.setLocalTranslation(-2f, 0, 0);
+       rootNode.attachChild(toon2);
+//
+//       Spatial toon3 = assetManager.loadModel("Models/ToonBlow/toon.obj");
+//       Material mat3 = assetManager.loadMaterial("Materials/LightBlow/Toon_System/Toon_Base.j3m");
+//       toon3.setMaterial(mat3);
+//       TangentBinormalGenerator.generate(toon3);
+//       toon3.setLocalTranslation(-4f, 0, 0);
+//       rootNode.attachChild(toon3);       
    
         DirectionalLight dl = new DirectionalLight();
         dl.setDirection(new Vector3f(-0.8f, -0.6f, -0.08f).normalizeLocal());

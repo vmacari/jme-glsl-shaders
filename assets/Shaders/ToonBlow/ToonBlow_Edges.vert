@@ -1,7 +1,6 @@
-uniform float m_EdgeSize; 
-
 #define ATTENUATION
 
+uniform float m_EdgeSize; 
 
 uniform mat4 g_WorldViewProjectionMatrix;
 uniform mat4 g_WorldViewMatrix;
@@ -12,13 +11,39 @@ attribute vec3 inPosition;
 attribute vec2 inTexCoord;
 attribute vec3 inNormal;
 
+#ifdef FOG
+    varying float fog_z;
+#endif
+
+#if defined(FOG_SKY)
+    varying vec3 I;
+    uniform vec3 g_CameraPosition;
+    uniform mat4 g_WorldMatrix;
+#endif 
 
 
 void main(){
+
    vec4 pos = vec4(inPosition, 1.0);
    vec4 normal = vec4(inNormal,0.0);
+
+    if (m_EdgeSize != 0.0) {
 
    normal = normalize(normal);
    pos = pos + normal * m_EdgeSize;
    gl_Position = g_WorldViewProjectionMatrix * pos;
+   } else {
+     gl_Position = vec4(1000.0,1000.0,1000.0,1000.0);
+   }
+
+#if defined (REFLECTION) || defined (IBL) || defined(FOG_SKY)
+       vec3 worldPos = (g_WorldMatrix * pos).xyz;
+       I = normalize( g_CameraPosition -  worldPos  ).xyz;
+#endif
+
+#ifdef FOG
+    fog_z = gl_Position.z;
+#endif
+
 }
+

@@ -3,13 +3,16 @@ MaterialDef LightBlow {
     MaterialParameters {
 
         // Fog
-        Boolean Fog
         Color FogColor
         TextureCubeMap FogSkyBox
 
         // Multiply Color system
         Boolean Multiply_Color
 
+        // Toon System
+        Boolean Toon
+        Color EdgesColor
+        Float EdgeSize
 
         // Color of RimLighting2
         Color RimLighting2
@@ -226,11 +229,47 @@ MaterialDef LightBlow {
             ADDITIVE_REFLECTION : AdditiveReflection
             SPHERE_MAP : SphereMap
             MULTIPLY_COLOR : Multiply_Color
-            FOG : Fog
+            FOG : FogColor
             FOG_SKY : FogSkyBox
+            TOON : Toon
+            TOON_EDGES : EdgesColor
 
         }
 
+    }
+
+
+    Technique CartoonEdge {
+
+        LightMode MultiPass
+
+        VertexShader GLSL100:   Shaders/ToonBlow/ToonBlow_Edges.vert
+        FragmentShader GLSL100: Shaders/ToonBlow/ToonBlow_Edges.frag
+
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            NormalMatrix
+            WorldViewMatrix
+            ViewMatrix
+            CameraPosition
+            WorldMatrix
+        }
+
+        Defines {
+
+            SPHERE_MAP : SphereMap
+            FOG : FogColor
+            FOG_SKY : FogSkyBox
+            TOON : Toon
+            TOON_EDGES : EdgesColor
+        }
+
+        RenderState {
+            FaceCull Front
+            DepthTest On
+            DepthWrite On
+        }
     }
 
     Technique PreShadow {
