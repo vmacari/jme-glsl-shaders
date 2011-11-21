@@ -588,12 +588,11 @@ colour.rgb =  (((AmbientSum + DiffuseSum.rgb) * diffuseColor.rgb)  +
 #endif
 
 
+
         #if defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING)
        gl_FragColor.rgb =  AmbientSum * diffuseColor.rgb +
                        DiffuseSum.rgb * diffuseColor.rgb  * vec3(light.x) +
                        SpecularSum2.rgb * specularColor.rgb * vec3(light.y); 
-#if defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING)
-      
         #endif
 
 #if !defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING)
