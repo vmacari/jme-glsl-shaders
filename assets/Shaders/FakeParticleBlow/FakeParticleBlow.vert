@@ -15,7 +15,7 @@ varying vec2 texCoordAni;
 void main(){
     gl_Position = g_WorldViewProjectionMatrix * vec4(inPosition, 1.0);
  
-g_Time *= m_TimeSpeed;
+float thisTime = g_Time * m_TimeSpeed;
 
 
 texCoord = inTexCoord;
@@ -25,15 +25,15 @@ texCoordAni = inTexCoord;
 
 
 #if defined (ANY_DIR_Y) && !defined (CHANGE_DIR)
-texCoordAni.y += g_Time;
+texCoordAni.y += thisTime;
 #elif defined (ANY_DIR_Y) && defined (CHANGE_DIR)
-texCoordAni.y -= g_Time;
+texCoordAni.y -= thisTime;
 #endif
 
 #if defined (ANY_DIR_X) && !defined (CHANGE_DIR)
-texCoordAni.x += g_Time;
+texCoordAni.x += thisTime;
 #elif defined (ANY_DIR_X) && defined (CHANGE_DIR)
-texCoordAni.x -= g_Time;
+texCoordAni.x -= thisTime;
 #endif
 
 
