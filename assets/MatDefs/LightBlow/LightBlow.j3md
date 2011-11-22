@@ -11,7 +11,7 @@ MaterialDef LightBlow {
 
         // Toon System
         Boolean Toon
-        Color EdgesColor
+        Color EdgesColor 
         Float EdgeSize
 
         // Color of RimLighting2

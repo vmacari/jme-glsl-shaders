@@ -19,7 +19,11 @@ vec4 toonEdges;
 
 void main(){
 
+#ifdef TOON_EDGES
 gl_FragColor = m_EdgesColor;
+#else
+gl_FragColor = vec4(0.0);
+#endif
 
 #ifdef FOG
 

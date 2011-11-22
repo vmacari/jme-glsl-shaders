@@ -24,17 +24,15 @@ attribute vec3 inNormal;
 
 void main(){
 
-   vec4 pos = vec4(inPosition, 1.0);
-   vec4 normal = vec4(inNormal,0.0);
+
 
     if (m_EdgeSize != 0.0) {
+   vec4 pos = vec4(inPosition, 1.0);
+   vec4 normal = vec4(inNormal,0.0);
 
    normal = normalize(normal);
    pos = pos + normal * m_EdgeSize;
    gl_Position = g_WorldViewProjectionMatrix * pos;
-   } else {
-     gl_Position = vec4(1000.0,1000.0,1000.0,1000.0);
-   }
 
 #if defined(FOG_SKY)
        vec3 worldPos = (g_WorldMatrix * pos).xyz;
@@ -44,6 +42,12 @@ void main(){
 #ifdef FOG
     fog_z = gl_Position.z;
 #endif
+
+   } else {
+     gl_Position = vec4(1000.0,1000.0,1000.0,1000.0);
+   }
+
+
 
 }
 

@@ -9,7 +9,7 @@ MaterialDef FakeParticleBlow {
 
         // Toon System
         Boolean Toon
-        Color EdgesColor
+        Color EdgesColor 
         Float EdgeSize
 
         Texture2D NormalMap
@@ -63,7 +63,6 @@ MaterialDef FakeParticleBlow {
             CHROMATIC_ABERRATION : ChromaticAbberation
             FOG : FogColor
             FOG_SKY : FogSkyBox
-            TOON : Toon
             TOON_EDGES : EdgesColor
             
         }
@@ -91,7 +90,6 @@ MaterialDef FakeParticleBlow {
             SPHERE_MAP : SphereMap
             FOG : FogColor
             FOG_SKY : FogSkyBox
-            TOON : Toon
             TOON_EDGES : EdgesColor
         }
 
