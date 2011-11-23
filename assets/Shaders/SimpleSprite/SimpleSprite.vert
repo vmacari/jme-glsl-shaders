@@ -40,7 +40,7 @@ void main(){
 	texCoordAni.x = (1 - ((texCoordAni.x + selectedTile % iNumTilesU) / iNumTilesU)); ///selectedTile;
 	texCoordAni.y = ((texCoordAni.y + selectedTile / iNumTilesU) / iNumTilesV); ///selectedTile;
 
-
+texCoordAni.x += g_Time-(1/iNumTilesU);
 
 
 #if defined(FOG_SKY)

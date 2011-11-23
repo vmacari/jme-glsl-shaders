@@ -8,13 +8,11 @@ import com.jme3.scene.Spatial;
 import com.jme3.util.TangentBinormalGenerator;
 
 
-public class MatCap extends SimpleApplication {
-
-    Spatial fire;
+public class SimpleSprite extends SimpleApplication {
 
     
   public static void main(String[] args) {
-    MatCap app = new MatCap();
+    SimpleSprite app = new SimpleSprite();
     app.start();
   }
 
