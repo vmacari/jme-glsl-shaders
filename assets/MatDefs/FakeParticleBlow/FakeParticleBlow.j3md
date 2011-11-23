@@ -3,7 +3,7 @@ MaterialDef FakeParticleBlow {
     MaterialParameters {
         Texture2D MaskMap
         Texture2D AniTexMap
-        Float TimeSpeed
+        Float TimeSpeed : 1
 
         Color BaseColor
 
