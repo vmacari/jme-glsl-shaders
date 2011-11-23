@@ -1,17 +1,15 @@
 uniform mat4 g_WorldViewProjectionMatrix;
-// uniform float g_Tpf;
-
-uniform float g_Tpf;
 uniform float g_Time;
 
 attribute vec3 inPosition;
 attribute vec2 inTexCoord;
 varying vec2 texCoordAni;
+varying vec2 texCoordAni2;
  
    // if these are passed as ints, then it doesn't work for some reason
-   uniform float m_numTilesU;
-   uniform float m_numTilesV;
-
+   uniform int m_numTilesU;
+   uniform int m_numTilesV;
+   uniform int m_Speed; 
 
 #ifdef FOG
     varying float fog_z;
@@ -27,20 +25,29 @@ void main(){
  
    gl_Position = g_WorldViewProjectionMatrix * vec4(inPosition, 1.0);
    texCoordAni = inTexCoord;
+   texCoordAni2 = inTexCoord;
 
 	int iNumTilesU = int(m_numTilesU);
 	int iNumTilesV = int(m_numTilesV);
 
 	int numTilesTotal = iNumTilesU * iNumTilesV;
-	int selectedTile = int(numTilesTotal);
+	int selectedTile = 1;
+	
 
-	if (selectedTile == numTilesTotal) selectedTile = numTilesTotal - 1;
+selectedTile += g_Time*m_Speed;
 
 	// the "1 - " bit is because otherwise it goes from right to left
-	texCoordAni.x = (1 - ((texCoordAni.x + selectedTile % iNumTilesU) / iNumTilesU)); ///selectedTile;
-	texCoordAni.y = ((texCoordAni.y + selectedTile / iNumTilesU) / iNumTilesV); ///selectedTile;
+	texCoordAni.x = -(1 - ((texCoordAni.x + selectedTile % iNumTilesU) / iNumTilesU)); ///selectedTile;
+        texCoordAni.y = ((-texCoordAni.y - selectedTile / iNumTilesU) / iNumTilesV); ///selectedTile;
 
-texCoordAni.x += g_Time-(1/iNumTilesU);
+
+
+
+
+// if (index = 8) index = 3;
+
+//texCoordAni.x = texCoordAni.x / numTilesTotal + float(index) / numTilesTotal;
+
 
 
 #if defined(FOG_SKY)

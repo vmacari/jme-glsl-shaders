@@ -29,13 +29,14 @@ public class SimpleSprite extends SimpleApplication {
     TangentBinormalGenerator.generate(char_boy1);
     rootNode.attachChild(char_boy1);
 
-//    Spatial char_boy2 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
-//    Material mat2 = assetManager.loadMaterial("Materials/MatCap/MatCapBump1.j3m");
-//    char_boy2.setMaterial(mat2);
-//    char_boy2.setLocalTranslation(1,0,0);
-//    TangentBinormalGenerator.generate(char_boy2);
-//    rootNode.attachChild(char_boy2);    
-//
+    Spatial char_boy2 = assetManager.loadModel("Models/SimpleSprite/SimpleSprite.blend");
+    Material mat2 = assetManager.loadMaterial("Materials/SimpleSprite/SimpleSprite_2.j3m");
+    char_boy2.setMaterial(mat2);
+    char_boy2.setLocalTranslation(1,0,0);
+    char_boy2.setLocalScale(0.5f, 1, 1);    
+    TangentBinormalGenerator.generate(char_boy2);
+    rootNode.attachChild(char_boy2);    
+
 //        Spatial char_boy3 = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
 //    Material mat3 = assetManager.loadMaterial("Materials/MatCap/MatCap2.j3m");
 //    char_boy3.setMaterial(mat3);

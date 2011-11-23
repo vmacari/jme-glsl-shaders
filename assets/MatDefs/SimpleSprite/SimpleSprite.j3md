@@ -5,9 +5,10 @@ MaterialDef SimpleSprite {
         Texture2D AniTexMap
        
         // Number of Tiles U and V
-        Float numTilesU
-        Float numTilesV
-
+        Int numTilesU
+        Int numTilesV
+        Int Speed
+        
         // Fog
         Color FogColor
         TextureCubeMap FogSkyBox
@@ -23,7 +24,6 @@ MaterialDef SimpleSprite {
  
         WorldParameters {
             WorldViewProjectionMatrix
-            Tpf
             Time
         }
  
