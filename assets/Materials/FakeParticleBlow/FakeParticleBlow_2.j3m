@@ -6,7 +6,7 @@ Material Fake_Particle_Blow : MatDefs/FakeParticleBlow/FakeParticleBlow.j3md {
         Change_Direction : true
         Animation_Y : true
         TimeSpeed : 1.5
-        FogColor : 0.0 0.0 0.0 10.0
+
      }
     AdditionalRenderState {
       FaceCull Off
