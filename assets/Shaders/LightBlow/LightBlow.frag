@@ -253,9 +253,13 @@ void main(){
 
 
 #ifdef TEXTURE_MASK
-vec4 textureBlend   = texture2D( m_TextureMask, texCoord.xy );
+vec4 textureBlend;
+   #ifdef SEPERATE_TEXCOORD
+    textureBlend   = texture2D( m_TextureMask, texCoord2.xy);
+        #else
+    textureBlend   = texture2D( m_TextureMask, texCoord.xy);
+   #endif
 #endif
-
 
 #if defined(NORMALMAP) && !defined(VERTEX_LIGHTING)
 vec4 normalHeightCalc = texture2D(m_NormalMap, newTexCoord* m_uv_0_scale);
