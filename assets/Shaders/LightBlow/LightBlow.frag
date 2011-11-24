@@ -7,6 +7,10 @@ varying vec2 texCoord;
     #ifdef SEPERATE_TEXCOORD
         varying vec2 texCoord2;
     #endif
+    #ifdef SEPERATE_TEXCOORD2
+        varying vec2 texCoord3;
+    #endif
+
 
 varying vec3 AmbientSum;
 varying vec4 DiffuseSum;
@@ -557,8 +561,10 @@ AmbientSum.rgb +=  refGet* refTex;
 
     #ifdef HAS_LIGHTMAP
      vec3 lightMapColor;
-   #ifdef SEPERATE_TEXCOORD
+   #if defined(SEPERATE_TEXCOORD) && !defined(SEPERATE_TEXCOORD2)
             lightMapColor = texture2D(m_LightMap, texCoord2).rgb * m_LightMapIntensity;
+   #elseif defined(SEPERATE_TEXCOORD) && defined(SEPERATE_TEXCOORD2)
+            lightMapColor = texture2D(m_LightMap, texCoord3).rgb * m_LightMapIntensity;
         #else
             lightMapColor = texture2D(m_LightMap, texCoord).rgb * m_LightMapIntensity;
         #endif

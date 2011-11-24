@@ -24,6 +24,11 @@ varying vec2 texCoord;
     varying vec2 texCoord2;
 #endif
 
+#ifdef SEPERATE_TEXCOORD2
+    attribute vec2 inTexCoord3;
+    varying vec2 texCoord3;
+#endif
+
 varying vec3 AmbientSum;
 varying vec4 DiffuseSum;
 varying vec3 SpecularSum;
@@ -153,6 +158,10 @@ void main(){
 
 #ifdef SEPERATE_TEXCOORD
         texCoord2 = inTexCoord2;
+    #endif
+
+#ifdef SEPERATE_TEXCOORD2
+        texCoord3 = inTexCoord3;
     #endif
 
 
