@@ -26,9 +26,11 @@ varying vec2 texCoordAni;
 
 void main(){
     gl_Position = g_WorldViewProjectionMatrix * vec4(inPosition, 1.0);
- 
-float thisTime = g_Time * m_TimeSpeed;
 
+
+#if defined (ANY_DIR_Y) || defined (ANY_DIR_X) 
+float thisTime = g_Time * m_TimeSpeed;
+#endif
 
 texCoord = inTexCoord;
 texCoordAni = inTexCoord;
