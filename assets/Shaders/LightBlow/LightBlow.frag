@@ -456,6 +456,12 @@ normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight3.rg, textureBlend.b
 
        vec2   light = computeLighting(vPosition, normal, vViewDir.xyz, lightDir.xyz) * spotFallOff;
 
+
+    #ifdef MULTIPLY_COLOR
+diffuseColor.rgb *= m_Diffuse.rgb;
+    #endif
+
+
        #ifdef COLORRAMP
            light.x = texture2D(m_ColorRamp, vec2(light.x, 0.0)).r;
            light.y = texture2D(m_ColorRamp, vec2(light.y, 0.0)).r;
@@ -573,9 +579,7 @@ diffuseColor.rgb  *= lightMapColor;
     #endif
 
 
-    #ifdef MULTIPLY_COLOR
-diffuseColor.rgb *= m_Diffuse.rgb;
-    #endif
+
 
 
 #if defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING) && !defined(TOON)
