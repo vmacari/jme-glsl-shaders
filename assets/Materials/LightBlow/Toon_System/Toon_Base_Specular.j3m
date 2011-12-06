@@ -10,7 +10,7 @@ Material toon : MatDefs/LightBlow/LightBlow.j3md {
         EdgesColor : 0.2 1.0 0.0 1.0
         EdgeSize : 0.01
         FogColor : 0.8 0.8 0.8 17.0
-        FogSkyBox : Flip Textures/Water32.dds
+
      }
     AdditionalRenderState {
     }
