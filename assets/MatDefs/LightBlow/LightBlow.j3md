@@ -13,6 +13,7 @@ MaterialDef LightBlow {
         Boolean Toon
         Color EdgesColor 
         Float EdgeSize
+        Boolean Fog_Edges
 
         // Color of RimLighting2
         Color RimLighting2
@@ -235,6 +236,7 @@ MaterialDef LightBlow {
             FOG_SKY : FogSkyBox
             TOON : Toon
             TOON_EDGES : EdgesColor
+            FOG_EDGES : Fog_Edges
 
         }
 
@@ -263,8 +265,8 @@ MaterialDef LightBlow {
             SPHERE_MAP : SphereMap
             FOG : FogColor
             FOG_SKY : FogSkyBox
-            TOON : Toon
             TOON_EDGES : EdgesColor
+            FOG_EDGES : Fog_Edges
         }
 
         RenderState {
@@ -311,6 +313,7 @@ MaterialDef LightBlow {
 
         Defines {
             DIFFUSEMAP_ALPHA : DiffuseMap
+            
         }
 
         RenderState {

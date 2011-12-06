@@ -11,6 +11,7 @@ attribute vec3 inPosition;
 attribute vec2 inTexCoord;
 attribute vec3 inNormal;
 
+#ifdef FOG_EDGES
 #ifdef FOG
     varying float fog_z;
 #endif
@@ -19,6 +20,7 @@ attribute vec3 inNormal;
     varying vec3 I;
     uniform vec3 g_CameraPosition;
     uniform mat4 g_WorldMatrix;
+#endif 
 #endif 
 
 
@@ -34,14 +36,18 @@ void main(){
    pos = pos + normal * m_EdgeSize;
    gl_Position = g_WorldViewProjectionMatrix * pos;
 
-#if defined(FOG_SKY)
+
+#ifdef FOG_EDGES
+  #if defined(FOG_SKY)
        vec3 worldPos = (g_WorldMatrix * pos).xyz;
        I = normalize( g_CameraPosition -  worldPos  ).xyz;
+  #endif
+
+   #ifdef FOG
+    fog_z = gl_Position.z;
+   #endif
 #endif
 
-#ifdef FOG
-    fog_z = gl_Position.z;
-#endif
 
    } else {
      gl_Position = vec4(1000.0,1000.0,1000.0,1000.0);

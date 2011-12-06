@@ -8,6 +8,7 @@ Material toon : MatDefs/LightBlow/LightBlow.j3md {
         EdgeSize : 0.01
         FogColor : 0.8 0.8 0.8 17.0
 
+        Fog_Edges : true
      }
     AdditionalRenderState {
     }

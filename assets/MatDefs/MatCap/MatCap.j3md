@@ -13,6 +13,7 @@ MaterialDef FakeParticleBlow {
         Boolean Toon
         Color EdgesColor 
         Float EdgeSize
+        Boolean Fog_Edges
 
 
         Texture2D DiffuseMap
@@ -74,6 +75,7 @@ MaterialDef FakeParticleBlow {
             FOG : FogColor
             FOG_SKY : FogSkyBox
             TOON_EDGES : EdgesColor
+            FOG_EDGES : Fog_Edges
         }
 
         RenderState {
