@@ -16,7 +16,7 @@ Material My Material : MatDefs/LightBlow/LightBlow.j3md {
         Spec_A_Dif : true
         Specular_Lighting : true
         Shininess : 1.6999999
-        Specular : 1.0 0.9137255 0.78039217 1.0
+        Specular : 1.9 1.5 1.2 1.0
         Nor_Inv_X : true
 
      }
