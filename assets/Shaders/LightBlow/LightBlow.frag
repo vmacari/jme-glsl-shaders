@@ -137,13 +137,10 @@ uniform float m_iblIntensity;
 
 
 #ifdef REFLECTION 
-
-    uniform float m_RefPower;
     uniform float m_RefIntensity;
     varying vec3 refVec;
     uniform ENVMAP m_RefMap;
-    varying float refTex;
-#endif
+    #endif
 
 
 #ifdef MINNAERT
@@ -342,7 +339,6 @@ vec4 diffuseColor;
      #ifdef LATC
         normal.z = sqrt(1.0 - (normal.x * normal.x) - (normal.y * normal.y));
       #endif
-
     #if defined (NOR_INV_X) && (NORMALMAP) 
     normal.x = -normal.x;
     #endif
@@ -355,14 +351,13 @@ vec4 diffuseColor;
     normal.z = -normal.z;
     #endif
  
-          #if !defined(VERTEX_LIGHTING)
+          #elif !defined(VERTEX_LIGHTING)
       vec3 normal = vNormal;
  
-#if !defined(LOW_QUALITY) && !defined(V_TANGENT)
+    #endif
+ #if !defined(LOW_QUALITY) && !defined(V_TANGENT)
          normal = normalize(normal);
       #endif
-    #endif
- 
 
 
     #if defined(SPECULAR_LIGHTING) && defined(SPECULARMAP)
@@ -515,6 +510,7 @@ diffuseColor.rgb *= m_Diffuse.rgb;
 
 #if defined (REFLECTION) 
     // Reflection based on either cube map or sphere map.
+// float refTex = 1.0;
 
     #if  defined (REFLECTION) && defined (NORMALMAP)
   //  vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec.xyz - mat.xyz * normal.xyz)*-1.5);
@@ -523,24 +519,27 @@ vec3 refGet = Optics_GetEnvColor(m_RefMap, (refVec - (mat * normal))).rgb;
     vec3 refGet = Optics_GetEnvColor(m_RefMap, refVec).rgb;
     #endif
 
-    vec3 refColor = refGet * m_RefPower;
-    refTex = 1.0;
+    vec3 refColor = refGet * m_RefIntensity;
+    
 
     #if defined(REF_A_NOR) && defined(NORMALMAP)
-    refTex = normalHeight.a * m_RefIntensity;
-    diffuseColor.rgb += refColor * refTex;
-    #elif defined(REF_A_DIF) && !defined(REF_A_NOR) && defined(DIFFUSEMAP)
-    refTex = diffuseColor.a * m_RefIntensity;
-    diffuseColor.rgb += refColor.rgb * refTex;
-    #else
-    diffuseColor.rgb += refColor.rgb;
+    //refTex = normalHeight.a;
+    refColor.rgb *= vec3(normalHeight.a);
+    #elif defined(REF_A_DIF)  && defined(DIFFUSEMAP)
+    //refTex = diffuseColor.a;
+    refColor.rgb *= vec3(diffuseColor.a);
     #endif
+    
+    
+    
 
 #ifdef ADDITIVE_REFLECTION
-AmbientSum.rgb +=  refGet* refTex;
+AmbientSum.rgb +=  refColor*0.5;
+diffuseColor.rgb += refColor;
 //AmbientSum.rgb = max(AmbientSum.rgb, refGet* refTex);
 #else
- light.x = max(light.x, refGet* refTex);
+light.x = max(light.x, refColor);
+ diffuseColor.rgb = max(diffuseColor.rgb, vec3(refColor));   
  #endif
 
 #endif

@@ -68,8 +68,7 @@ MaterialDef LightBlow {
         TextureCubeMap RefMap // Ref Map for reflection
         Boolean Ref_A_Nor // Output reflection from the normal map alpha channel
         Boolean Ref_A_Dif // Output reflection from the diffuse map alpha channel
-        Float RefPower : 1 // Reflection Intensity
-        Float RefIntensity : 1 // Reflection normal map alpha channel Intensity
+        Float RefIntensity : 1 // Reflection Intensity
         Boolean AdditiveReflection
 
         // Compute vertex lighting in the shader

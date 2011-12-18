@@ -14,8 +14,7 @@ Material LightBlow_3 : MatDefs/LightBlow/LightBlow.j3md {
 
 
 
-        RefPower : 1.0
-        RefIntensity : 1.8
+        RefIntensity : 1.9
         Ref_A_Nor : true
         GlowMap : Flip Models/LightBlow/jme_lightblow_dif.png
 
