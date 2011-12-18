@@ -4,8 +4,7 @@ Material toon : MatDefs/LightBlow/LightBlow.j3md {
 
         Toon : true
         Specular_Lighting : true
-        Specular : 1.0 1.0 0.72156864 1.0
-        SpecIntensity : 0.5
+        Specular : 0.6431373 0.6431373 0.47843137 1.0
         Shininess : 1.9999999
         EdgesColor : 0.2 1.0 0.0 1.0
         EdgeSize : 0.01

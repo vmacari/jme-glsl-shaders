@@ -21,7 +21,6 @@ uniform vec4 m_Diffuse;
 #endif
 
 #ifdef HAS_LIGHTMAP
-    uniform float m_LightMapIntensity;
     uniform sampler2D m_LightMap;
 #endif
 
@@ -82,7 +81,7 @@ uniform vec4 m_Diffuse;
 #endif
 
 
-#if defined(NORMALMAP) || defined(DIFFUSEMAP)
+#if defined(NORMALMAP) || defined(DIFFUSEMAP)  && defined(TEXTURE_MASK)
   uniform float m_uv_0_scale;  
 #endif
 #if defined(NORMALMAP_1) || defined(DIFFUSEMAP_1)
@@ -117,17 +116,11 @@ uniform float m_AlphaDiscardThreshold;
 
 #ifdef SPECULAR_LIGHTING
 uniform float m_Shininess;
-uniform float m_SpecIntensity;
 #endif
 
 #ifdef HQ_ATTENUATION
 uniform vec4 g_LightPosition;
 #endif
-
-#ifdef EMISSIVEMAP
-uniform float m_EmissiveIntensity;
-#endif
-
 
 #if defined RIM_LIGHTING || RIM_LIGHTING_2
 uniform vec4 m_RimLighting;
@@ -231,7 +224,7 @@ float specularFactor;
     
     #ifdef SPECULAR_LIGHTING
     specularFactor = lightComputeSpecular(wvNorm, wvViewDir, wvLightDir, m_Shininess);
-    specularFactor =  (specularFactor * step(1.0, m_Shininess)) * m_SpecIntensity;
+    specularFactor =  (specularFactor * step(1.0, m_Shininess));
      #else
    specularFactor = 0.0;
      #endif
@@ -266,8 +259,16 @@ vec4 textureBlend;
 #endif
 
 #if defined(NORMALMAP) && !defined(VERTEX_LIGHTING)
-vec4 normalHeightCalc = texture2D(m_NormalMap, newTexCoord* m_uv_0_scale);
+vec4 normalHeightCalc;
+
+    #if  !defined(TEXTURE_MASK)
+    normalHeightCalc = texture2D(m_NormalMap, newTexCoord);
+    #elif  defined(TEXTURE_MASK)
+    normalHeightCalc = texture2D(m_NormalMap, newTexCoord* m_uv_0_scale);
+    #endif
+
 #endif
+
     #if defined(NORMALMAP_1) && defined(TEXTURE_MASK)
 vec4 normalHeight1 = texture2D(m_NormalMap_1, newTexCoord * m_uv_1_scale);
 normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight1.rg, textureBlend.r ).rg;
@@ -306,8 +307,16 @@ normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight3.rg, textureBlend.b
     #endif
 
 
-   #ifdef DIFFUSEMAP
-   vec4 diffuseColor = texture2D(m_DiffuseMap, newTexCoord* m_uv_0_scale);
+#ifdef DIFFUSEMAP
+
+vec4 diffuseColor;
+
+    #if !defined(TEXTURE_MASK)
+    diffuseColor = texture2D(m_DiffuseMap, newTexCoord);
+    #elif defined(TEXTURE_MASK)
+    diffuseColor = texture2D(m_DiffuseMap, newTexCoord* m_uv_0_scale);
+    #endif
+
     #if defined(DIFFUSEMAP_1) && defined(TEXTURE_MASK)
       vec4 diffuseColor1 = texture2D(m_DiffuseMap_1, newTexCoord * m_uv_1_scale);
       diffuseColor.rgb = mix( diffuseColor.rgb, diffuseColor1.rgb, textureBlend.r ).rgb;
@@ -320,9 +329,9 @@ normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight3.rg, textureBlend.b
           vec4 diffuseColor3 = texture2D(m_DiffuseMap_3, newTexCoord * m_uv_3_scale);
           diffuseColor.rgb = mix( diffuseColor.rgb, diffuseColor3.rgb, textureBlend.b ).rgb;
         #endif  
-    #else
-      vec4 diffuseColor = vec4(0.6, 0.6, 0.6, 1.0);
-    #endif
+#else
+     vec4 diffuseColor = vec4(0.6, 0.6, 0.6, 1.0);
+#endif
 
 
     #if defined(NORMALMAP) && !defined(VERTEX_LIGHTING)
@@ -495,7 +504,7 @@ diffuseColor.rgb *= m_Diffuse.rgb;
 
 //          AmbientSum.rgb = AmbientSum.rgb + 2.0 * emissiveTex;  
 //        AmbientSum.rgb = max(AmbientSum.rgb, emissiveTex);
-        light.x = light.x + emissiveTex*m_EmissiveIntensity;
+        light.x = light.x + emissiveTex;
    //     light.x = max(light.x,  emissiveTex);
         //diffuseColor.rgb = max(diffuseColor, emissiveTex); 
 
@@ -565,21 +574,32 @@ AmbientSum.rgb +=  refGet* refTex;
 // }
 #endif
 
-    #ifdef HAS_LIGHTMAP
+
+ #ifdef HAS_LIGHTMAP
      vec3 lightMapColor;
-   #if defined(SEPERATE_TEXCOORD) && !defined(SEPERATE_TEXCOORD2)
-            lightMapColor = texture2D(m_LightMap, texCoord2).rgb * m_LightMapIntensity;
-   #elseif defined(SEPERATE_TEXCOORD) && defined(SEPERATE_TEXCOORD2)
-            lightMapColor = texture2D(m_LightMap, texCoord3).rgb * m_LightMapIntensity;
+           #if defined(SEPERATE_TEXCOORD) && !defined(SEPERATE_TEXCOORD2)
+            lightMapColor = texture2D(m_LightMap, texCoord2).rgb;
+           #elif defined(SEPERATE_TEXCOORD) && defined(SEPERATE_TEXCOORD2)
+            lightMapColor = texture2D(m_LightMap, texCoord3).rgb;
         #else
-            lightMapColor = texture2D(m_LightMap, texCoord).rgb * m_LightMapIntensity;
+            lightMapColor = texture2D(m_LightMap, texCoord).rgb;
         #endif
-specularColor.rgb *= lightMapColor;
-diffuseColor.rgb  *= lightMapColor;
-    #endif
+    
+         #ifdef SPECULAR_LIGHTING
+        specularColor.rgb *= lightMapColor;
+        #endif
 
+        #if defined(LIGHTMAP_R)
+        diffuseColor.rgb  *= vec3(lightMapColor.r);
+        #elif defined(LIGHTMAP_G)
+        diffuseColor.rgb  *= vec3(lightMapColor.g);
+        #elif defined(LIGHTMAP_B)
+        diffuseColor.rgb  *= vec3(lightMapColor.b);
+        #else
+        diffuseColor.rgb  *= lightMapColor;
+        #endif
 
-
+ #endif
 
 
 #if defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING) && !defined(TOON)

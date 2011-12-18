@@ -4,7 +4,6 @@ Material Base : MatDefs/LightBlow/LightBlow.j3md {
         Nor_Inv_Y : false
         Specular_Lighting : true
         Shininess : 5.0
-        SpecIntensity : 0.7
         Specular : 1.0 1.0 1.0 1.0
      }
     AdditionalRenderState {

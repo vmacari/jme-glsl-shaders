@@ -22,10 +22,12 @@ MaterialDef LightBlow {
         Color RimLighting
 
         // Light Map
-        Float LightMapIntensity : 1
         Boolean SeperateTexCoord
         Boolean SeperateTexCoord2
         Texture2D LightMap
+        Boolean LightMap_R
+        Boolean LightMap_G
+        Boolean LightMap_B
 
         // Glow intensity
         Float GlowIntensity : 1
@@ -35,9 +37,7 @@ MaterialDef LightBlow {
 
      // Output emission from the diffuse map alpha channel
         Boolean EmissiveMap
-        Float EmissiveIntensity : 1
-
-
+        
      // Output alpha from the diffuse map
         Boolean Alpha_A_Dif
 
@@ -59,7 +59,6 @@ MaterialDef LightBlow {
 
         // Specular lighting
         Boolean Specular_Lighting
-        Float SpecIntensity : 1
         Float Shininess (MaterialShininess) : 1 // Specular power/shininess
         Boolean Spec_A_Nor // Output specular from the normal map alpha channel
         Boolean Spec_A_Dif // Output specular from the diffuse map alpha channel
@@ -186,6 +185,9 @@ MaterialDef LightBlow {
             SEPERATE_TEXCOORD : SeperateTexCoord
             SEPERATE_TEXCOORD2 : SeperateTexCoord2
             HAS_LIGHTMAP : LightMap
+            LIGHTMAP_R : LightMap_R
+            LIGHTMAP_G : LightMap_G
+            LIGHTMAP_B : LightMap_B
             ALPHA_A_DIF : Alpha_A_Dif
             ALPHA_A_NOR : Alpha_A_Nor
             NO_ATTENUATION : No_Attenuation
