@@ -252,11 +252,12 @@ void main(){
 #ifdef TEXTURE_MASK
 vec4 textureBlend;
    #ifdef SEPERATE_TEXCOORD
-    textureBlend   = texture2D( m_TextureMask, texCoord2.xy);
+    textureBlend = texture2D( m_TextureMask, texCoord2.xy);
         #else
-    textureBlend   = texture2D( m_TextureMask, texCoord.xy);
+    textureBlend = texture2D( m_TextureMask, texCoord.xy);
    #endif
 #endif
+
 
 #if defined(NORMALMAP) && !defined(VERTEX_LIGHTING)
 vec4 normalHeightCalc;
@@ -341,6 +342,7 @@ vec4 diffuseColor;
      #ifdef LATC
         normal.z = sqrt(1.0 - (normal.x * normal.x) - (normal.y * normal.y));
       #endif
+
     #if defined (NOR_INV_X) && (NORMALMAP) 
     normal.x = -normal.x;
     #endif
@@ -353,7 +355,7 @@ vec4 diffuseColor;
     normal.z = -normal.z;
     #endif
  
-          #elif !defined(VERTEX_LIGHTING)
+          #if !defined(VERTEX_LIGHTING)
       vec3 normal = vNormal;
  
 #if !defined(LOW_QUALITY) && !defined(V_TANGENT)
@@ -576,18 +578,16 @@ AmbientSum.rgb +=  refGet* refTex;
 
 
  #ifdef HAS_LIGHTMAP
-     vec3 lightMapColor;
+     vec4 lightMapColor;
            #if defined(SEPERATE_TEXCOORD) && !defined(SEPERATE_TEXCOORD2)
-            lightMapColor = texture2D(m_LightMap, texCoord2).rgb;
+            lightMapColor = texture2D(m_LightMap, texCoord2);
            #elif defined(SEPERATE_TEXCOORD) && defined(SEPERATE_TEXCOORD2)
-            lightMapColor = texture2D(m_LightMap, texCoord3).rgb;
+            lightMapColor = texture2D(m_LightMap, texCoord3);
         #else
-            lightMapColor = texture2D(m_LightMap, texCoord).rgb;
+            lightMapColor = texture2D(m_LightMap, texCoord);
         #endif
     
-         #ifdef SPECULAR_LIGHTING
-        specularColor.rgb *= lightMapColor;
-        #endif
+
 
         #if defined(LIGHTMAP_R)
         diffuseColor.rgb  *= vec3(lightMapColor.r);
@@ -595,9 +595,25 @@ AmbientSum.rgb +=  refGet* refTex;
         diffuseColor.rgb  *= vec3(lightMapColor.g);
         #elif defined(LIGHTMAP_B)
         diffuseColor.rgb  *= vec3(lightMapColor.b);
+        #elif defined(LIGHTMAP_A)
+        diffuseColor.rgb  *= vec3(lightMapColor.a);
         #else
-        diffuseColor.rgb  *= lightMapColor;
+        diffuseColor.rgb  *= lightMapColor.rgb;
         #endif
+
+     #ifdef SPECULAR_LIGHTING
+        #if defined(LIGHTMAP_R)
+        specularColor.rgb  *= vec3(lightMapColor.r);
+        #elif defined(LIGHTMAP_G)
+        specularColor.rgb  *= vec3(lightMapColor.g);
+        #elif defined(LIGHTMAP_B)
+        specularColor.rgb  *= vec3(lightMapColor.b);
+        #elif defined(LIGHTMAP_A)
+        specularColor.rgb  *= vec3(lightMapColor.a);
+        #else
+        specularColor.rgb  *= lightMapColor.rgb;
+        #endif
+    #endif
 
  #endif
 

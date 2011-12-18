@@ -28,6 +28,7 @@ MaterialDef LightBlow {
         Boolean LightMap_R
         Boolean LightMap_G
         Boolean LightMap_B
+        Boolean LightMap_A
 
         // Glow intensity
         Float GlowIntensity : 1
@@ -188,6 +189,7 @@ MaterialDef LightBlow {
             LIGHTMAP_R : LightMap_R
             LIGHTMAP_G : LightMap_G
             LIGHTMAP_B : LightMap_B
+            LIGHTMAP_A : LightMap_A
             ALPHA_A_DIF : Alpha_A_Dif
             ALPHA_A_NOR : Alpha_A_Nor
             NO_ATTENUATION : No_Attenuation
