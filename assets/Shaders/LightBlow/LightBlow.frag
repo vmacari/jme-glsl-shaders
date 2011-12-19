@@ -1,5 +1,5 @@
 #import "Common/ShaderLib/Parallax.glsllib"
-#import "Common/ShaderLib/Optics.glsllib"
+#import "Shaders/LightBlow/Optics.glsllib"
 #define ATTENUATION
 //#define HQ_ATTENUATION
 
@@ -244,6 +244,9 @@ void main(){
     
   vec2 newTexCoord = texCoord;
 
+       // Workaround, since it is not possible to modify varying variables
+       vec4 SpecularSum2 = vec4(SpecularSum, 1.0);
+       vec3 AmbientSum2 = AmbientSum;
 
 
 #ifdef TEXTURE_MASK
@@ -423,7 +426,7 @@ vec4 diffuseColor;
 
           #if __VERSION__ >= 110
               if(spotFallOff <= 0.0){
-                  gl_FragColor.rgb = AmbientSum * diffuseColor.rgb;
+                  gl_FragColor.rgb = AmbientSum2 * diffuseColor.rgb;
                   gl_FragColor.a   = alpha;
                   return;
               }else{
@@ -445,14 +448,14 @@ vec4 diffuseColor;
        #endif
 
      #if defined(SPECULAR_LIGHTING) && defined(VERTEX_LIGHTING)
-       gl_FragColor.rgb =  AmbientSum     * diffuseColor.rgb + 
+       gl_FragColor.rgb =  AmbientSum2     * diffuseColor.rgb + 
                            DiffuseSum.rgb * diffuseColor.rgb  * vec3(light.x) +
                            SpecularSum.rgb    * specularColor.rgb * vec3(light.y);
         #endif
 
 
     #if !defined(SPECULAR_LIGHTING) && defined(VERTEX_LIGHTING)
-                        gl_FragColor.rgb = AmbientSum * diffuseColor.rgb + 
+                        gl_FragColor.rgb = AmbientSum2 * diffuseColor.rgb + 
                                        DiffuseSum.rgb * diffuseColor.rgb  * vec3(light.x);
         #endif
 
@@ -475,8 +478,6 @@ diffuseColor.rgb *= m_Diffuse.rgb;
 
 
 
-       // Workaround, since it is not possible to modify varying variables
-       vec4 SpecularSum2 = vec4(SpecularSum, 1.0);
 
 
 
@@ -489,7 +490,7 @@ diffuseColor.rgb *= m_Diffuse.rgb;
            #endif
         
         //Albedo 
-        AmbientSum.rgb +=  iblLight * m_iblIntensity;
+        AmbientSum2.rgb +=  iblLight * m_iblIntensity;
         
 
         #endif
@@ -499,8 +500,8 @@ diffuseColor.rgb *= m_Diffuse.rgb;
         //Illumination based on diffuse map alpha chanel.
 	float emissiveTex = diffuseColor.a;
 
-//          AmbientSum.rgb = AmbientSum.rgb + 2.0 * emissiveTex;  
-//        AmbientSum.rgb = max(AmbientSum.rgb, emissiveTex);
+//          AmbientSum2.rgb = AmbientSum2.rgb + 2.0 * emissiveTex;  
+//        AmbientSum2.rgb = max(AmbientSum2.rgb, emissiveTex);
         light.x = light.x + emissiveTex;
    //     light.x = max(light.x,  emissiveTex);
         //diffuseColor.rgb = max(diffuseColor, emissiveTex); 
@@ -534,9 +535,9 @@ vec3 refGet = Optics_GetEnvColor(m_RefMap, (refVec - (mat * normal))).rgb;
     
 
 #ifdef ADDITIVE_REFLECTION
-AmbientSum.rgb +=  refColor*0.5;
+AmbientSum2.rgb +=  refColor*0.5;
 diffuseColor.rgb += refColor;
-//AmbientSum.rgb = max(AmbientSum.rgb, refGet* refTex);
+//AmbientSum2.rgb = max(AmbientSum2.rgb, refGet* refTex);
 #else
 light.x = max(light.x, refColor);
  diffuseColor.rgb = max(diffuseColor.rgb, vec3(refColor));   
@@ -550,7 +551,7 @@ light.x = max(light.x, refColor);
 // if (length(g_AmbientLightColor.xyz) != 0.0) { // 1st pass only
         vec3 minnaert = pow( 1.0 - dot( normal.xyz, vViewDir.xyz ), 1.7 ) * m_Minnaert.xyz * m_Minnaert.w;
       //  minnaert.a = 0.0;
-       AmbientSum += minnaert.rgb*light.x;
+       AmbientSum2 += minnaert.rgb*light.x;
     //   light.x += minnaert*0.1;
 // }
 #endif
@@ -559,7 +560,7 @@ light.x = max(light.x, refColor);
 // if (length(g_AmbientLightColor.xyz) != 0.0) { // 1st pass only
         vec4 rim = pow( 1.0 - dot( normal, vViewDir.xyz ), 1.5 ) * m_RimLighting * m_RimLighting.w;
         rim.a = 0.0;
-       AmbientSum += rim.rgb*diffuseColor.rgb;
+       AmbientSum2 += rim.rgb*diffuseColor.rgb;
     //   light.x += rim*0.1;
 // }
 #endif
@@ -568,7 +569,7 @@ light.x = max(light.x, refColor);
 // if (length(g_AmbientLightColor.xyz) != 0.0) { // 1st pass only
         vec3 rim2 = pow( 1.0 - dot( normal, vViewDir.xyz ), 1.5 ) * m_RimLighting2.xyz * m_RimLighting2.w;
 
-        AmbientSum += rim2;
+        AmbientSum2 += rim2;
       //  rim2.a = 0.0;
      //  gl_FragColor.rgb += rim2.rgb*diffuseColor.rgb;
     //   light.x += rim2*0.1;
@@ -618,20 +619,20 @@ light.x = max(light.x, refColor);
 
 
 #if defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING) && !defined(TOON)
-    gl_FragColor.rgb =  AmbientSum * diffuseColor.rgb +
+    gl_FragColor.rgb =  AmbientSum2 * diffuseColor.rgb +
                     DiffuseSum.rgb * diffuseColor.rgb  * vec3(light.x) +
                     SpecularSum2.rgb * specularColor.rgb * vec3(light.y); 
        
 #elif defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING) && defined(TOON)
-        gl_FragColor.rgb =  (((AmbientSum * 0.35 + DiffuseSum.rgb) * diffuseColor.rgb)  +
+        gl_FragColor.rgb =  (((AmbientSum2 * 0.35 + DiffuseSum.rgb) * diffuseColor.rgb)  +
                        SpecularSum2.rgb * specularColor.rgb * vec3(light.y));
 
     #elif !defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING)  && !defined(TOON)
-                        gl_FragColor.rgb = AmbientSum * diffuseColor.rgb +
+                        gl_FragColor.rgb = AmbientSum2 * diffuseColor.rgb +
                                        DiffuseSum.rgb * diffuseColor.rgb  * vec3(light.x);
 
 #elif !defined(SPECULAR_LIGHTING) && !defined(VERTEX_LIGHTING) && defined(TOON)
-        gl_FragColor.rgb =  (((AmbientSum * 0.35 + DiffuseSum.rgb) * diffuseColor.rgb));
+        gl_FragColor.rgb =  (((AmbientSum2 * 0.35 + DiffuseSum.rgb) * diffuseColor.rgb));
 
 #endif
 
