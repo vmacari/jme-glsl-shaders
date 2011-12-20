@@ -1,5 +1,3 @@
-#import "Common/ShaderLib/Parallax.glsllib"
-#import "Shaders/LightBlow/Optics.glsllib"
 #define ATTENUATION
 //#define HQ_ATTENUATION
 
@@ -42,6 +40,7 @@ uniform vec4 m_Diffuse;
 #endif
 
 #if (defined(PARALLAXMAP) || (defined(NORMALMAP_PARALLAX) && defined(NORMALMAP))) && !defined(VERTEX_LIGHTING) 
+  #import "Common/ShaderLib/Parallax.glsllib"
   uniform sampler2D m_ParallaxMap;
   float m_ParallaxHeight;
 #endif
@@ -128,13 +127,21 @@ uniform vec4 m_RimLighting2;
 // uniform vec4 g_AmbientLightColor;
 #endif
 
-
-#ifdef IBL 
-varying vec3 iblVec;
-uniform ENVMAP m_IblMap;
-uniform float m_iblIntensity;
+#if defined(IBL) || defined(REFLECTION)
+#import "Shaders/LightBlow/Optics.glsllib"
 #endif
 
+#if defined(IBL) || defined(IBL_SIMPLE)
+varying vec3 iblVec;
+#endif
+
+#ifdef IBL 
+uniform ENVMAP m_IblMap;
+#endif
+
+#ifdef IBL_SIMPLE 
+uniform sampler2D m_IblMap_Simple;
+#endif
 
 #ifdef REFLECTION 
     uniform float m_RefIntensity;
@@ -479,7 +486,18 @@ diffuseColor.rgb *= m_Diffuse.rgb;
 
 
 
-
+        #ifdef IBL_SIMPLE
+       // IBL - Image Based Lighting. The lighting based on either cube map or sphere map.
+       iblVec.y = -iblVec.y;
+           #if  defined (IBL_SIMPLE) && defined (NORMALMAP)
+            vec3 iblLight = texture2D(m_IblMap_Simple, ((iblVec.xy - mat.xy * normal.xy) * vec2(0.5)) + vec2(0.43)).rgb;
+           #elif  defined (IBL_SIMPLE) && !defined (NORMALMAP)
+            vec3 iblLight = texture2D(m_IblMap_Simple,  (iblVec.xy * vec2(0.5)) + vec2(0.43)).rgb;
+           #endif
+        
+        //Albedo 
+        AmbientSum2.rgb += iblLight;
+        #endif
 
         #ifdef IBL
        // IBL - Image Based Lighting. The lighting based on either cube map or sphere map.
@@ -490,9 +508,7 @@ diffuseColor.rgb *= m_Diffuse.rgb;
            #endif
         
         //Albedo 
-        AmbientSum2.rgb +=  iblLight * m_iblIntensity;
-        
-
+        AmbientSum2.rgb += iblLight;
         #endif
 
 

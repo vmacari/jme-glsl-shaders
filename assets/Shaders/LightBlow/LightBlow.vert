@@ -59,13 +59,13 @@ varying vec3 lightVec;
   uniform vec4 g_LightDirection;
 #endif
 
-#if defined(REFLECTION) || defined(IBL) || defined(FOG_SKY)
+#if defined(REFLECTION) || defined(IBL) || defined(IBL_SIMPLE) || defined(FOG_SKY)
     varying vec3 I;
     uniform vec3 g_CameraPosition;
     uniform mat4 g_WorldMatrix;
 #endif 
 
-#if defined(REFLECTION) || defined(IBL)
+#if defined(REFLECTION) || defined(IBL) || defined(IBL_SIMPLE)
     varying vec3 refVec;
     varying vec3 iblVec;
 #endif 
@@ -237,12 +237,12 @@ void main(){
     #endif
 
 
-#if defined (REFLECTION) || defined (IBL) || defined(FOG_SKY)
+#if defined (REFLECTION) || defined (IBL) || defined(FOG_SKY) || defined(IBL_SIMPLE)
        vec3 worldPos = (g_WorldMatrix * pos).xyz;
        I = normalize( g_CameraPosition -  worldPos  ).xyz;
 #endif
 
-#if defined (REFLECTION) || defined (IBL) 
+#if defined (REFLECTION) || defined (IBL) || defined(IBL_SIMPLE)
 //Reflection vectors calculation
 
        vec3 N = normalize( (g_WorldMatrix * vec4(inNormal, 0.0)).xyz );      

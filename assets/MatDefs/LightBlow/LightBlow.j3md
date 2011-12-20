@@ -52,7 +52,8 @@ MaterialDef LightBlow {
 
         // IBL Map for Image Based Lighting
         TextureCubeMap IblMap
-        Float iblIntensity : 1
+        Texture2D IblMap_Simple
+
 
         // Switch Hemispherical Lighting on/off
         Boolean Hemi_Lighting_1
@@ -197,6 +198,7 @@ MaterialDef LightBlow {
             NOR_INV_Y : Nor_Inv_Y
             NOR_INV_Z : Nor_Inv_Z
             IBL : IblMap
+            IBL_SIMPLE : IblMap_Simple
             HEMI_LIGHTING_1 : Hemi_Lighting_1
             HEMI_LIGHTING_2 : Hemi_Lighting_2
             SPECULAR_LIGHTING : Specular_Lighting
