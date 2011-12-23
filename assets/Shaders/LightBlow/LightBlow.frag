@@ -128,7 +128,7 @@ uniform vec4 m_RimLighting2;
 #endif
 
 #if defined(IBL) || defined(REFLECTION)
-#import "Shaders/LightBlow/Optics.glsllib"
+#import "Common/ShaderLib/Optics.glsllib"
 #endif
 
 #if defined(IBL) || defined(IBL_SIMPLE)
