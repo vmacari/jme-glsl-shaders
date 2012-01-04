@@ -258,7 +258,7 @@ void main(){
 
 #ifdef TEXTURE_MASK
 vec4 textureBlend;
-   #ifdef SEPERATE_TEXCOORD
+   #ifdef SEPERATE_TEXCOORD2
     textureBlend = texture2D( m_TextureMask, texCoord2.xy);
         #else
     textureBlend = texture2D( m_TextureMask, texCoord.xy);
