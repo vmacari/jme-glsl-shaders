@@ -124,7 +124,7 @@ fogColor.rgb = Optics_GetEnvColor(m_FogSkyBox, I).rgb;
     #endif
 
 float fogDensity = 1.2;
-float fogDistance = fogColor.a;
+float depth = min(fog_z / fogDistance, fogDistance*0.7);
 float depth = fog_z / fogDistance;
 float LOG2 = 1.442695;
  
