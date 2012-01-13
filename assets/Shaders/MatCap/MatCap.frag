@@ -96,13 +96,11 @@ fogColor = m_FogColor;
 fogColor.rgb = Optics_GetEnvColor(m_FogSkyBox, I).rgb;
     #endif
 
-float fogDensity = 1.2;
 float fogDistance = fogColor.a;
-float depth = min(fog_z / fogDistance, fogDistance*0.7);
-float LOG2 = 1.442695;
- 
-fogFactor = exp2( -fogDensity * fogDensity * depth *  depth * LOG2 );
-fogFactor = clamp(fogFactor, 0.0, 1.0);
+float depth = (fog_z - fogDistance)/ fogDistance;
+depth = max(depth, 0.0);
+fogFactor = exp2(-depth*depth);
+fogFactor = clamp(fogFactor, 0.05, 1.0);
 
 gl_FragColor.rgb = mix(fogColor.rgb,gl_FragColor.rgb,vec3(fogFactor));
 
