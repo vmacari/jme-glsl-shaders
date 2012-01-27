@@ -31,7 +31,7 @@ void main(){
 	int iNumTilesV = int(m_numTilesV);
 
 	int numTilesTotal = iNumTilesU * iNumTilesV;
-	int selectedTile = 1;
+	float selectedTile = 1.0;
 	
 
 selectedTile += g_Time*m_Speed;
