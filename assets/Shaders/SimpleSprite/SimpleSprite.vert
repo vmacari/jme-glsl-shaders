@@ -4,7 +4,6 @@ uniform float g_Time;
 attribute vec3 inPosition;
 attribute vec2 inTexCoord;
 varying vec2 texCoordAni;
-varying vec2 texCoordAni2;
  
    // if these are passed as ints, then it doesn't work for some reason
    uniform int m_numTilesU;
@@ -25,7 +24,6 @@ void main(){
  
    gl_Position = g_WorldViewProjectionMatrix * vec4(inPosition, 1.0);
    texCoordAni = inTexCoord;
-   texCoordAni2 = inTexCoord;
 
 	float iNumTilesU = float(m_numTilesU);
 	float iNumTilesV = float(m_numTilesV);
