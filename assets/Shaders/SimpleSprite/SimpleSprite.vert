@@ -27,10 +27,10 @@ void main(){
    texCoordAni = inTexCoord;
    texCoordAni2 = inTexCoord;
 
-	int iNumTilesU = int(m_numTilesU);
-	int iNumTilesV = int(m_numTilesV);
+	float iNumTilesU = float(m_numTilesU);
+	float iNumTilesV = float(m_numTilesV);
 
-	int numTilesTotal = iNumTilesU * iNumTilesV;
+	float numTilesTotal = iNumTilesU * iNumTilesV;
 	float selectedTile = 1.0;
 	
 
