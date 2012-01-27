@@ -25,18 +25,18 @@ void main(){
    gl_Position = g_WorldViewProjectionMatrix * vec4(inPosition, 1.0);
    texCoordAni = inTexCoord;
 
-	float iNumTilesU = float(m_numTilesU);
-	float iNumTilesV = float(m_numTilesV);
+	int iNumTilesU = float(m_numTilesU);
+	int iNumTilesV = float(m_numTilesV);
 
-	float numTilesTotal = iNumTilesU * iNumTilesV;
-	float selectedTile = 1.0;
+	int numTilesTotal = iNumTilesU * iNumTilesV;
+	int selectedTile = 1.0;
 	
 
 selectedTile += g_Time*m_Speed;
 
 	// the "1 - " bit is because otherwise it goes from right to left
-	texCoordAni.x = -(1 - ((texCoordAni.x + selectedTile % iNumTilesU) / iNumTilesU)); ///selectedTile;
-        texCoordAni.y = ((-texCoordAni.y - selectedTile / iNumTilesU) / iNumTilesV); ///selectedTile;
+	texCoordAni.x = -(1 - ((texCoordAni.x + mod(int(selectedTile),  int(iNumTilesU))) / iNumTilesU)); ///selectedTile;
+        texCoordAni.y = ((-texCoordAni.y - int(selectedTile / iNumTilesU)) / iNumTilesV); ///selectedTile;
 
 
 
