@@ -26,7 +26,7 @@ varying vec3 refVecB;
 uniform float m_abberIndex;
 #endif
 
-  varying vec3 vPosition;
+//  varying vec3 vPosition;
   varying vec3 vViewDir;
 
     
@@ -58,12 +58,12 @@ vNormal = wvNormal;
      mat3 tbnMat = mat3(wvTangent, wvBinormal * -inTangent.w,wvNormal);
      mat = vec3(1.0) * tbnMat;
      mat = normalize(mat);
-     vPosition = wvPosition * tbnMat;
+//     vPosition = wvPosition * tbnMat;
      vViewDir  = viewDir * tbnMat;
 
    #else
      
-     vPosition = wvPosition;
+ //    vPosition = wvPosition;
      vViewDir = viewDir;
 
    #endif

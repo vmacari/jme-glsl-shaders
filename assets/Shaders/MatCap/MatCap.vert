@@ -20,7 +20,7 @@ varying vec3 vNormal;
     uniform mat4 g_WorldMatrix;
 #endif 
 
-  varying vec3 vPosition;
+//  varying vec3 vPosition;
   varying vec3 vViewDir;
 
 
@@ -54,12 +54,12 @@ void main(){
      mat3 tbnMat = mat3(wvTangent, wvBinormal * -inTangent.w,wvNormal);
      mat = vec3(1.0) * tbnMat;
      mat = normalize(mat);
-     vPosition = wvPosition * tbnMat;
+//     vPosition = wvPosition * tbnMat;
      vViewDir  = viewDir * tbnMat;
 
    #else
      
-     vPosition = wvPosition;
+ //    vPosition = wvPosition;
      vViewDir = viewDir;
 
    #endif

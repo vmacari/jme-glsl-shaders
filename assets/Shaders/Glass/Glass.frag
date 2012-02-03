@@ -1,7 +1,7 @@
 #import "Common/ShaderLib/Optics.glsllib"
 varying vec2 texCoord;
 uniform float m_texturesize;
-  varying vec3 vPosition;
+//  varying vec3 vPosition;
   varying vec3 vViewDir;
 
 #ifdef NORMALMAP
