@@ -1,7 +1,6 @@
 varying vec2 texCoord;
 uniform float m_texturesize;
 //  varying vec3 vPosition;
-  varying vec3 vViewDir;
 
   uniform sampler2D m_DiffuseMap;
 
@@ -73,9 +72,9 @@ vec3 coords = (vmr);
 
     #if defined (NORMALMAP)
 vec3  normalz = mat.xyz*normal.xyz;
-diffuseColor = texture2D(m_DiffuseMap, vec2((coords*vec3(0.495) + vec3(0.5))+(normalz)*m_NormalMapPower).xy).rgb;
+diffuseColor = texture2D(m_DiffuseMap, (coords.xy*vec2(0.495) + vec2(0.5))+(normalz.xy)*vec2(m_NormalMapPower)).rgb;
 #else
-    diffuseColor = texture2D(m_DiffuseMap, vec2(coords*vec3(0.495) + vec3(0.5)).xy).rgb;
+    diffuseColor = texture2D(m_DiffuseMap, vec2(coords.xy*vec2(0.495) + vec2(0.5)).xy).rgb;
 //    diffuseColor = (diffuseColor - vec3(0.5, 0.5, 0.5) * 2.0);
 #endif
     

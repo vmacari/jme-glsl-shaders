@@ -27,7 +27,7 @@ uniform float m_abberIndex;
 #endif
 
 //  varying vec3 vPosition;
-  varying vec3 vViewDir;
+//  varying vec3 vViewDir;
 
     
     uniform vec3 g_CameraPosition;
@@ -59,13 +59,14 @@ vNormal = wvNormal;
      mat = vec3(1.0) * tbnMat;
      mat = normalize(mat);
 //     vPosition = wvPosition * tbnMat;
-     vViewDir  = viewDir * tbnMat;
+//     vViewDir  = viewDir * tbnMat;
+//          vViewDir  = -wvPosition * tbnMat;
 
    #else
      
  //    vPosition = wvPosition;
  //    vViewDir = viewDir;
-     vViewDir  = -wvPosition * tbnMat;
+
    #endif
 
 

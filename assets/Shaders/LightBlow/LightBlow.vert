@@ -190,14 +190,17 @@ void main(){
      mat = normalize(mat);
 //     vPosition = wvPosition * tbnMat;
      vViewDir  = viewDir * tbnMat;
+   //  vViewDir  = -wvPosition * tbnMat;
+
      lightComputeDir(wvPosition, lightColor, wvLightPos, vLightDir);
      vLightDir.xyz = (vLightDir.xyz * tbnMat).xyz;
+
    #elif !defined(VERTEX_LIGHTING)
      vNormal = wvNormal;
 
 //     vPosition = wvPosition;
-//     vViewDir = viewDir;
-     vViewDir  = -wvPosition * tbnMat;
+     vViewDir = viewDir;
+
 
      lightComputeDir(wvPosition, lightColor, wvLightPos, vLightDir);
      

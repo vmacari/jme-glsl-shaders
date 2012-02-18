@@ -2,7 +2,7 @@
 varying vec2 texCoord;
 uniform float m_texturesize;
 //  varying vec3 vPosition;
-  varying vec3 vViewDir;
+//  varying vec3 vViewDir;
 
 #ifdef NORMALMAP
   uniform sampler2D m_NormalMap;
@@ -88,7 +88,7 @@ refGet.g = Optics_GetEnvColor(m_RefMap, (refVecG - normalz*m_NormalMapPower)).g;
 refGet.b = Optics_GetEnvColor(m_RefMap, (refVecB - normalz*m_NormalMapPower)).b;
 #endif 
     #if defined (SPECULAR) 
-specularColor = texture2D(m_MatCapSpecular, vec2((coords*vec3(0.495) + vec3(0.5))+(normalz)*m_NormalMapPower).xy).rgb;
+specularColor = texture2D(m_MatCapSpecular, (coords.xy*vec2(0.495) + vec2(0.5))+(normalz.xy)*vec2(m_NormalMapPower)).rgb;
 #endif
 
 #else
