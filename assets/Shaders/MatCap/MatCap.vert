@@ -60,7 +60,8 @@ void main(){
    #else
      
  //    vPosition = wvPosition;
-     vViewDir = viewDir;
+ //    vViewDir = viewDir;
+     vViewDir  = -wvPosition * tbnMat;
 
    #endif
 vNormal = wvNormal;

@@ -196,7 +196,8 @@ void main(){
      vNormal = wvNormal;
 
 //     vPosition = wvPosition;
-     vViewDir = viewDir;
+//     vViewDir = viewDir;
+     vViewDir  = -wvPosition * tbnMat;
 
      lightComputeDir(wvPosition, lightColor, wvLightPos, vLightDir);
      
