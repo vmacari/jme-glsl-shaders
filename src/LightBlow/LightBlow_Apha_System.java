@@ -1,6 +1,7 @@
 
 package LightBlow;
 
+import FixedTangentBinormalGenerator.FixedTangentBinormalGenerator;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.TextureKey;
 import com.jme3.light.DirectionalLight;
@@ -47,7 +48,7 @@ public class LightBlow_Apha_System extends SimpleApplication {
     Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow.obj");
     Material mat = assetManager.loadMaterial("Materials/LightBlow/Alpha_System/LightBlow_AlphaDiffuseMap.j3m");
     char_boy.setMaterial(mat);
-    TangentBinormalGenerator.generate(char_boy);
+    FixedTangentBinormalGenerator.generate(char_boy);
     char_boy.setQueueBucket(Bucket.Transparent); 
     rootNode.attachChild(char_boy);
 
@@ -55,7 +56,7 @@ public class LightBlow_Apha_System extends SimpleApplication {
     Material mat2 = assetManager.loadMaterial("Materials/LightBlow/Alpha_System/LightBlow_AlphaDiffuseMap_Threshould.j3m");
     char_boy2.setMaterial(mat2);
     char_boy2.setLocalTranslation(-2f, 0, 0);
-    TangentBinormalGenerator.generate(char_boy2);
+    FixedTangentBinormalGenerator.generate(char_boy2);
     char_boy2.setQueueBucket(Bucket.Transparent);
     rootNode.attachChild(char_boy2);
     
@@ -64,7 +65,7 @@ public class LightBlow_Apha_System extends SimpleApplication {
     Material mat3 = assetManager.loadMaterial("Materials/LightBlow/Alpha_System/LightBlow_AlphaNormalMap.j3m");
     char_boy3.setMaterial(mat3);
     char_boy3.setLocalTranslation(-4f, 0, 0);
-    TangentBinormalGenerator.generate(char_boy3);
+    FixedTangentBinormalGenerator.generate(char_boy3);
     char_boy3.setQueueBucket(Bucket.Transparent);
     rootNode.attachChild(char_boy3);
     
@@ -72,7 +73,7 @@ public class LightBlow_Apha_System extends SimpleApplication {
     Material mat4 = assetManager.loadMaterial("Materials/LightBlow/Alpha_System/LightBlow_AlphaNormalMap_Threshould.j3m");
     char_boy4.setMaterial(mat4);
     char_boy4.setLocalTranslation(-6f, 0, 0);
-    TangentBinormalGenerator.generate(char_boy4);
+    FixedTangentBinormalGenerator.generate(char_boy4);
     char_boy4.setQueueBucket(Bucket.Transparent);
     rootNode.attachChild(char_boy4);
     

@@ -1,6 +1,7 @@
 
 package LightBlow;
 
+import FixedTangentBinormalGenerator.FixedTangentBinormalGenerator;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;
@@ -47,7 +48,7 @@ public class LightBlow_Terrain_System extends SimpleApplication {
     Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow_terrain.blend");
     Material mat = assetManager.loadMaterial("Materials/LightBlow/Terrain_System/Terrain_System.j3m");
     char_boy.setMaterial(mat);
-    TangentBinormalGenerator.generate(char_boy);
+    FixedTangentBinormalGenerator.generate(char_boy);
     rootNode.attachChild(char_boy);
 
 //    Spatial char_boy2 = assetManager.loadModel("Models/LightBlow/jme_lightblow.blend");
