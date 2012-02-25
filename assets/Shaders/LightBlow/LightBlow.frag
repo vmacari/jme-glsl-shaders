@@ -241,6 +241,10 @@ float specularFactor;
     float att = vLightDir.w;
    #endif
 
+if (m_Shininess <= 1.0) {
+specularFactor = 0.0; // should be one instruction on most cards ..
+}
+
 return vec2(diffuseFactor, specularFactor) * vec2(att);
 }
 #endif
