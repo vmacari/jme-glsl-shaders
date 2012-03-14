@@ -12,7 +12,11 @@ varying vec2 texCoord;
 
 varying vec3 AmbientSum;
 varying vec4 DiffuseSum;
+
+#if defined(SPECULAR_LIGHTING)
 varying vec3 SpecularSum;
+uniform float m_Shininess;
+#endif
 
 #ifdef MULTIPLY_COLOR
 uniform vec4 m_Diffuse;
@@ -113,9 +117,7 @@ uniform float m_AlphaDiscardThreshold;
 
 #ifndef VERTEX_LIGHTING
 
-#ifdef SPECULAR_LIGHTING
-uniform float m_Shininess;
-#endif
+
 
 #ifdef HQ_ATTENUATION
 uniform vec4 g_LightPosition;
@@ -259,7 +261,9 @@ void main(){
   vec2 newTexCoord = texCoord;
 
        // Workaround, since it is not possible to modify varying variables
+       #if defined(SPECULAR_LIGHTING)
        vec4 SpecularSum2 = vec4(SpecularSum, 1.0);
+       #endif
        vec3 AmbientSum2 = AmbientSum;
 
 

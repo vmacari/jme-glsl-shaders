@@ -10,8 +10,12 @@ varying vec3 mat;
 
 uniform vec4 m_Ambient;
 uniform vec4 m_Diffuse;
+
+#if defined(SPECULAR_LIGHTING)
+varying vec3 SpecularSum;
 uniform vec4 m_Specular;
 uniform float m_Shininess;
+#endif
 
 uniform vec4 g_LightColor;
 uniform vec4 g_LightPosition;
@@ -31,7 +35,6 @@ varying vec2 texCoord;
 
 varying vec3 AmbientSum;
 varying vec4 DiffuseSum;
-varying vec3 SpecularSum;
 
 attribute vec3 inPosition;
 attribute vec2 inTexCoord;
@@ -220,12 +223,17 @@ void main(){
    #ifdef MATERIAL_COLORS
       AmbientSum  = (m_Ambient  * g_AmbientLightColor).rgb;
       DiffuseSum  = m_Diffuse  * lightColor;
+        #if defined(SPECULAR_LIGHTING)
       SpecularSum = (m_Specular * lightColor).rgb;
+        #endif
+
     #else
       AmbientSum  = vec3(0.2, 0.2, 0.2) * g_AmbientLightColor.rgb; // Default: ambient color is dark gray
       DiffuseSum  = lightColor;
+        #if defined(SPECULAR_LIGHTING)
       SpecularSum = (m_Specular * lightColor).rgb;
   //    SpecularSum = vec3(0.0);
+        #endif
     #endif
 
 
