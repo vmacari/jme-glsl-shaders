@@ -67,7 +67,6 @@ varying vec3 lightVec;
 
 #if defined(REFLECTION) || defined(IBL) || defined(IBL_SIMPLE)
     varying vec3 refVec;
-    varying vec3 iblVec;
 #endif 
 
 
@@ -250,12 +249,8 @@ void main(){
 //Reflection vectors calculation
 
        vec3 N = normalize( (g_WorldMatrix * vec4(inNormal, 0.0)).xyz );      
+       refVec = reflect(I, N);
 
-        refVec = reflect(I, N);
-
- 
-        iblVec = refVec;
- 
     #endif
 
 

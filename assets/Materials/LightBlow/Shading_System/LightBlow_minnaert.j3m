@@ -9,7 +9,6 @@ Material LightBlow_4 : MatDefs/LightBlow/LightBlow.j3md {
         Specular : 1.0 1.0 1.0 1.0
         Shininess : 5.0
         Nor_Inv_Y : false
-        GlowIntensity : 1.2
 
 
         GlowMap : Flip Models/LightBlow/jme_lightblow_dif.png

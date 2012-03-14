@@ -10,7 +10,6 @@ Material LightBlow_3 : MatDefs/LightBlow/LightBlow.j3md {
         Specular : 1.0 1.0 1.0 1.0
         Shininess : 5.0
         Nor_Inv_Y : false
-        GlowIntensity : 1.2
 
 
 

@@ -131,8 +131,8 @@ uniform vec4 m_RimLighting2;
 #import "Common/ShaderLib/Optics.glsllib"
 #endif
 
-#if defined(IBL) || defined(IBL_SIMPLE)
-varying vec3 iblVec;
+#if defined(IBL) || defined(IBL_SIMPLE) || defined(REFLECTION)
+varying vec3 refVec;
 #endif
 
 #ifdef IBL 
@@ -145,7 +145,7 @@ uniform sampler2D m_IblMap_Simple;
 
 #ifdef REFLECTION 
     uniform float m_RefIntensity;
-    varying vec3 refVec;
+//    varying vec3 refVec;
     uniform ENVMAP m_RefMap;
     #endif
 
@@ -496,11 +496,11 @@ diffuseColor.rgb *= m_Diffuse.rgb;
 
         #ifdef IBL_SIMPLE
        // IBL - Image Based Lighting. The lighting based on either cube map or sphere map.
-     //  iblVec.y = -iblVec.y;
+
            #if  defined (IBL_SIMPLE) && defined (NORMALMAP)
-            vec3 iblLight = texture2D(m_IblMap_Simple, (((-iblVec.xy) + mat.xy * normal.xy) * vec2(0.49)) + vec2(0.49)).rgb;
+            vec3 iblLight = texture2D(m_IblMap_Simple, (((-refVec.xy) + mat.xy * normal.xy) * vec2(0.49)) + vec2(0.49)).rgb;
            #elif  defined (IBL_SIMPLE) && !defined (NORMALMAP)
-            vec3 iblLight = texture2D(m_IblMap_Simple,  ((-iblVec.xy) * vec2(0.49)) + vec2(0.49)).rgb;
+            vec3 iblLight = texture2D(m_IblMap_Simple,  ((-refVec.xy) * vec2(0.49)) + vec2(0.49)).rgb;
            #endif
         
         //Albedo 
@@ -510,9 +510,9 @@ diffuseColor.rgb *= m_Diffuse.rgb;
         #ifdef IBL
        // IBL - Image Based Lighting. The lighting based on either cube map or sphere map.
            #if  defined (IBL) && defined (NORMALMAP)
-            vec3 iblLight = Optics_GetEnvColor(m_IblMap, (iblVec - mat * normal)).rgb;
+            vec3 iblLight = Optics_GetEnvColor(m_IblMap, (refVec - mat * normal)).rgb;
            #elif  defined (IBL) && !defined (NORMALMAP)
-            vec3 iblLight = Optics_GetEnvColor(m_IblMap,  iblVec).rgb;
+            vec3 iblLight = Optics_GetEnvColor(m_IblMap,  refVec).rgb;
            #endif
         
         //Albedo 
