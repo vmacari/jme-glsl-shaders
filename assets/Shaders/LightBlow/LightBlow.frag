@@ -230,7 +230,7 @@ float specularFactor;
     
     #ifdef SPECULAR_LIGHTING
     specularFactor = lightComputeSpecular(wvNorm, wvViewDir, wvLightDir, m_Shininess);
-    specularFactor =  (specularFactor * step(1.0, m_Shininess));
+ //   specularFactor =  (specularFactor * step(1.0, m_Shininess));
 
 if (m_Shininess <= 1.0) {
 specularFactor = 0.0; // should be one instruction on most cards ..
