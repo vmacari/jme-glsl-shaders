@@ -30,9 +30,6 @@ MaterialDef LightBlow {
         Boolean LightMap_B
         Boolean LightMap_A
 
-        // Glow intensity
-        Float GlowIntensity : 1
-
         // No attenuation increases fps
         Boolean No_Attenuation
 
