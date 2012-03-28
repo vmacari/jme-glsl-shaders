@@ -1,9 +1,9 @@
 Material My Material : MatDefs/MatCap/MatCap.j3md {
      MaterialParameters {
         DiffuseMap : Flip Textures/matcaps/Gold.jpg
-        Nor_Inv_Y : false
-        Nor_Inv_X : false
-        Nor_Inv_Z : false
+        Nor_Inv_Y : true
+        Nor_Inv_X : true
+
         NormalMap : Flip Models/LightBlow/jme_lightblow_nor.png
      }
     AdditionalRenderState {

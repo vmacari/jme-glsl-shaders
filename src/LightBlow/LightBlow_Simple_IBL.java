@@ -1,22 +1,13 @@
 package LightBlow;
 
 
-import FixedTangentBinormalGenerator.FixedTangentBinormalGenerator;
 import com.jme3.app.SimpleApplication;
-import com.jme3.asset.BlenderKey;
-import com.jme3.asset.DesktopAssetManager;
-import com.jme3.asset.ModelKey;
-import com.jme3.asset.TextureKey;
-import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.*;
 import com.jme3.scene.*;
 import com.jme3.scene.Node;
-import com.jme3.scene.plugins.blender.BlenderModelLoader;
 import com.jme3.scene.shape.*;
-import com.jme3.texture.Texture;
-import com.jme3.util.SkyFactory;
 import com.jme3.util.TangentBinormalGenerator;
 
 
@@ -57,7 +48,7 @@ public class LightBlow_Simple_IBL extends SimpleApplication {
         Mesh sph_test = new Sphere(20, 20, 5);
         Geometry geo_test = new Geometry("geo_test", sph_test);
         geo_test.setMaterial(mat);
-        FixedTangentBinormalGenerator.generate(geo_test);
+        TangentBinormalGenerator.generate(geo_test);
         geo_test.setLocalTranslation(0, 0, -20);
         geo_test.rotate(1.6f, 0, 0);
         rootNode.attachChild(geo_test);
@@ -65,7 +56,7 @@ public class LightBlow_Simple_IBL extends SimpleApplication {
         Mesh box = new Box(3, 3, 3);
         Geometry geo_test2 = new Geometry("geo_test2", box);
         geo_test2.setMaterial(mat);
-        FixedTangentBinormalGenerator.generate(geo_test2);
+        TangentBinormalGenerator.generate(geo_test2);
         geo_test2.setLocalTranslation(-8, 0, -20);
         geo_test2.rotate(1.6f, 0, 0);
         rootNode.attachChild(geo_test2);

@@ -2,7 +2,6 @@
 
 package LightBlow;
 
-import FixedTangentBinormalGenerator.FixedTangentBinormalGenerator;
 import com.jme3.app.SimpleApplication;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -45,13 +44,13 @@ public class LightBlow_Toon_PostEdges extends SimpleApplication {
        Spatial toon = assetManager.loadModel("Models/ToonBlow/toon.obj");
        Material mat = assetManager.loadMaterial("Materials/LightBlow/Toon_System/Toon_Base.j3m");
        toon.setMaterial(mat);
-       FixedTangentBinormalGenerator.generate(toon);
+       TangentBinormalGenerator.generate(toon);
        rootNode.attachChild(toon);
        
        Spatial toon2 = assetManager.loadModel("Models/ToonBlow/toon.obj");
        Material mat2 = assetManager.loadMaterial("Materials/LightBlow/Toon_System/Toon_Base_Specular.j3m");
        toon2.setMaterial(mat2);
-       FixedTangentBinormalGenerator.generate(toon2);
+       TangentBinormalGenerator.generate(toon2);
        toon2.setLocalTranslation(-2f, 0, 0);
        rootNode.attachChild(toon2);
 //
