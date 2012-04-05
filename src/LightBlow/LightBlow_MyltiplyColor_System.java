@@ -1,6 +1,7 @@
 
 package LightBlow;
 
+import FixedTangentBinormalGenerator.FixedTangentBinormalGenerator;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.TextureKey;
 import com.jme3.light.AmbientLight;
@@ -47,14 +48,14 @@ public class LightBlow_MyltiplyColor_System extends SimpleApplication {
     Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow.blend");
     Material mat = assetManager.loadMaterial("Materials/LightBlow/MultiplyColor_System/MultiplyColor_Base.j3m");
     char_boy.setMaterial(mat);
-    TangentBinormalGenerator.generate(char_boy);
+    FixedTangentBinormalGenerator.generate(char_boy);
     rootNode.attachChild(char_boy);
 
     Spatial char_boy2 = assetManager.loadModel("Models/LightBlow/jme_lightblow.blend");
     Material mat2 = assetManager.loadMaterial("Materials/LightBlow/MultiplyColor_System/MultiplyColor_1.j3m");
     char_boy2.setMaterial(mat2);
     char_boy2.setLocalTranslation(-2f, 0, 0);
-    TangentBinormalGenerator.generate(char_boy2);
+    FixedTangentBinormalGenerator.generate(char_boy2);
     rootNode.attachChild(char_boy2);
     
     
@@ -62,14 +63,14 @@ public class LightBlow_MyltiplyColor_System extends SimpleApplication {
     Material mat3 = assetManager.loadMaterial("Materials/LightBlow/MultiplyColor_System/MultiplyColor_2.j3m");
     char_boy3.setMaterial(mat3);
     char_boy3.setLocalTranslation(-4f, 0, 0);
-    TangentBinormalGenerator.generate(char_boy3);
+    FixedTangentBinormalGenerator.generate(char_boy3);
     rootNode.attachChild(char_boy3);
     
     Spatial char_boy4 = assetManager.loadModel("Models/LightBlow/jme_lightblow.blend");
     Material mat4 = assetManager.loadMaterial("Materials/LightBlow/MultiplyColor_System/MultiplyColor_3.j3m");
     char_boy4.setMaterial(mat4);
     char_boy4.setLocalTranslation(-6f, 0, 0);
-    TangentBinormalGenerator.generate(char_boy4);
+    FixedTangentBinormalGenerator.generate(char_boy4);
     rootNode.attachChild(char_boy4);
     
 

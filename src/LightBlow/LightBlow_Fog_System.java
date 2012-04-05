@@ -1,6 +1,7 @@
 
 package LightBlow;
 
+import FixedTangentBinormalGenerator.FixedTangentBinormalGenerator;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.TextureKey;
 import com.jme3.light.DirectionalLight;
@@ -47,7 +48,7 @@ public class LightBlow_Fog_System extends SimpleApplication {
     Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow.blend");
     Material mat = assetManager.loadMaterial("Materials/LightBlow/Fog_System/LightBlow_Fog.j3m");
     char_boy.setMaterial(mat);
-    TangentBinormalGenerator.generate(char_boy);
+    FixedTangentBinormalGenerator.generate(char_boy);
 //    rootNode.attachChild(char_boy);
 
         Node fog1[] = new Node [20];
@@ -67,7 +68,7 @@ public class LightBlow_Fog_System extends SimpleApplication {
     Material mat2 = assetManager.loadMaterial("Materials/LightBlow/Fog_System/LightBlow_Fog_Skybox.j3m");
     char_boy2.setMaterial(mat2);
     char_boy2.setLocalTranslation(2.0f, 0, 0);
-    TangentBinormalGenerator.generate(char_boy2);
+    FixedTangentBinormalGenerator.generate(char_boy2);
 //    rootNode.attachChild(char_boy2);
     
         Node fog2[] = new Node [20];

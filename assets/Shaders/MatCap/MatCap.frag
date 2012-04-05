@@ -72,7 +72,7 @@ vec3 coords = (vmr);
 
     #if defined (NORMALMAP)
 vec3  normalz = mat.xyz*normal.xyz;
-diffuseColor = texture2D(m_DiffuseMap, (coords.xy*vec2(0.495) + vec2(0.5)) - (normalz.xy)*vec2(m_NormalMapPower)).rgb;
+diffuseColor = texture2D(m_DiffuseMap, (coords.xy*vec2(0.495) + vec2(0.5)) + (normalz.xy)*vec2(m_NormalMapPower)).rgb;
 #else
     diffuseColor = texture2D(m_DiffuseMap, (coords.xy*vec2(0.495) + vec2(0.5))).rgb;
 //    diffuseColor = (diffuseColor - vec3(0.5, 0.5, 0.5) * 2.0);
