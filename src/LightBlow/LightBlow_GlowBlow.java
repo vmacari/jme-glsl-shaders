@@ -107,8 +107,8 @@ public class LightBlow_GlowBlow extends SimpleApplication {
         BloomFilter bloom=new BloomFilter(BloomFilter.GlowMode.Objects);
         bloom.setDownSamplingFactor(2);
         bloom.setBlurScale(2.37f);
-        bloom.setExposurePower(2.3f);
-        bloom.setExposureCutOff(0.1f);
+        bloom.setExposurePower(2.5f);
+        bloom.setExposureCutOff(0.3f);
         bloom.setBloomIntensity(2.8f);
  
         fpp.addFilter(bloom);

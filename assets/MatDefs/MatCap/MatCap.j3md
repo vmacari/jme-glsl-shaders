@@ -167,7 +167,7 @@ MaterialDef FakeParticleBlow {
 
     Technique Glow {
 
-        VertexShader GLSL100:   Common/MatDefs/Misc/SimpleTextured.vert
+        VertexShader GLSL100:   Common/MatDefs/Misc/Unshaded.vert
         FragmentShader GLSL100: Shaders/PostBlow/GlowBlow.frag
 
         WorldParameters {
