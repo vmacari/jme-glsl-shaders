@@ -92,7 +92,7 @@ public class LightBlow_Shading_System extends SimpleApplication {
     FixedTangentBinormalGenerator.generate(char_boy6);
     rootNode.attachChild(char_boy6);
     
-
+        
         flyCam.setMoveSpeed(5);   
      
 

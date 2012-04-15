@@ -163,7 +163,7 @@ public class ForceShieldControl implements Control {
 		return null;
 	}
 
-	@Override
+	
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -173,7 +173,7 @@ public class ForceShieldControl implements Control {
 		
 	}
 
-	@Override
+	
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
