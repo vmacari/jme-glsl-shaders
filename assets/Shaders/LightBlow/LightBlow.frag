@@ -43,7 +43,7 @@ uniform vec4 m_Diffuse;
   uniform sampler2D m_SpecularMap;
 #endif
 
-#if (defined(PARALLAXMAP) || (defined(NORMALMAP_PARALLAX) && defined(NORMALMAP))) && !defined(VERTEX_LIGHTING) 
+#if defined(PARALLAXMAP) || defined(NORMALMAP_PARALLAX) && defined(NORMALMAP) && !defined(VERTEX_LIGHTING) 
   #import "Common/ShaderLib/Parallax.glsllib"
   uniform sampler2D m_ParallaxMap;
   float m_ParallaxHeight;
@@ -123,7 +123,7 @@ uniform float m_AlphaDiscardThreshold;
 uniform vec4 g_LightPosition;
 #endif
 
-#if defined RIM_LIGHTING || RIM_LIGHTING_2
+#if defined (RIM_LIGHTING) || defined (RIM_LIGHTING_2)
 uniform vec4 m_RimLighting;
 uniform vec4 m_RimLighting2;
 // uniform vec4 g_AmbientLightColor;
@@ -240,9 +240,9 @@ specularFactor = 0.0; // should be one instruction on most cards ..
    specularFactor = 0.0;
      #endif
 
-   #ifdef HQ_ATTENUATION
+   #if defined (HQ_ATTENUATION)
     float att = clamp(1.0 - g_LightPosition.w * length(lightVec), 0.0, 1.0);
-    #elif NO_ATTENUATION
+    #elif defined (NO_ATTENUATION)
     float att = 1.0;
    #else
     float att = vLightDir.w;
