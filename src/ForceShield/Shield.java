@@ -38,7 +38,7 @@ public class Shield extends SimpleApplication implements ActionListener {
                 Geometry cube = new Geometry("cube", box);
                 cube.setLocalScale(0.5f,0.5f,0.5f);
                 Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                mat1.setColor("m_Color", ColorRGBA.randomColor());
+                mat1.setColor("Color", ColorRGBA.randomColor());
                 cube.setMaterial(mat1);
                 rootNode.attachChild(cube);
 
@@ -46,7 +46,7 @@ public class Shield extends SimpleApplication implements ActionListener {
                 Sphere sphere = new Sphere(30, 30, 1.2f);
                 Geometry shield = new Geometry("the Floor", sphere);
                 Material mat2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                mat2.setColor("m_Color", new ColorRGBA(1.0f,0.0f,0.0f,0.3f));
+                mat2.setColor("Color", new ColorRGBA(1.0f,0.0f,0.0f,0.3f));
                 shield.setMaterial(mat2);
                 mat1.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
                 shield.setQueueBucket(Bucket.Transparent);
