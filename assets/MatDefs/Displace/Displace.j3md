@@ -52,7 +52,7 @@ MaterialDef Displace {
         Boolean LowQuality
         Boolean HighQuality
         Boolean UseAlpha
-        Float AlphaDiscardThreshold
+      //  Float AlphaDiscardThreshold
         Boolean LATC
         Boolean UseMaterialColors
         Boolean VTangent
@@ -162,7 +162,7 @@ MaterialDef Displace {
         }
  
         Defines {
-            DIFFUSEMAP_ALPHA : DiffuseMap
+            DIFFUSEMAP : DiffuseMap
         }
  
         RenderState {
@@ -175,6 +175,49 @@ MaterialDef Displace {
  
     }
  
+Technique PostShadow15{
+        VertexShader GLSL150:   Common/MatDefs/Shadow/PostShadowPSSM.vert
+        FragmentShader GLSL150: Common/MatDefs/Shadow/PostShadowPSSM15.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldMatrix
+        }
+
+        Defines {
+            HARDWARE_SHADOWS : HardwareShadows
+            FILTER_MODE : FilterMode
+            PCFEDGE : PCFEdge
+            DIFFUSEMAP : DiffuseMap         
+        }
+
+        RenderState {
+            Blend Alpha
+        }
+    }
+
+    Technique PostShadow{
+        VertexShader GLSL100:   Common/MatDefs/Shadow/PostShadowPSSM.vert
+        FragmentShader GLSL100: Common/MatDefs/Shadow/PostShadowPSSM.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldMatrix
+        }
+
+        Defines {
+            HARDWARE_SHADOWS : HardwareShadows
+            FILTER_MODE : FilterMode
+            PCFEDGE : PCFEdge
+            DIFFUSEMAP : DiffuseMap     
+        }
+
+        RenderState {
+            Blend Alpha
+        }
+    }
+
+
   Technique PreNormalPass {
  
         VertexShader GLSL100 :   Common/MatDefs/SSAO/normal.vert

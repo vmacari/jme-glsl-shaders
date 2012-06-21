@@ -113,7 +113,7 @@ MaterialDef FakeParticleBlow {
         }
 
         Defines {
-            DIFFUSEMAP_ALPHA : DiffuseMap
+            DIFFUSEMAP : DiffuseMap
         }
 
         RenderState {
@@ -124,6 +124,49 @@ MaterialDef FakeParticleBlow {
             ColorWrite Off
         }
 
+    }
+
+
+Technique PostShadow15{
+        VertexShader GLSL150:   Common/MatDefs/Shadow/PostShadowPSSM.vert
+        FragmentShader GLSL150: Common/MatDefs/Shadow/PostShadowPSSM15.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldMatrix
+        }
+
+        Defines {
+            HARDWARE_SHADOWS : HardwareShadows
+            FILTER_MODE : FilterMode
+            PCFEDGE : PCFEdge
+            DIFFUSEMAP : DiffuseMap         
+        }
+
+        RenderState {
+            Blend Alpha
+        }
+    }
+
+    Technique PostShadow{
+        VertexShader GLSL100:   Common/MatDefs/Shadow/PostShadowPSSM.vert
+        FragmentShader GLSL100: Common/MatDefs/Shadow/PostShadowPSSM.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldMatrix
+        }
+
+        Defines {
+            HARDWARE_SHADOWS : HardwareShadows
+            FILTER_MODE : FilterMode
+            PCFEDGE : PCFEdge
+            DIFFUSEMAP : DiffuseMap     
+        }
+
+        RenderState {
+            Blend Alpha
+        }
     }
 
   Technique PreNormalPass {
