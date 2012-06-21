@@ -103,6 +103,27 @@ MaterialDef Phong Lighting {
         // Dissolve Map
         Texture2D DissolveMap
         Vector2 DissolveParams;
+
+
+        //shadows
+         Int FilterMode
+        Boolean HardwareShadows
+
+        Texture2D ShadowMap0
+        Texture2D ShadowMap1
+        Texture2D ShadowMap2
+        Texture2D ShadowMap3
+        
+        Float ShadowIntensity
+        Vector4 Splits
+
+        Matrix4 LightViewProjectionMatrix0
+        Matrix4 LightViewProjectionMatrix1
+        Matrix4 LightViewProjectionMatrix2
+        Matrix4 LightViewProjectionMatrix3
+
+        Float PCFEdge
+
     }
 
     Technique {
@@ -145,7 +166,7 @@ MaterialDef Phong Lighting {
             SEPARATE_TEXCOORD : SeparateTexCoord
 
             USE_REFLECTION : EnvMap
-            SPHERE_MAP : SphereMap
+            SPHERE_MAP : EnvMapAsSphereMap
 
             DISSOLVE_MAP : DissolveMap
             DISSOLVE_PARAMS : DissolveParams
