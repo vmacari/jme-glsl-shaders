@@ -2,7 +2,7 @@
 
 package LightBlow;
 
-import FixedTangentBinormalGenerator.FixedTangentBinormalGenerator;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.TextureKey;
 import com.jme3.light.DirectionalLight;
@@ -42,52 +42,52 @@ public class LightBlow_GlowBlow extends SimpleApplication {
          rootNode.attachChild(SkyFactory.createSky(assetManager, texlow, false));
          
          
-    Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow.blend");
+    Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow.mesh.xml");
     Material mat = assetManager.loadMaterial("Materials/LightBlow/Shading_System/LightBlow_ibl.j3m");
     char_boy.setMaterial(mat);
-    FixedTangentBinormalGenerator.generate(char_boy);
+    TangentBinormalGenerator.generate(char_boy);
     rootNode.attachChild(char_boy);
 
-    Spatial char_boy2 = assetManager.loadModel("Models/LightBlow/jme_lightblow.blend");
+    Spatial char_boy2 = assetManager.loadModel("Models/LightBlow/jme_lightblow.mesh.xml");
     Material mat2 = assetManager.loadMaterial("Materials/LightBlow/Shading_System/LightBlow_reflection.j3m");
     char_boy2.setMaterial(mat2);
     char_boy2.setLocalTranslation(-1.5f, 0, 0);
-    FixedTangentBinormalGenerator.generate(char_boy2);
+    TangentBinormalGenerator.generate(char_boy2);
     rootNode.attachChild(char_boy2);
     
-    Spatial char_boy2_2 = assetManager.loadModel("Models/LightBlow/jme_lightblow.blend");
+    Spatial char_boy2_2 = assetManager.loadModel("Models/LightBlow/jme_lightblow.mesh.xml");
     Material mat2_2 = assetManager.loadMaterial("Materials/LightBlow/Shading_System/LightBlow_reflection_additive.j3m");
     char_boy2_2.setMaterial(mat2_2);
     char_boy2_2.setLocalTranslation(-2.5f, 0, 0);
-    FixedTangentBinormalGenerator.generate(char_boy2_2);
+    TangentBinormalGenerator.generate(char_boy2_2);
     rootNode.attachChild(char_boy2_2);
         
-    Spatial char_boy3 = assetManager.loadModel("Models/LightBlow/jme_lightblow.blend");
+    Spatial char_boy3 = assetManager.loadModel("Models/LightBlow/jme_lightblow.mesh.xml");
     Material mat3 = assetManager.loadMaterial("Materials/LightBlow/Shading_System/LightBlow_ref_a_nor.j3m");
     char_boy3.setMaterial(mat3);
     char_boy3.setLocalTranslation(-4f, 0, 0);
-    FixedTangentBinormalGenerator.generate(char_boy3);
+    TangentBinormalGenerator.generate(char_boy3);
     rootNode.attachChild(char_boy3);
     
-    Spatial char_boy4 = assetManager.loadModel("Models/LightBlow/jme_lightblow.blend");
+    Spatial char_boy4 = assetManager.loadModel("Models/LightBlow/jme_lightblow.mesh.xml");
     Material mat4 = assetManager.loadMaterial("Materials/LightBlow/Shading_System/LightBlow_minnaert.j3m");
     char_boy4.setMaterial(mat4);
     char_boy4.setLocalTranslation(-6f, 0, 0);
-    FixedTangentBinormalGenerator.generate(char_boy4);
+    TangentBinormalGenerator.generate(char_boy4);
     rootNode.attachChild(char_boy4);
     
-    Spatial char_boy5 = assetManager.loadModel("Models/LightBlow/jme_lightblow.blend");
+    Spatial char_boy5 = assetManager.loadModel("Models/LightBlow/jme_lightblow.mesh.xml");
     Material mat5 = assetManager.loadMaterial("Materials/LightBlow/Shading_System/LightBlow_rim.j3m");
     char_boy5.setMaterial(mat5);
     char_boy5.setLocalTranslation(-8f, 0, 0);
-    FixedTangentBinormalGenerator.generate(char_boy5);
+    TangentBinormalGenerator.generate(char_boy5);
     rootNode.attachChild(char_boy5);
     
-    Spatial char_boy6 = assetManager.loadModel("Models/LightBlow/jme_lightblow.blend");
+    Spatial char_boy6 = assetManager.loadModel("Models/LightBlow/jme_lightblow.mesh.xml");
     Material mat6 = assetManager.loadMaterial("Materials/LightBlow/Shading_System/LightBlow_rim_2.j3m");
     char_boy6.setMaterial(mat6);
     char_boy6.setLocalTranslation(-10f, 0, 0);
-    FixedTangentBinormalGenerator.generate(char_boy6);
+    TangentBinormalGenerator.generate(char_boy6);
     rootNode.attachChild(char_boy6);
     
 
