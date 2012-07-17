@@ -286,7 +286,7 @@ Technique PostShadow15{
         }
     }
  
-    Technique FixedFunc {
+    Technique  {
         LightMode FixedPipeline
     }
  

@@ -40,7 +40,7 @@ MaterialDef FakeParticleBlow {
         }
     }
  
-    Technique FixedFunc {
+    Technique  {
     }
  
 

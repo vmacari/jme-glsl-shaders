@@ -210,7 +210,7 @@ Technique PostShadow15{
     }
 
 
-    Technique FixedFunc {
+    Technique  {
         LightMode FixedPipeline
     }
 
@@ -240,7 +240,7 @@ Technique PostShadow15{
         }
     }
 
-    Technique FixedFunc {
+    Technique  {
         LightMode FixedPipeline
     }
 

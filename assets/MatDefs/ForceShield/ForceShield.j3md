@@ -23,7 +23,7 @@ MaterialDef Solid Color {
             HAS_COLOR : Color
         }
     }
-    Technique FixedFunc {
+    Technique  {
     }
     
 

@@ -131,7 +131,7 @@ MaterialDef FakeParticleBlow {
     }
 
 
-    Technique FixedFunc {
+    Technique {
         LightMode FixedPipeline
     }
 
@@ -161,7 +161,7 @@ MaterialDef FakeParticleBlow {
         }
     }
 
-    Technique FixedFunc {
+    Technique {
         LightMode FixedPipeline
     }
 
