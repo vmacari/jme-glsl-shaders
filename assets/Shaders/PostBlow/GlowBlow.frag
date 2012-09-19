@@ -18,11 +18,9 @@ void main(){
     #ifdef HAS_GLOWMAP
         #if defined(NEED_TEXCOORD1) 
 vec4 GlowTex = texture2D(m_GlowMap, texCoord1);
-     GlowTex = GlowTex;
            gl_FragColor = GlowTex;
         #else 
 vec4 GlowTex = texture2D(m_GlowMap, texCoord);
-     GlowTex = GlowTex;
            gl_FragColor = GlowTex;
         #endif
     #else

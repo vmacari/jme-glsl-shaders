@@ -12,7 +12,7 @@ Material LightBlow_4 : MatDefs/LightBlow/LightBlow.j3md {
 
 
         GlowMap : Models/LightBlow/jme_lightblow_dif.png
-        Minnaert : 1.0 1.0 0.95 5.0
+        Minnaert : 1.0 1.0 0.95 28.0
 
 }
     AdditionalRenderState {

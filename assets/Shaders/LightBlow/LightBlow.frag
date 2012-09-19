@@ -170,6 +170,41 @@ uniform vec4 m_Minnaert;
 
 
 
+
+float srgb_to_linearrgb(float c)
+{
+	if(c < 0.04045)
+		return (c < 0.0)? 0.0: c * (1.0/12.92);
+	else
+		return pow((c + 0.055)*(1.0/1.055), 2.4);
+}
+
+float linearrgb_to_srgb(float c)
+{
+	if(c < 0.0031308)
+		return (c < 0.0)? 0.0: c * 12.92;
+	else
+		return 1.055 * pow(c, 1.0/2.4) - 0.055;
+}
+
+void srgb_to_linearrgb(vec4 col_from, out vec4 col_to)
+{
+	col_to.r = srgb_to_linearrgb(col_from.r);
+	col_to.g = srgb_to_linearrgb(col_from.g);
+	col_to.b = srgb_to_linearrgb(col_from.b);
+	col_to.a = col_from.a;
+}
+
+void linearrgb_to_srgb(vec4 col_from, out vec4 col_to)
+{
+	col_to.r = linearrgb_to_srgb(col_from.r);
+	col_to.g = linearrgb_to_srgb(col_from.g);
+	col_to.b = linearrgb_to_srgb(col_from.b);
+	col_to.a = col_from.a;
+}
+
+
+
 float tangDot(in vec3 v1, in vec3 v2){
     float d = dot(v1,v2);
     #ifdef V_TANGENT
@@ -331,21 +366,29 @@ normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight3.rg, textureBlend.b
 vec4 diffuseColor;
 
     #if !defined(TEXTURE_MASK)
-    diffuseColor = texture2D(m_DiffuseMap, newTexCoord);
+      srgb_to_linearrgb(texture2D(m_DiffuseMap, newTexCoord),diffuseColor);
+//    diffuseColor = texture2D(m_DiffuseMap, newTexCoord);
     #elif defined(TEXTURE_MASK)
-    diffuseColor = texture2D(m_DiffuseMap, newTexCoord* m_uv_0_scale);
+      srgb_to_linearrgb(texture2D(m_DiffuseMap, newTexCoord* m_uv_0_scale),diffuseColor);
+//    diffuseColor = texture2D(m_DiffuseMap, newTexCoord* m_uv_0_scale);
     #endif
 
     #if defined(DIFFUSEMAP_1) && defined(TEXTURE_MASK)
-      vec4 diffuseColor1 = texture2D(m_DiffuseMap_1, newTexCoord * m_uv_1_scale);
+      vec4 diffuseColor1; 
+      srgb_to_linearrgb(texture2D(m_DiffuseMap_1, newTexCoord * m_uv_1_scale),diffuseColor1);
+//      vec4 diffuseColor1 = texture2D(m_DiffuseMap_1, newTexCoord * m_uv_1_scale);
       diffuseColor.rgb = mix( diffuseColor.rgb, diffuseColor1.rgb, textureBlend.r ).rgb;
     #endif  
       #if defined(DIFFUSEMAP_2) && defined(TEXTURE_MASK)
-        vec4 diffuseColor2 = texture2D(m_DiffuseMap_2, newTexCoord * m_uv_2_scale);
+        vec4 diffuseColor2; 
+        srgb_to_linearrgb(texture2D(m_DiffuseMap_2, newTexCoord * m_uv_2_scale),diffuseColor2);
+//        vec4 diffuseColor2 = texture2D(m_DiffuseMap_2, newTexCoord * m_uv_2_scale);
         diffuseColor.rgb = mix( diffuseColor.rgb, diffuseColor2.rgb, textureBlend.g ).rgb;
       #endif  
         #if defined(DIFFUSEMAP_3) && defined(TEXTURE_MASK)
-          vec4 diffuseColor3 = texture2D(m_DiffuseMap_3, newTexCoord * m_uv_3_scale);
+          vec4 diffuseColor3; 
+          srgb_to_linearrgb(texture2D(m_DiffuseMap_3, newTexCoord * m_uv_3_scale),diffuseColor3);
+//          vec4 diffuseColor3 = texture2D(m_DiffuseMap_3, newTexCoord * m_uv_3_scale);
           diffuseColor.rgb = mix( diffuseColor.rgb, diffuseColor3.rgb, textureBlend.b ).rgb;
         #endif  
 #else
@@ -501,10 +544,13 @@ diffuseColor.rgb *= m_Diffuse.rgb;
         #ifdef IBL_SIMPLE
        // IBL - Image Based Lighting. The lighting based on either cube map or sphere map.
 
+           vec4 tempVec1;
            #if  defined (IBL_SIMPLE) && defined (NORMALMAP)
-            vec3 iblLight = texture2D(m_IblMap_Simple, (((refVec.xy) - mat.xy * normal.xy) * vec2(0.49)) + vec2(0.49)).rgb;
+            srgb_to_linearrgb(texture2D(m_IblMap_Simple, (((refVec.xy) - mat.xy * normal.xy) * vec2(0.49)) + vec2(0.49)),tempVec1);
+            vec3 iblLight = tempVec1.rgb;
            #elif  defined (IBL_SIMPLE) && !defined (NORMALMAP)
-            vec3 iblLight = texture2D(m_IblMap_Simple,  ((refVec.xy) * vec2(0.49)) + vec2(0.49)).rgb;
+            srgb_to_linearrgb(texture2D(m_IblMap_Simple,  ((refVec.xy) * vec2(0.49)) + vec2(0.49)), tempVec1);
+            vec3 iblLight = tempVec1.rgb;
            #endif
         
         //Albedo 
@@ -513,14 +559,18 @@ diffuseColor.rgb *= m_Diffuse.rgb;
 
         #ifdef IBL
        // IBL - Image Based Lighting. The lighting based on either cube map or sphere map.
+           vec4 tempVecIBL;
+           
            #if  defined (IBL) && defined (NORMALMAP)
-            vec3 iblLight = Optics_GetEnvColor(m_IblMap, (refVec - mat * normal)).rgb;
+            vec4 iblLight = Optics_GetEnvColor(m_IblMap, (refVec - mat * normal));
+            srgb_to_linearrgb(iblLight,tempVecIBL);
            #elif  defined (IBL) && !defined (NORMALMAP)
-            vec3 iblLight = Optics_GetEnvColor(m_IblMap,  refVec).rgb;
+            vec4 iblLight = Optics_GetEnvColor(m_IblMap,  refVec);
+            srgb_to_linearrgb(iblLight,tempVecIBL);
            #endif
         
         //Albedo 
-        AmbientSum2.rgb += iblLight;
+        AmbientSum2.rgb += tempVecIBL.rgb;
         #endif
 
 
@@ -540,15 +590,18 @@ diffuseColor.rgb *= m_Diffuse.rgb;
 #if defined (REFLECTION) 
     // Reflection based on either cube map or sphere map.
 // float refTex = 1.0;
-
+    vec4 tempVecRef;
+    
     #if  defined (REFLECTION) && defined (NORMALMAP)
   //  vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec.xyz - mat.xyz * normal.xyz)*-1.5);
-vec3 refGet = Optics_GetEnvColor(m_RefMap, (refVec - (mat * normal))).rgb;
+    vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec - (mat * normal)));
+    srgb_to_linearrgb(refGet,tempVecRef);
   #elif defined (REFLECTION) && !defined (NORMALMAP)
-    vec3 refGet = Optics_GetEnvColor(m_RefMap, refVec).rgb;
+    vec4 refGet = Optics_GetEnvColor(m_RefMap, refVec);
+    srgb_to_linearrgb(refGet,tempVecRef);
     #endif
 
-    vec3 refColor = refGet * m_RefIntensity;
+    vec3 refColor = tempVecRef.rgb * m_RefIntensity;
     
 
     #if defined(REF_A_NOR) && defined(NORMALMAP)
@@ -668,10 +721,14 @@ light.x = max(light.x, refColor);
 
 #ifdef FOG
 
-fogColor = m_FogColor;
+    fogColor = m_FogColor;
+    
 
     #ifdef FOG_SKY
-fogColor.rgb = Optics_GetEnvColor(m_FogSkyBox, I).rgb;
+    vec4 tempVecFog;
+    fogColor.rgb = Optics_GetEnvColor(m_FogSkyBox, I).rgb;
+    srgb_to_linearrgb(fogColor,tempVecFog);
+    fogColor.rgb = tempVecFog.rgb;
     #endif
 
 float fogDistance = fogColor.a;
@@ -688,4 +745,8 @@ gl_FragColor.rgb = mix(fogColor.rgb,gl_FragColor.rgb,vec3(fogFactor));
  #endif
     gl_FragColor.a = alpha;
 
+    // set from linear to srgb
+    vec4 tempFrag;
+    linearrgb_to_srgb(gl_FragColor,tempFrag);
+    gl_FragColor.rgb = tempFrag.rgb;
 }

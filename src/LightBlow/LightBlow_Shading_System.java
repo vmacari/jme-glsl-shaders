@@ -34,7 +34,7 @@ public class LightBlow_Shading_System extends SimpleApplication {
         skyhi.setAsCube(true);
       final  Texture texhi = assetManager.loadTexture(skyhi);
 
-      
+      flyCam.setMoveSpeed(20f);
 //      TextureKey skylow = new TextureKey("Textures/Water32.dds", true);
 //        skylow.setGenerateMips(true);
 //        skylow.setAsCube(true);
@@ -92,7 +92,6 @@ public class LightBlow_Shading_System extends SimpleApplication {
     rootNode.attachChild(char_boy6);
     
         
-        flyCam.setMoveSpeed(5);   
      
 
         DirectionalLight dl = new DirectionalLight();
