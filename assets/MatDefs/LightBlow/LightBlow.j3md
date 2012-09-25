@@ -36,6 +36,9 @@ MaterialDef LightBlow {
      // Output emission from the diffuse map alpha channel
         Boolean EmissiveMap
         
+        // Apha threshold for fragment discarding
+        Float AlphaDiscardThreshold (AlphaTestFallOff)
+
      // Output alpha from the diffuse map
         Boolean Alpha_A_Dif
 
@@ -175,6 +178,7 @@ MaterialDef LightBlow {
         Matrix4 LightViewProjectionMatrix3
 
         Float PCFEdge
+        Float ShadowMapSize
     }
 
     Technique {
@@ -306,7 +310,8 @@ MaterialDef LightBlow {
         }
 
         Defines {
-            DIFFUSEMAP : DiffuseMap
+            COLOR_MAP : ColorMap
+            DISCARD_ALPHA : AlphaDiscardThreshold
         }
 
         RenderState {
@@ -332,11 +337,15 @@ Technique PostShadow15{
             HARDWARE_SHADOWS : HardwareShadows
             FILTER_MODE : FilterMode
             PCFEDGE : PCFEdge
-            DIFFUSEMAP : DiffuseMap         
+            DISCARD_ALPHA : AlphaDiscardThreshold
+            COLOR_MAP : ColorMap
+            SHADOWMAP_SIZE : ShadowMapSize
         }
 
-        RenderState {
-            Blend Alpha
+         ForcedRenderState {
+            Blend Modulate
+            DepthWrite Off
+            PolyOffset -0.1 0
         }
     }
 
@@ -353,11 +362,15 @@ Technique PostShadow15{
             HARDWARE_SHADOWS : HardwareShadows
             FILTER_MODE : FilterMode
             PCFEDGE : PCFEdge
-            DIFFUSEMAP : DiffuseMap     
+            DISCARD_ALPHA : AlphaDiscardThreshold
+            COLOR_MAP : ColorMap
+            SHADOWMAP_SIZE : ShadowMapSize
         }
 
-        RenderState {
-            Blend Alpha
+        ForcedRenderState {
+            Blend Modulate
+            DepthWrite Off
+            PolyOffset -0.1 0
         }
     }
 

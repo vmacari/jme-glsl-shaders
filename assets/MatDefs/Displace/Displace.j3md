@@ -52,7 +52,7 @@ MaterialDef Displace {
         Boolean LowQuality
         Boolean HighQuality
         Boolean UseAlpha
-      //  Float AlphaDiscardThreshold
+        Float AlphaDiscardThreshold (AlphaTestFallOff)
         Boolean LATC
         Boolean UseMaterialColors
         Boolean VTangent
@@ -98,6 +98,7 @@ MaterialDef Displace {
         Matrix4 LightViewProjectionMatrix3
 
         Float PCFEdge
+        Float ShadowMapSize
 
 
     }
@@ -173,19 +174,20 @@ MaterialDef Displace {
     }
  
     Technique PreShadow {
- 
+
         VertexShader GLSL100 :   Common/MatDefs/Shadow/PreShadow.vert
         FragmentShader GLSL100 : Common/MatDefs/Shadow/PreShadow.frag
- 
+
         WorldParameters {
             WorldViewProjectionMatrix
             WorldViewMatrix
         }
- 
+
         Defines {
-            DIFFUSEMAP : DiffuseMap
+            COLOR_MAP : ColorMap
+            DISCARD_ALPHA : AlphaDiscardThreshold
         }
- 
+
         RenderState {
             FaceCull Off
             DepthTest On
@@ -193,9 +195,9 @@ MaterialDef Displace {
             PolyOffset 5 0
             ColorWrite Off
         }
- 
+
     }
- 
+
 Technique PostShadow15{
         VertexShader GLSL150:   Common/MatDefs/Shadow/PostShadowPSSM.vert
         FragmentShader GLSL150: Common/MatDefs/Shadow/PostShadowPSSM15.frag
@@ -209,11 +211,15 @@ Technique PostShadow15{
             HARDWARE_SHADOWS : HardwareShadows
             FILTER_MODE : FilterMode
             PCFEDGE : PCFEdge
-            DIFFUSEMAP : DiffuseMap         
+            DISCARD_ALPHA : AlphaDiscardThreshold
+            COLOR_MAP : ColorMap
+            SHADOWMAP_SIZE : ShadowMapSize
         }
 
-        RenderState {
-            Blend Alpha
+         ForcedRenderState {
+            Blend Modulate
+            DepthWrite Off
+            PolyOffset -0.1 0
         }
     }
 
@@ -230,11 +236,15 @@ Technique PostShadow15{
             HARDWARE_SHADOWS : HardwareShadows
             FILTER_MODE : FilterMode
             PCFEDGE : PCFEdge
-            DIFFUSEMAP : DiffuseMap     
+            DISCARD_ALPHA : AlphaDiscardThreshold
+            COLOR_MAP : ColorMap
+            SHADOWMAP_SIZE : ShadowMapSize
         }
 
-        RenderState {
-            Blend Alpha
+        ForcedRenderState {
+            Blend Modulate
+            DepthWrite Off
+            PolyOffset -0.1 0
         }
     }
 

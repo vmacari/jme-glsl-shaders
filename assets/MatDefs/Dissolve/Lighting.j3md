@@ -16,7 +16,7 @@ MaterialDef Phong Lighting {
         Boolean UseAlpha
 
         // Apha threshold for fragment discarding
-       // Float AlphaDiscardThreshold
+        Float AlphaDiscardThreshold
 
         // Normal map is in BC5/ATI2n/LATC/3Dc compression format
         Boolean LATC
@@ -123,6 +123,7 @@ MaterialDef Phong Lighting {
         Matrix4 LightViewProjectionMatrix3
 
         Float PCFEdge
+        Float ShadowMapSize
 
     }
 
@@ -184,7 +185,8 @@ MaterialDef Phong Lighting {
         }
 
         Defines {
-            DIFFUSEMAP : DiffuseMap
+            COLOR_MAP : ColorMap
+            DISCARD_ALPHA : AlphaDiscardThreshold
         }
 
         RenderState {
@@ -196,7 +198,6 @@ MaterialDef Phong Lighting {
         }
 
     }
-
 
 Technique PostShadow15{
         VertexShader GLSL150:   Common/MatDefs/Shadow/PostShadowPSSM.vert
@@ -211,11 +212,15 @@ Technique PostShadow15{
             HARDWARE_SHADOWS : HardwareShadows
             FILTER_MODE : FilterMode
             PCFEDGE : PCFEdge
-            DIFFUSEMAP : DiffuseMap         
+            DISCARD_ALPHA : AlphaDiscardThreshold
+            COLOR_MAP : ColorMap
+            SHADOWMAP_SIZE : ShadowMapSize
         }
 
-        RenderState {
-            Blend Alpha
+         ForcedRenderState {
+            Blend Modulate
+            DepthWrite Off
+            PolyOffset -0.1 0
         }
     }
 
@@ -232,11 +237,15 @@ Technique PostShadow15{
             HARDWARE_SHADOWS : HardwareShadows
             FILTER_MODE : FilterMode
             PCFEDGE : PCFEdge
-            DIFFUSEMAP : DiffuseMap     
+            DISCARD_ALPHA : AlphaDiscardThreshold
+            COLOR_MAP : ColorMap
+            SHADOWMAP_SIZE : ShadowMapSize
         }
 
-        RenderState {
-            Blend Alpha
+        ForcedRenderState {
+            Blend Modulate
+            DepthWrite Off
+            PolyOffset -0.1 0
         }
     }
 
