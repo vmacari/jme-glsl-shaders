@@ -14,13 +14,13 @@ import com.jme3.util.SkyFactory;
 import com.jme3.util.TangentBinormalGenerator;
 
 
-public class LightBlow_Terrain_System extends SimpleApplication {
+public class LightBlow_Terrain_System_Texture extends SimpleApplication {
 
 
     
     
   public static void main(String[] args) {
-    LightBlow_Terrain_System app = new LightBlow_Terrain_System();
+    LightBlow_Terrain_System_Texture app = new LightBlow_Terrain_System_Texture();
     app.start();
   }
     
@@ -44,8 +44,8 @@ public class LightBlow_Terrain_System extends SimpleApplication {
 
          
          
-    Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow_terrain.blend");
-    Material mat = assetManager.loadMaterial("Materials/LightBlow/Terrain_System/Terrain_System.j3m");
+    Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow_terrain.mesh.xml");
+    Material mat = assetManager.loadMaterial("Materials/LightBlow/Terrain_System/Terrain_System_Texture.j3m");
     char_boy.setMaterial(mat);
     TangentBinormalGenerator.generate(char_boy);
     rootNode.attachChild(char_boy);

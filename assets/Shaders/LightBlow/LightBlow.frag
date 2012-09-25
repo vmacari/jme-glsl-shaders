@@ -26,6 +26,9 @@ uniform vec4 m_Diffuse;
     uniform sampler2D m_LightMap;
 #endif
 
+#ifdef VERTEX_COLOR
+  varying vec4 vColor;
+#endif
 
 #ifndef VERTEX_LIGHTING
   uniform vec4 g_LightDirection;
@@ -54,14 +57,20 @@ uniform vec4 m_Diffuse;
   uniform sampler2D m_DiffuseMap;
   
 #endif
-#if defined(DIFFUSEMAP_1) && defined(TEXTURE_MASK)
-  uniform sampler2D m_DiffuseMap_1;
+#if defined(DIFFUSEMAP_1)
+    #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+     uniform sampler2D m_DiffuseMap_1;
+    #endif
 #endif
-#if defined(DIFFUSEMAP_2) && defined(TEXTURE_MASK)
-  uniform sampler2D m_DiffuseMap_2;
+#if defined(DIFFUSEMAP_2)
+    #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+     uniform sampler2D m_DiffuseMap_2;
+    #endif
 #endif
-#if defined(DIFFUSEMAP_3) && defined(TEXTURE_MASK)
-  uniform sampler2D m_DiffuseMap_3;
+#if defined(DIFFUSEMAP_3)
+    #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+     uniform sampler2D m_DiffuseMap_3;
+    #endif
 #endif
 
   
@@ -73,28 +82,42 @@ uniform vec4 m_Diffuse;
 #endif
 
 
-#if defined(NORMALMAP_1) && defined(TEXTURE_MASK)
-  uniform sampler2D m_NormalMap_1;
+#if defined(NORMALMAP_1) 
+    #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+     uniform sampler2D m_NormalMap_1;
+    #endif
 #endif
-#if defined(NORMALMAP_2) && defined(TEXTURE_MASK)
-  uniform sampler2D m_NormalMap_2;
+#if defined(NORMALMAP_2) 
+    #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+     uniform sampler2D m_NormalMap_2;
+    #endif
 #endif
-#if defined(NORMALMAP_3) && defined(TEXTURE_MASK)
-  uniform sampler2D m_NormalMap_3;
+#if defined(NORMALMAP_3) 
+    #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+     uniform sampler2D m_NormalMap_3;
+    #endif
 #endif
 
 
-#if defined(NORMALMAP) || defined(DIFFUSEMAP)  && defined(TEXTURE_MASK)
-  uniform float m_uv_0_scale;  
+#if defined(NORMALMAP) || defined(DIFFUSEMAP)
+    #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+      uniform float m_uv_0_scale;  
+    #endif
 #endif
 #if defined(NORMALMAP_1) || defined(DIFFUSEMAP_1)
+    #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
   uniform float m_uv_1_scale;  
+    #endif
 #endif
 #if defined(NORMALMAP_2) || defined(DIFFUSEMAP_2)
+    #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
   uniform float m_uv_2_scale;  
+    #endif
 #endif
 #if defined(NORMALMAP_3) || defined(DIFFUSEMAP_3)
+    #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
   uniform float m_uv_3_scale;  
+    #endif
 #endif
 
 
@@ -302,12 +325,16 @@ void main(){
        vec3 AmbientSum2 = AmbientSum;
 
 
-#ifdef TEXTURE_MASK
+#if defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
 vec4 textureBlend;
-   #ifdef SEPERATE_TEXCOORD2
-    textureBlend = texture2D( m_TextureMask, texCoord2.xy);
-        #else
-    textureBlend = texture2D( m_TextureMask, texCoord.xy);
+   #if defined(TEXTURE_MASK)
+       #ifdef SEPERATE_TEXCOORD2
+        textureBlend = texture2D( m_TextureMask, texCoord2.xy);
+            #else
+        textureBlend = texture2D( m_TextureMask, texCoord.xy);
+       #endif
+   #elif defined(VERTEX_COLOR)    
+       textureBlend = vColor;
    #endif
 #endif
 
@@ -315,26 +342,32 @@ vec4 textureBlend;
 #if defined(NORMALMAP) && !defined(VERTEX_LIGHTING)
 vec4 normalHeightCalc;
 
-    #if  !defined(TEXTURE_MASK)
+    #if  !defined(TEXTURE_MASK) && !defined(VERTEX_COLOR)
     normalHeightCalc = texture2D(m_NormalMap, newTexCoord);
-    #elif  defined(TEXTURE_MASK)
+    #elif  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
     normalHeightCalc = texture2D(m_NormalMap, newTexCoord* m_uv_0_scale);
     #endif
 
 #endif
 
-    #if defined(NORMALMAP_1) && defined(TEXTURE_MASK)
-vec4 normalHeight1 = texture2D(m_NormalMap_1, newTexCoord * m_uv_1_scale);
-normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight1.rg, textureBlend.r ).rg;
-#endif
-    #if defined(NORMALMAP_2) && defined(TEXTURE_MASK)
-vec4 normalHeight2 = texture2D(m_NormalMap_2, newTexCoord * m_uv_2_scale);
-normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight2.rg, textureBlend.g ).rg;
-#endif
-    #if defined(NORMALMAP_3) && defined(TEXTURE_MASK)
-vec4 normalHeight3 = texture2D(m_NormalMap_3, newTexCoord * m_uv_3_scale);
-normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight3.rg, textureBlend.b ).rg;
-#endif
+    #if defined(NORMALMAP_1)
+        #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+        vec4 normalHeight1 = texture2D(m_NormalMap_1, newTexCoord * m_uv_1_scale);
+        normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight1.rg, textureBlend.r ).rg;
+        #endif
+    #endif
+    #if defined(NORMALMAP_2)
+        #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+        vec4 normalHeight2 = texture2D(m_NormalMap_2, newTexCoord * m_uv_2_scale);
+        normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight2.rg, textureBlend.g ).rg;
+        #endif
+    #endif
+    #if defined(NORMALMAP_3)
+        #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+        vec4 normalHeight3 = texture2D(m_NormalMap_3, newTexCoord * m_uv_3_scale);
+        normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight3.rg, textureBlend.b ).rg;
+        #endif
+    #endif
 
 
    #if (defined(PARALLAXMAP) || (defined(NORMALMAP_PARALLAX) && defined(NORMALMAP))) && !defined(VERTEX_LIGHTING) 
@@ -365,31 +398,37 @@ normalHeightCalc.rg = mix( normalHeightCalc.rg, normalHeight3.rg, textureBlend.b
 
 vec4 diffuseColor;
 
-    #if !defined(TEXTURE_MASK)
+    #if !defined(TEXTURE_MASK) && !defined(VERTEX_COLOR)
       srgb_to_linearrgb(texture2D(m_DiffuseMap, newTexCoord),diffuseColor);
 //    diffuseColor = texture2D(m_DiffuseMap, newTexCoord);
-    #elif defined(TEXTURE_MASK)
+    #elif defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
       srgb_to_linearrgb(texture2D(m_DiffuseMap, newTexCoord* m_uv_0_scale),diffuseColor);
 //    diffuseColor = texture2D(m_DiffuseMap, newTexCoord* m_uv_0_scale);
     #endif
 
-    #if defined(DIFFUSEMAP_1) && defined(TEXTURE_MASK)
-      vec4 diffuseColor1; 
-      srgb_to_linearrgb(texture2D(m_DiffuseMap_1, newTexCoord * m_uv_1_scale),diffuseColor1);
-//      vec4 diffuseColor1 = texture2D(m_DiffuseMap_1, newTexCoord * m_uv_1_scale);
-      diffuseColor.rgb = mix( diffuseColor.rgb, diffuseColor1.rgb, textureBlend.r ).rgb;
+    #if defined(DIFFUSEMAP_1)
+        #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+          vec4 diffuseColor1; 
+          srgb_to_linearrgb(texture2D(m_DiffuseMap_1, newTexCoord * m_uv_1_scale),diffuseColor1);
+//          vec4 diffuseColor1 = texture2D(m_DiffuseMap_1, newTexCoord * m_uv_1_scale);
+          diffuseColor.rgb = mix( diffuseColor.rgb, diffuseColor1.rgb, textureBlend.r ).rgb;
+        #endif  
     #endif  
-      #if defined(DIFFUSEMAP_2) && defined(TEXTURE_MASK)
-        vec4 diffuseColor2; 
-        srgb_to_linearrgb(texture2D(m_DiffuseMap_2, newTexCoord * m_uv_2_scale),diffuseColor2);
-//        vec4 diffuseColor2 = texture2D(m_DiffuseMap_2, newTexCoord * m_uv_2_scale);
-        diffuseColor.rgb = mix( diffuseColor.rgb, diffuseColor2.rgb, textureBlend.g ).rgb;
+      #if defined(DIFFUSEMAP_2)
+        #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+          vec4 diffuseColor2; 
+          srgb_to_linearrgb(texture2D(m_DiffuseMap_2, newTexCoord * m_uv_2_scale),diffuseColor2);
+//          vec4 diffuseColor2 = texture2D(m_DiffuseMap_2, newTexCoord * m_uv_2_scale);
+          diffuseColor.rgb = mix( diffuseColor.rgb, diffuseColor2.rgb, textureBlend.g ).rgb;
+        #endif  
       #endif  
-        #if defined(DIFFUSEMAP_3) && defined(TEXTURE_MASK)
-          vec4 diffuseColor3; 
-          srgb_to_linearrgb(texture2D(m_DiffuseMap_3, newTexCoord * m_uv_3_scale),diffuseColor3);
-//          vec4 diffuseColor3 = texture2D(m_DiffuseMap_3, newTexCoord * m_uv_3_scale);
-          diffuseColor.rgb = mix( diffuseColor.rgb, diffuseColor3.rgb, textureBlend.b ).rgb;
+        #if defined(DIFFUSEMAP_3)
+            #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+             vec4 diffuseColor3; 
+             srgb_to_linearrgb(texture2D(m_DiffuseMap_3, newTexCoord * m_uv_3_scale),diffuseColor3);
+//             vec4 diffuseColor3 = texture2D(m_DiffuseMap_3, newTexCoord * m_uv_3_scale);
+             diffuseColor.rgb = mix( diffuseColor.rgb, diffuseColor3.rgb, textureBlend.b ).rgb;
+             #endif  
         #endif  
 #else
      vec4 diffuseColor = vec4(0.6, 0.6, 0.6, 1.0);

@@ -45,6 +45,7 @@ varying vec3 lightVec;
 
 #ifdef VERTEX_COLOR
   attribute vec4 inColor;
+  varying vec4 vColor;
 #endif
 
 #ifndef VERTEX_LIGHTING
@@ -238,8 +239,9 @@ void main(){
 
 
     #ifdef VERTEX_COLOR
-      AmbientSum *= inColor.rgb;
-      DiffuseSum *= inColor;
+  //    AmbientSum *= inColor.rgb;
+  //    DiffuseSum *= inColor;
+      vColor = inColor;
     #endif
 
  
