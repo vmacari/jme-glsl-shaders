@@ -464,29 +464,36 @@ vec4 diffuseColor;
 
 
     #if defined(SPECULAR_LIGHTING) && defined(SPECULARMAP)
-      vec4 specularColor = texture2D(m_SpecularMap, newTexCoord);
+      vec4 specularColor;
+       srgb_to_linearrgb(texture2D(m_SpecularMap, newTexCoord), specularColor);
     #else
       vec4 specularColor = vec4(1.0);
     #endif
 
     #if defined(SPECULAR_LIGHTING) && defined(SPEC_A_NOR) && defined(NORMALMAP) && !defined(SPECULARMAP)
-    float specA = normalHeight.a;
+    float specA = srgb_to_linearrgb(normalHeight.a);
     specularColor =  vec4(specA);
 
 
     #elif defined(SPECULAR_LIGHTING) && defined(SPEC_A_DIF) && !defined(SPEC_A_NOR) && defined(DIFFUSEMAP) && !defined(SPECULARMAP)
-    float specA = diffuseColor.a;
+    float specA = srgb_to_linearrgb(diffuseColor.a);
       
 
-    #if defined(DIFFUSEMAP_1) && defined(TEXTURE_MASK) && defined(SPEC_A_DIF)
-      specA = mix( specA, diffuseColor1.a, textureBlend.r );
+    #if defined(DIFFUSEMAP_1) && defined(SPEC_A_DIF)
+        #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+         specA = mix( specA, diffuseColor1.a, textureBlend.r );
+        #endif
     #endif  
-      #if defined(DIFFUSEMAP_2) && defined(TEXTURE_MASK) && defined(SPEC_A_DIF)
-      specA = mix( specA, diffuseColor2.a, textureBlend.g );
-      #endif  
-        #if defined(DIFFUSEMAP_3) && defined(TEXTURE_MASK) && defined(SPEC_A_DIF)
-      specA = mix( specA, diffuseColor3.a, textureBlend.b );
-        #endif  
+    #if defined(DIFFUSEMAP_2) && defined(SPEC_A_DIF)
+        #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+          specA = mix( specA, diffuseColor2.a, textureBlend.g );
+        #endif
+    #endif  
+    #if defined(DIFFUSEMAP_3) && defined(SPEC_A_DIF)
+        #if  defined(TEXTURE_MASK) || defined(VERTEX_COLOR)
+         specA = mix( specA, diffuseColor3.a, textureBlend.b );
+        #endif
+    #endif  
 
  specularColor =  vec4(specA); 
     #endif
@@ -634,7 +641,7 @@ diffuseColor.rgb *= m_Diffuse.rgb;
     
     #if  defined (REFLECTION) && defined (NORMALMAP)
   //  vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec.xyz - mat.xyz * normal.xyz)*-1.5);
-    vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec - (mat * normal)));
+    vec4 refGet = Optics_GetEnvColor(m_RefMap, (refVec - ((mat * normal)*0.7)));
     srgb_to_linearrgb(refGet,tempVecRef);
   #elif defined (REFLECTION) && !defined (NORMALMAP)
     vec4 refGet = Optics_GetEnvColor(m_RefMap, refVec);
