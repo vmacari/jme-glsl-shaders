@@ -1,6 +1,6 @@
 package com.simplesprite;
 
-import MatCap.*;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
