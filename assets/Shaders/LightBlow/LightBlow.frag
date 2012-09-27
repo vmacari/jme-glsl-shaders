@@ -653,10 +653,10 @@ diffuseColor.rgb *= m_Diffuse.rgb;
 
     #if defined(REF_A_NOR) && defined(NORMALMAP)
     //refTex = normalHeight.a;
-    refColor.rgb *= vec3(normalHeight.a);
+    refColor.rgb *= vec3(srgb_to_linearrgb(normalHeight.a));
     #elif defined(REF_A_DIF)  && defined(DIFFUSEMAP)
     //refTex = diffuseColor.a;
-    refColor.rgb *= vec3(diffuseColor.a);
+    refColor.rgb *= vec3(srgb_to_linearrgb(diffuseColor.a));
     #endif
     
     
