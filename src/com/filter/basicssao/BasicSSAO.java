@@ -100,7 +100,8 @@ public class BasicSSAO extends Filter{
     }
  
 //    @Override
-    protected void postQueue(RenderQueue renderQueue) {
+//    protected void postQueue(RenderQueue renderQueue) {
+        protected void postQueue() {
         Renderer r = renderManager.getRenderer();
         r.setFrameBuffer(normalPass.getRenderFrameBuffer());
         renderManager.getRenderer().clearBuffers(true, true, true);
@@ -182,6 +183,9 @@ public class BasicSSAO extends Filter{
         ssaoMat.setVector3("FrustumCorner", frustumCorner);
         ssaoMat.setVector2("FrustumNearFar", frustumNearFar);
         ssaoMat.setParam("Samples", VarType.Vector3Array, samples);
+        
+        postQueue();
+        
     }
  
     /**
