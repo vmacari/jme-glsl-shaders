@@ -31,18 +31,18 @@ public class BasicSSAO_run extends SimpleApplication {
     public void setupFilters() {
         fpp = new FilterPostProcessor(assetManager);
 
-        BasicSSAO ssao = new BasicSSAO();
-        ssao.scaleSettings(0.25f); // or whatever works for your model scale        
+//        BasicSSAO ssao = new BasicSSAO();
+//        ssao.scaleSettings(0.25f); // or whatever works for your model scale        
 
 
-//        // In vars: reflection-radius, intensity, scale, bias
-//        BasicSSAO ssao = new BasicSSAO(3.0f, 10.5f, 0.5f, 0.025f);
-//        // Add in detail pass - this doubles the number of samples taken and halves performance.  But, allows for smoothing artifacting while keeping detail
-//        ssao.setUseDetailPass(true);
-//        // Add distance falloff and set distance/rate of falloff
-//        ssao.setUseDistanceFalloff(true);
-//        ssao.setFalloffStartDistance(250f);
-//        ssao.setFalloffRate(4.0f);
+        // In vars: reflection-radius, intensity, scale, bias
+        BasicSSAO ssao = new BasicSSAO(0.15f, 5.5f, 0.5f, 0.025f);
+        // Add in detail pass - this doubles the number of samples taken and halves performance.  But, allows for smoothing artifacting while keeping detail
+        ssao.setUseDetailPass(true);
+        // Add distance falloff and set distance/rate of falloff
+        ssao.setUseDistanceFalloff(true);
+        ssao.setFalloffStartDistance(50f);
+        ssao.setFalloffRate(4.0f);
 
         fpp.addFilter(ssao);
         viewPort.addProcessor(fpp);
