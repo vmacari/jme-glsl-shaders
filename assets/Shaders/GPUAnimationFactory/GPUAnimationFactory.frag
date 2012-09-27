@@ -339,6 +339,7 @@ void main(){
     #ifdef ALPHAMAP
        alpha = alpha * texture2D(m_AlphaMap, newTexCoord*m_Scale).r;
     #endif
+
     if(alpha < m_AlphaDiscardThreshold){
         discard;
     }

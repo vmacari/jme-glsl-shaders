@@ -1,4 +1,4 @@
-MaterialDef MovingTexture {
+MaterialDef GPUAnimationFactory {
  
     MaterialParameters {
         Texture2D Texture
