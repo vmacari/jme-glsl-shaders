@@ -709,26 +709,27 @@ light.x = max(light.x, refColor);
  #ifdef HAS_LIGHTMAP
      vec4 lightMapColor;
            #if defined(SEPERATE_TEXCOORD) && !defined(SEPERATE_TEXCOORD2)
-            lightMapColor = texture2D(m_LightMap, texCoord2);
+            srgb_to_linearrgb(texture2D(m_LightMap, texCoord2), lightMapColor);
            #elif defined(SEPERATE_TEXCOORD) && defined(SEPERATE_TEXCOORD2)
-            lightMapColor = texture2D(m_LightMap, texCoord3);
+            srgb_to_linearrgb(texture2D(m_LightMap, texCoord3), lightMapColor);
         #else
-            lightMapColor = texture2D(m_LightMap, texCoord);
+            srgb_to_linearrgb(texture2D(m_LightMap, texCoord), lightMapColor);
         #endif
     
 
 
-        #if defined(LIGHTMAP_R)
+    #if defined(LIGHTMAP_R)
         diffuseColor.rgb  *= vec3(lightMapColor.r);
         #elif defined(LIGHTMAP_G)
         diffuseColor.rgb  *= vec3(lightMapColor.g);
         #elif defined(LIGHTMAP_B)
         diffuseColor.rgb  *= vec3(lightMapColor.b);
         #elif defined(LIGHTMAP_A)
+        srgb_to_linearrgb(lightMapColor.a);
         diffuseColor.rgb  *= vec3(lightMapColor.a);
         #else
         diffuseColor.rgb  *= lightMapColor.rgb;
-        #endif
+    #endif
 
      #ifdef SPECULAR_LIGHTING
         #if defined(LIGHTMAP_R)
