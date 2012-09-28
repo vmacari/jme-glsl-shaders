@@ -23,6 +23,7 @@ uniform float m_FalloffStartDistance;
 uniform float m_FalloffRate;
  
 in vec2 texCoord;
+out vec4 fragColor;
  
 float depthv;
 float shadowFactor;
@@ -73,7 +74,7 @@ void main(){
     float result;
     vec3 position = getPosition(texCoord);
     if(depthv==1.0){
-        gl_FragColor=vec4(1.0);
+        fragColor=vec4(1.0);
         return;
     }
     vec3 normal = getNormal(texCoord);
@@ -125,5 +126,5 @@ void main(){
         result = 1.0-ao;
     }
  
-    gl_FragColor = vec4(vec3(result),1.0);
+    fragColor = vec4(vec3(result),1.0);
 }
