@@ -192,7 +192,16 @@ uniform vec4 m_Minnaert;
   #endif
 
 
-
+float overlayMode(float color, float overlayColor)
+{
+        float result;
+            if (color < 0.5) {
+                   result = 2.0 * color * overlayColor;
+                } else {
+               result = vec4(1.0) - 2.0 * (vec4(1.0) - overlayColor) * (vec4(1.0) - color);
+            }
+		return result;
+}
 
 float srgb_to_linearrgb(float c)
 {
@@ -653,10 +662,12 @@ diffuseColor.rgb *= m_Diffuse.rgb;
 
     #if defined(REF_A_NOR) && defined(NORMALMAP)
     //refTex = normalHeight.a;
-    refColor.rgb *= vec3(srgb_to_linearrgb(normalHeight.a));
+    normalHeight.a = srgb_to_linearrgb(normalHeight.a);
+    refColor.rgb *= vec3(tempRef);
     #elif defined(REF_A_DIF)  && defined(DIFFUSEMAP)
     //refTex = diffuseColor.a;
-    refColor.rgb *= vec3(srgb_to_linearrgb(diffuseColor.a));
+    normalHeight.a = srgb_to_linearrgb(normalHeight.a);
+    refColor.rgb *= vec3(tempRef);
     #endif
     
     
@@ -719,29 +730,100 @@ light.x = max(light.x, refColor);
 
 
     #if defined(LIGHTMAP_R)
-        diffuseColor.rgb  *= vec3(lightMapColor.r);
+            #if defined(OVERLAYLIGHTMAP)
+                diffuseColor.r = overlayMode(diffuseColor.r, lightMapColor.r);
+                diffuseColor.g = overlayMode(diffuseColor.g, lightMapColor.r);
+                diffuseColor.b = overlayMode(diffuseColor.b, lightMapColor.r);
+             #else
+                diffuseColor.rgb  *= vec3(lightMapColor.r);
+             #endif
+
+
         #elif defined(LIGHTMAP_G)
-        diffuseColor.rgb  *= vec3(lightMapColor.g);
+            #if defined(OVERLAYLIGHTMAP)
+                diffuseColor.r = overlayMode(diffuseColor.r, lightMapColor.g);
+                diffuseColor.g = overlayMode(diffuseColor.g, lightMapColor.g);
+                diffuseColor.b = overlayMode(diffuseColor.b, lightMapColor.g);
+             #else
+                diffuseColor.rgb  *= vec3(lightMapColor.g);
+             #endif   
+
         #elif defined(LIGHTMAP_B)
-        diffuseColor.rgb  *= vec3(lightMapColor.b);
+            #if defined(OVERLAYLIGHTMAP)
+                diffuseColor.r = overlayMode(diffuseColor.r, lightMapColor.b);
+                diffuseColor.g = overlayMode(diffuseColor.g, lightMapColor.b);
+                diffuseColor.b = overlayMode(diffuseColor.b, lightMapColor.b);
+             #else
+                diffuseColor.rgb  *= vec3(lightMapColor.b);
+             #endif
+
         #elif defined(LIGHTMAP_A)
-        srgb_to_linearrgb(lightMapColor.a);
-        diffuseColor.rgb  *= vec3(lightMapColor.a);
+        lightMapColor.a = srgb_to_linearrgb(lightMapColor.a);
+            #if defined(OVERLAYLIGHTMAP)
+                diffuseColor.r = overlayMode(diffuseColor.r, lightMapColor.a);
+                diffuseColor.g = overlayMode(diffuseColor.g, lightMapColor.a);
+                diffuseColor.b = overlayMode(diffuseColor.b, lightMapColor.a);
+             #else
+                diffuseColor.rgb  *= vec3(lightMapColor.a);
+             #endif
+
         #else
-        diffuseColor.rgb  *= lightMapColor.rgb;
+            #if defined(OVERLAYLIGHTMAP)
+                diffuseColor.r = overlayMode(diffuseColor.r, lightMapColor.r);
+                diffuseColor.g = overlayMode(diffuseColor.g, lightMapColor.g);
+                diffuseColor.b = overlayMode(diffuseColor.b, lightMapColor.b);
+             #else
+                diffuseColor.rgb  *= lightMapColor.rgb;
+             #endif
     #endif
 
      #ifdef SPECULAR_LIGHTING
         #if defined(LIGHTMAP_R)
-        specularColor.rgb  *= vec3(lightMapColor.r);
+            #if defined(OVERLAYLIGHTMAP)
+                specularColor.r = overlayMode(specularColor.r, lightMapColor.r);
+                specularColor.g = overlayMode(specularColor.g, lightMapColor.r);
+                specularColor.b = overlayMode(specularColor.b, lightMapColor.r);
+             #else
+                specularColor.rgb  *= vec3(lightMapColor.r);
+             #endif
+
+
         #elif defined(LIGHTMAP_G)
-        specularColor.rgb  *= vec3(lightMapColor.g);
+            #if defined(OVERLAYLIGHTMAP)
+                specularColor.r = overlayMode(specularColor.r, lightMapColor.g);
+                specularColor.g = overlayMode(specularColor.g, lightMapColor.g);
+                specularColor.b = overlayMode(specularColor.b, lightMapColor.g);
+             #else
+                specularColor.rgb  *= vec3(lightMapColor.g);
+             #endif
+
         #elif defined(LIGHTMAP_B)
-        specularColor.rgb  *= vec3(lightMapColor.b);
+            #if defined(OVERLAYLIGHTMAP)
+                specularColor.r = overlayMode(specularColor.r, lightMapColor.b);
+                specularColor.g = overlayMode(specularColor.g, lightMapColor.b);
+                specularColor.b = overlayMode(specularColor.b, lightMapColor.b);
+             #else
+                specularColor.rgb  *= vec3(lightMapColor.b);
+             #endif
+
+
         #elif defined(LIGHTMAP_A)
-        specularColor.rgb  *= vec3(lightMapColor.a);
+            #if defined(OVERLAYLIGHTMAP)
+                specularColor.r = overlayMode(specularColor.r, lightMapColor.a);
+                specularColor.g = overlayMode(specularColor.g, lightMapColor.a);
+                specularColor.b = overlayMode(specularColor.b, lightMapColor.a);
+             #else
+                specularColor.rgb  *= vec3(lightMapColor.a);
+             #endif
+
         #else
-        specularColor.rgb  *= lightMapColor.rgb;
+            #if defined(OVERLAYLIGHTMAP)
+                specularColor.r = overlayMode(specularColor.r, lightMapColor.r);
+                specularColor.g = overlayMode(specularColor.g, lightMapColor.g);
+                specularColor.b = overlayMode(specularColor.b, lightMapColor.b);
+             #else
+                specularColor.rgb  *= lightMapColor.rgb;
+             #endif
         #endif
     #endif
 
