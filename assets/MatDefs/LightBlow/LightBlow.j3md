@@ -24,6 +24,7 @@ MaterialDef LightBlow {
         // Light Map
         Boolean SeperateTexCoord
         Boolean SeperateTexCoord2
+        Boolean OverlayLightmap
         Texture2D LightMap
         Boolean LightMap_R
         Boolean LightMap_G
@@ -201,6 +202,7 @@ MaterialDef LightBlow {
 
             RIM_LIGHTING_2 : RimLighting2
             RIM_LIGHTING : RimLighting
+            OVERLAYLIGHTMAP : OverlayLightmap
             SEPERATE_TEXCOORD : SeperateTexCoord
             SEPERATE_TEXCOORD2 : SeperateTexCoord2
             HAS_LIGHTMAP : LightMap
