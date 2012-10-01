@@ -663,11 +663,11 @@ diffuseColor.rgb *= m_Diffuse.rgb;
     #if defined(REF_A_NOR) && defined(NORMALMAP)
     //refTex = normalHeight.a;
     normalHeight.a = srgb_to_linearrgb(normalHeight.a);
-    refColor.rgb *= vec3(tempRef);
+    refColor.rgb *= vec3(normalHeight.a);
     #elif defined(REF_A_DIF)  && defined(DIFFUSEMAP)
     //refTex = diffuseColor.a;
     normalHeight.a = srgb_to_linearrgb(normalHeight.a);
-    refColor.rgb *= vec3(tempRef);
+    refColor.rgb *= vec3(normalHeight.a);
     #endif
     
     
@@ -678,8 +678,8 @@ AmbientSum2.rgb +=  refColor*0.5;
 diffuseColor.rgb += refColor;
 //AmbientSum2.rgb = max(AmbientSum2.rgb, refGet* refTex);
 #else
-light.x = max(light.x, refColor);
- diffuseColor.rgb = max(diffuseColor.rgb, vec3(refColor));   
+light.x = max(vec3(light.x), refColor);
+ diffuseColor.rgb = max(diffuseColor.rgb, refColor);   
  #endif
 
 #endif
