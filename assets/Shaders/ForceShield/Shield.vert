@@ -18,7 +18,7 @@ void main(){
         texCoord1 = inTexCoord;
     #endif
 
-	for (int i=0;i<m_CollisionNum && i<8;i++) {
+	for (int i=0;i<8;i++) {
 		dists[i]=distance(inPosition,m_Collisions[i]);
 	}
 
