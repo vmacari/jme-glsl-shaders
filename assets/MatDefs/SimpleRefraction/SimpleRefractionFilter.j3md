@@ -3,8 +3,10 @@ MaterialDef Simple Water {
     MaterialParameters {
 
         Int NumSamples
+        Int NumSamplesDepth
       //  Texture2D water_reflection
         Texture2D Texture
+        Texture2D DepthTexture
    //     Texture2D water_depthmap
         Texture2D water_normalmap
         Texture2D water_dudvmap
@@ -29,4 +31,5 @@ MaterialDef Simple Water {
             CameraPosition
         }
     }
+
 }

@@ -150,6 +150,7 @@ public class SimpleRefractionProcessor implements SceneProcessor {
     float time = 0;
     float savedTpf = 0;
 
+    @Override
     public void preFrame(float tpf) {
         time = time + (tpf * speed);
         if (time > 1f) {

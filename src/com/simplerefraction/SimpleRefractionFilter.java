@@ -47,6 +47,7 @@ import com.jme3.post.Filter;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.texture.Image.Format;
+import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.MagFilter;
 import com.jme3.texture.Texture.MinFilter;
 import com.jme3.texture.Texture.WrapMode;
@@ -71,7 +72,7 @@ public class SimpleRefractionFilter extends Filter {
     private float exposureCutOff = 0.0f;
     private float bloomIntensity = 2.0f;
     private float downSamplingFactor = 1;
-    private Pass verticalalBlur = new Pass();
+    private Pass refractPass = new Pass();
     private Material vBlurMat;
     private int screenWidth;
     private int screenHeight;
@@ -80,46 +81,56 @@ public class SimpleRefractionFilter extends Filter {
     protected Texture2D normalTexture;
     protected Texture2D dudvTexture;
     private AssetManager manager;
-    private Material material2;
+    private Material matRefraction;
+    private float time = 0;
+    private float speed = 0.05f;
+    private Pass preGlowPass;
+
     /**
      * Creates a Bloom filter
      */
-    public SimpleRefractionFilter() {
+    public SimpleRefractionFilter(AssetManager manager) {
         super("RefractionFilter");
+        this.manager = manager;
+        matRefraction = new Material(manager, "MatDefs/SimpleRefraction/SimpleRefractionFilter.j3md");
     }
 
     @Override
     protected void initFilter(AssetManager manager, RenderManager renderManager, ViewPort vp, int w, int h) {
         screenWidth = (int) Math.max(1, (w / downSamplingFactor));
         screenHeight = (int) Math.max(1, (h / downSamplingFactor));
-        //    System.out.println(screenWidth + " " + screenHeight);
+
 
         postRenderPasses = new ArrayList<Pass>();
 
 
-//        material.setTexture("BloomTex", verticalalBlur.getRenderedTexture());
+//        preGlowPass = new Pass();
+//        preGlowPass.init(renderManager.getRenderer(), screenWidth, screenHeight, Format.RGBA8, Format.Depth);
 
+        refractPass = new Pass() {
 
-        
-        //configuring vertical blur pass
-        vBlurMat = new Material(manager, "Common/MatDefs/Misc/Unshaded.j3md");
-        verticalalBlur = new Pass() {
+            @Override
+            public boolean requiresDepthAsTexture() {
+                return false;
+            }
+
+            @Override
+            public boolean requiresSceneAsTexture() { // I wasn't doing this >.<
+                return true;
+            }
 
             @Override
             public void beforeRender() {
-
+                
             }
         };
+        
+        refractPass.init(renderManager.getRenderer(), w, h, Format.RGBA8, Format.Depth, 1, matRefraction);
+        refractPass.getRenderedTexture().setMinFilter(Texture.MinFilter.BilinearNearestMipMap);
+        refractPass.getRenderedTexture().setMagFilter(Texture.MagFilter.Bilinear);
 
-        verticalalBlur.init(renderManager.getRenderer(), screenWidth, screenHeight, Format.RGBA8, Format.Depth, 1, vBlurMat);
-        postRenderPasses.add(verticalalBlur);
+        postRenderPasses.add(refractPass);
 
-        this.manager = manager;
-        
-        //final material
-        material2 = new Material(manager, "MatDefs/SimpleRefraction/SimpleRefractionFilter.j3md");
-        
-        
         normalTexture = (Texture2D) manager.loadTexture("Common/MatDefs/Water/Textures/water_normalmap.dds");
         normalTexture.setWrap(WrapMode.Repeat);
         normalTexture.setMagFilter(MagFilter.Bilinear);
@@ -129,63 +140,52 @@ public class SimpleRefractionFilter extends Filter {
         dudvTexture.setMagFilter(MagFilter.Bilinear);
         dudvTexture.setMinFilter(MinFilter.BilinearNearestMipMap);
         dudvTexture.setWrap(WrapMode.Repeat);
-        
-        
-        material2.setFloat("waterTransparency", 0.5f / 10);
+
+
+        matRefraction.setFloat("waterTransparency", 0.5f / 10);
 //        material.setColor("waterColor", ColorRGBA.White);
 //        material.setVector3("lightPos", new Vector3f(1, -1, 1));
+        matRefraction.setTexture("Texture", refractPass.getRenderedTexture());
+        matRefraction.setColor("distortionScale", new ColorRGBA(0.2f, 0.2f, 0.2f, 0.2f));
+        matRefraction.setColor("distortionMix", new ColorRGBA(0.5f, 0.5f, 0.5f, 0.5f));
+        matRefraction.setColor("texScale", new ColorRGBA(1.0f, 1.0f, 1.0f, 1.0f));
+        matRefraction.setVector2("FrustumNearFar", new Vector2f(vp.getCamera().getFrustumNear(), vp.getCamera().getFrustumFar()));
 
-        material2.setColor("distortionScale", new ColorRGBA(0.2f, 0.2f, 0.2f, 0.2f));
-        material2.setColor("distortionMix", new ColorRGBA(0.5f, 0.5f, 0.5f, 0.5f));
-        material2.setColor("texScale", new ColorRGBA(1.0f, 1.0f, 1.0f, 1.0f));
-        material2.setVector2("FrustumNearFar", new Vector2f(vp.getCamera().getFrustumNear(), vp.getCamera().getFrustumFar()));        
- 
 //        mat.setTexture("water_reflection", reflectionTexture);
-        material2.setTexture("Texture", defaultPass.getRenderedTexture());
+
         //   mat.setTexture("water_depthmap", depthTexture);
-        material2.setTexture("water_normalmap", normalTexture);
-        material2.setTexture("water_dudvmap", dudvTexture);
-        material2.setFloat("time", 1f);
-        
+        matRefraction.setTexture("water_normalmap", normalTexture);
+        matRefraction.setTexture("water_dudvmap", dudvTexture);
+        matRefraction.setFloat("time", 1f);
+
     }
-
-
-
-//    protected void createTextures() {
-//        refractionTexture = new Texture2D(screenWidth, screenHeight, Format.RGBA8);
-//        depthTexture = new Texture2D(screenWidth, screenHeight, Format.Depth);
-//    }
-
 
     @Override
     protected Material getMaterial() {
 
-        return material2;
+        return matRefraction;
+    }
+
+    @Override
+    public void preFrame(float tpf) {
+        time = time + (tpf * speed);
+        if (time > 1f) {
+            time = 0;
+        }
+        matRefraction.setFloat("time", time);
     }
 
     @Override
     protected void postQueue(RenderManager renderManager, ViewPort viewPort) {
-//        if (glowMode != GlowMode.Scene) {           
-//            renderManager.getRenderer().setBackgroundColor(ColorRGBA.BlackNoAlpha);            
-//            renderManager.getRenderer().setFrameBuffer(preGlowPass.getRenderFrameBuffer());
-//            renderManager.getRenderer().clearBuffers(true, true, true);
-//            renderManager.setForcedTechnique("Glow");
-//            renderManager.renderViewPortQueues(viewPort, false);         
-//            renderManager.setForcedTechnique(null);
-//            renderManager.getRenderer().setFrameBuffer(viewPort.getOutputFrameBuffer());
-//        }
-    }
+//        renderManager.getRenderer().setBackgroundColor(ColorRGBA.BlackNoAlpha);
+//        renderManager.getRenderer().setFrameBuffer(refractPass.getRenderFrameBuffer());
+//        renderManager.getRenderer().clearBuffers(true, true, true);
+//        renderManager.setForcedTechnique("Refraction");
+//        renderManager.renderViewPortQueues(viewPort, false);
+//        renderManager.setForcedTechnique(null);
+//        renderManager.getRenderer().setFrameBuffer(viewPort.getOutputFrameBuffer());
+   }
 
-//    @Override
-//    public void preFrame(float tpf) {
-//        time = time + (tpf * speed);
-//        if (time > 1f) {
-//            time = 0;
-//        }
-//        material.setFloat("time", time);
-//        savedTpf = tpf;
-//    }    
-    
     @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);

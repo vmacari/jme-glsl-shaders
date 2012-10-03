@@ -145,6 +145,12 @@ public class BasicSSAO extends Filter{
             public boolean requiresDepthAsTexture() {
                 return true;
             }
+            
+            @Override
+            public boolean requiresSceneAsTexture() { // This is important!
+                return true;
+            }            
+            
         };
         ssaoPass.init(renderManager.getRenderer(), (int) (screenWidth / downSampleFactor), (int) (screenHeight / downSampleFactor), Format.RGBA8, Format.Depth, 1, ssaoMat);
         ssaoPass.getRenderedTexture().setMinFilter(Texture.MinFilter.Trilinear);
