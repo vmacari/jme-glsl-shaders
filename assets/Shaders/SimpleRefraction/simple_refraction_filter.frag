@@ -7,6 +7,7 @@ Converted by Mars_999
 
 uniform sampler2D m_water_normalmap;
 // uniform sampler2D m_water_reflection;
+uniform sampler2D m_DepthTexture;
 uniform sampler2D m_Texture;
 uniform sampler2D m_water_dudvmap;
 //uniform sampler2D m_water_depthmap;

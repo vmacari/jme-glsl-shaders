@@ -54,8 +54,6 @@ public class TestSimpleRefraction extends SimpleApplication {
 
     Material mat;
     Geometry jmeSphere;
-    SimpleRefractionProcessor waterProcessor;
-    SimpleRefractionFilter refract;
     Node sceneNode;
     boolean useWater = true;
     private Vector3f lightPos = new Vector3f(33, 12, -29);
@@ -72,28 +70,27 @@ public class TestSimpleRefraction extends SimpleApplication {
     public void simpleInitApp() {
         initScene();
 
-        //create processor
-        waterProcessor = new SimpleRefractionProcessor(assetManager);
-        waterProcessor.setRefractionScene(sceneNode);
-        waterProcessor.setDebug(true);
-        waterProcessor.setRenderSize(256, 256);
-        viewPort.addProcessor(waterProcessor);
+//        //create processor
+//        SimpleRefractionProcessor refract = new SimpleRefractionProcessor(assetManager);
+//        refract.setRefractionScene(sceneNode);
+//        refract.setDebug(true);
+//        refract.setRenderSize(256, 256);
+//        viewPort.addProcessor(refract);
 
         
         
-//        FilterPostProcessor fpp=new FilterPostProcessor(assetManager);
-//       // fpp.setNumSamples(4);
-//        refract = new SimpleRefractionFilter();
-//// 
-//        fpp.addFilter(refract);
-//        viewPort.addProcessor(fpp);
+        FilterPostProcessor fpp=new FilterPostProcessor(assetManager);
+        SimpleRefractionFilter refract = new SimpleRefractionFilter(assetManager);
+        fpp.addFilter(refract);
+        viewPort.addProcessor(fpp);
+        // fpp.setNumSamples(4);
         
         
         Node nd = new Node("nd");
 
         Box quad = new Box(10f, 10f, 10f);
         Geometry geom = new Geometry("WaterGeometry", quad);
-        geom.setMaterial(waterProcessor.getMaterial());
+        geom.setMaterial(refract.getMaterial());
         nd.attachChild(geom);
         
 
@@ -104,7 +101,7 @@ public class TestSimpleRefraction extends SimpleApplication {
             rootNode.attachChild(geo);
         }
 
-//        rootNode.attachChild(nd);
+        rootNode.attachChild(nd);
 
         flyCam.setMoveSpeed(70f);
 //        flyCam.setDragToRotate(true);
