@@ -70,25 +70,26 @@ public class TestSimpleRefraction extends SimpleApplication {
     public void simpleInitApp() {
         initScene();
 
-//        //create processor
-//        SimpleRefractionProcessor refract = new SimpleRefractionProcessor(assetManager);
-//        refract.setRefractionScene(sceneNode);
-//        refract.setDebug(true);
-//        refract.setRenderSize(256, 256);
-//        viewPort.addProcessor(refract);
+        //create processor
+        SimpleRefractionProcessor refract = new SimpleRefractionProcessor(assetManager);
+        refract.setRefractionScene(sceneNode);
+        refract.setDebug(true);
+        refract.setRenderSize(256, 256);
+        viewPort.addProcessor(refract);
 
         
         
-        FilterPostProcessor fpp=new FilterPostProcessor(assetManager);
-        SimpleRefractionFilter refract = new SimpleRefractionFilter(assetManager);
-        fpp.addFilter(refract);
-        viewPort.addProcessor(fpp);
-        // fpp.setNumSamples(4);
+//        FilterPostProcessor fpp=new FilterPostProcessor(assetManager);
+//        SimpleRefractionFilter refract = new SimpleRefractionFilter(assetManager);
+//        fpp.addFilter(refract);
+//        viewPort.addProcessor(fpp);
+//        // fpp.setNumSamples(4);
         
         
         Node nd = new Node("nd");
 
-        Box quad = new Box(10f, 10f, 10f);
+//        Box quad = new Box(10f, 10f, 10f);
+        Sphere quad = new Sphere(10, 10, 20);
         Geometry geom = new Geometry("WaterGeometry", quad);
         geom.setMaterial(refract.getMaterial());
         nd.attachChild(geom);
