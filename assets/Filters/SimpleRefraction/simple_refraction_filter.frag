@@ -35,12 +35,12 @@ varying vec4 viewCamDir;
 //unit 3 = m_water_dudvmap
 //unit 4 = m_water_depthmap
 
- const vec4 two = vec4(2.0, 2.0, 2.0, 1.0);
- const vec4 mone = vec4(-1.0, -1.0, -1.0, 1.0);
+//  const vec4 two = vec4(2.0, 2.0, 2.0, 1.0);
+//  const vec4 mone = vec4(-1.0, -1.0, -1.0, 1.0);
 
- const vec4 ofive = vec4(0.5,0.5,0.5,1.0);
+//  const vec4 ofive = vec4(0.5,0.5,0.5,1.0);
 
- const float exponent = 64.0;
+//  const float exponent = 64.0;
 
 //float tangDot(in vec3 v1, in vec3 v2){
 //    float d = dot(v1,v2);
