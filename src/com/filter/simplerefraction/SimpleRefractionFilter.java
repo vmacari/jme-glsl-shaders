@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.simplerefraction;
+package com.filter.simplerefraction;
 
 /*
  * Copyright (c) 2009-2010 jMonkeyEngine
@@ -73,7 +73,6 @@ public class SimpleRefractionFilter extends Filter {
     private float bloomIntensity = 2.0f;
     private float downSamplingFactor = 1;
     private Pass refractPass = new Pass();
-    private Material vBlurMat;
     private int screenWidth;
     private int screenHeight;
     protected Texture2D refractionTexture;
@@ -81,10 +80,10 @@ public class SimpleRefractionFilter extends Filter {
     protected Texture2D normalTexture;
     protected Texture2D dudvTexture;
     private AssetManager manager;
-    private Material matRefraction;
+//    private Material matRefraction;
     private float time = 0;
     private float speed = 0.05f;
-    private Pass preGlowPass;
+//    private Pass preGlowPass;
 
     /**
      * Creates a Bloom filter
@@ -92,7 +91,7 @@ public class SimpleRefractionFilter extends Filter {
     public SimpleRefractionFilter(AssetManager manager) {
         super("RefractionFilter");
         this.manager = manager;
-        matRefraction = new Material(manager, "MatDefs/SimpleRefraction/SimpleRefractionFilter.j3md");
+        this.material = new Material(manager, "MatDefs/Filters/SimpleRefraction/SimpleRefractionFilter.j3md");
     }
 
     @Override
@@ -111,7 +110,7 @@ public class SimpleRefractionFilter extends Filter {
 
             @Override
             public boolean requiresDepthAsTexture() {
-                return false;
+                return true;
             }
 
             @Override
@@ -125,7 +124,7 @@ public class SimpleRefractionFilter extends Filter {
             }
         };
         
-        refractPass.init(renderManager.getRenderer(), w, h, Format.RGBA8, Format.Depth, 1, matRefraction);
+        refractPass.init(renderManager.getRenderer(), w, h, Format.RGBA8, Format.Depth, 1, this.material);
         refractPass.getRenderedTexture().setMinFilter(Texture.MinFilter.BilinearNearestMipMap);
         refractPass.getRenderedTexture().setMagFilter(Texture.MagFilter.Bilinear);
 
@@ -142,28 +141,28 @@ public class SimpleRefractionFilter extends Filter {
         dudvTexture.setWrap(WrapMode.Repeat);
 
 
-        matRefraction.setFloat("waterTransparency", 0.5f / 10);
+        this.material.setFloat("waterTransparency", 0.5f / 10);
 //        material.setColor("waterColor", ColorRGBA.White);
 //        material.setVector3("lightPos", new Vector3f(1, -1, 1));
-        matRefraction.setTexture("Texture", refractPass.getRenderedTexture());
-        matRefraction.setColor("distortionScale", new ColorRGBA(0.2f, 0.2f, 0.2f, 0.2f));
-        matRefraction.setColor("distortionMix", new ColorRGBA(0.5f, 0.5f, 0.5f, 0.5f));
-        matRefraction.setColor("texScale", new ColorRGBA(1.0f, 1.0f, 1.0f, 1.0f));
-        matRefraction.setVector2("FrustumNearFar", new Vector2f(vp.getCamera().getFrustumNear(), vp.getCamera().getFrustumFar()));
+        this.material.setTexture("Texture", refractPass.getRenderedTexture());
+        this.material.setColor("distortionScale", new ColorRGBA(0.2f, 0.2f, 0.2f, 0.2f));
+        this.material.setColor("distortionMix", new ColorRGBA(0.5f, 0.5f, 0.5f, 0.5f));
+        this.material.setColor("texScale", new ColorRGBA(1.0f, 1.0f, 1.0f, 1.0f));
+        this.material.setVector2("FrustumNearFar", new Vector2f(vp.getCamera().getFrustumNear(), vp.getCamera().getFrustumFar()));
 
 //        mat.setTexture("water_reflection", reflectionTexture);
 
         //   mat.setTexture("water_depthmap", depthTexture);
-        matRefraction.setTexture("water_normalmap", normalTexture);
-        matRefraction.setTexture("water_dudvmap", dudvTexture);
-        matRefraction.setFloat("time", 1f);
+        this.material.setTexture("water_normalmap", normalTexture);
+        this.material.setTexture("water_dudvmap", dudvTexture);
+        this.material.setFloat("time", 1f);
 
     }
 
     @Override
     protected Material getMaterial() {
 
-        return matRefraction;
+        return this.material;
     }
 
     @Override
@@ -172,7 +171,7 @@ public class SimpleRefractionFilter extends Filter {
         if (time > 1f) {
             time = 0;
         }
-        matRefraction.setFloat("time", time);
+        this.material.setFloat("time", time);
     }
 
     @Override

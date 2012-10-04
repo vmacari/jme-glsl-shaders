@@ -21,8 +21,8 @@ MaterialDef Simple Water {
     }
 
     Technique {
-        VertexShader GLSL100:   Shaders/SimpleRefraction/simple_refraction_filter.vert
-        FragmentShader GLSL100: Shaders/SimpleRefraction/simple_refraction_filter.frag
+        VertexShader GLSL100:   Filters/SimpleRefraction/simple_refraction_filter.vert
+        FragmentShader GLSL100: Filters/SimpleRefraction/simple_refraction_filter.frag
 
         WorldParameters {
             WorldViewProjectionMatrix
@@ -31,5 +31,23 @@ MaterialDef Simple Water {
             CameraPosition
         }
     }
+
+    Technique {
+        VertexShader GLSL150:   Shaders/SimpleRefraction/simple_refraction_filter15.vert
+        FragmentShader GLSL150: Shaders/SimpleRefraction/simple_refraction_filter15.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldViewMatrix
+            Resolution
+            CameraPosition
+        }
+
+        Defines {
+            RESOLVE_MS : NumSamples          
+        }
+
+    }
+
 
 }
