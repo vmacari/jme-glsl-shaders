@@ -146,10 +146,10 @@ public class BasicSSAO extends Filter{
                 return true;
             }
             
-            @Override
-            public boolean requiresSceneAsTexture() { // This is important!
-                return true;
-            }            
+//            @Override
+//            public boolean requiresSceneAsTexture() { // This is important!
+//                return true;
+//            }            
             
         };
         ssaoPass.init(renderManager.getRenderer(), (int) (screenWidth / downSampleFactor), (int) (screenHeight / downSampleFactor), Format.RGBA8, Format.Depth, 1, ssaoMat);
