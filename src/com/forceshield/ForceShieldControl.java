@@ -30,6 +30,8 @@ public class ForceShieldControl implements Control {
 	protected Spatial model;
 	protected boolean numChanged = false;
 	protected boolean enabled = true;
+        protected float timer = 0;
+        protected float timerSize;
 	/**
 	 * Max number of hits displayed
 	 * I've experienced crashes with 7 or 8 hits 
@@ -41,6 +43,7 @@ public class ForceShieldControl implements Control {
 		material = new Material(assetManager,"MatDefs/ForceShield/ForceShield.j3md");
 		material.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 		material.setFloat("MaxDistance", 1);
+                timerSize = 4f;
 	}
 	
 	/**
@@ -55,6 +58,18 @@ public class ForceShieldControl implements Control {
 	
 	@Override
 	public void update(float tpf) {
+            if (enabled) {
+                
+//                System.out.println(timer);
+                
+                if (timer > timerSize) {
+                    timer = 0f;
+                    enabled = false;
+                    return;
+                }
+                
+                timer += tpf * 3f;
+                
 		for (int i = 0; i < collisionTimes.size(); i++) {
 			float time = collisionTimes.get(i);
 			time -= tpf;
@@ -71,6 +86,8 @@ public class ForceShieldControl implements Control {
                         updateCollisionAlpha();
 		
 		numChanged = false;
+                
+            }
 	}
 	
 	/**
@@ -78,8 +95,11 @@ public class ForceShieldControl implements Control {
 	 * @param position - world space position
 	 */
 	public void registerHit(Vector3f position){
-		if (!enabled)
-			return;
+//		if (!enabled)
+//			return;
+            
+                timer = 0f;
+                enabled = true;
 		Vector3f lposition = new Vector3f();
 		model.worldToLocal(position, lposition);
 		collisions.add(new Vector3f(lposition.x, lposition.y, lposition.z));
