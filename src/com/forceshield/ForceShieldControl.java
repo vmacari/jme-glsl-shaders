@@ -23,20 +23,21 @@ import com.jme3.texture.Texture;
  */
 public class ForceShieldControl implements Control {
 
-	protected Material material;
-	protected float maxTime = 0.5f;
-	protected ArrayList<Vector3f> collisions = new ArrayList<Vector3f>();
-	protected ArrayList<Float> collisionTimes = new ArrayList<Float>(); 
-	protected Spatial model;
-	protected boolean numChanged = false;
-	protected boolean enabled = true;
-        protected float timer = 0;
-        protected float timerSize;
+	private Material material;
+	private float maxTime = 0.5f;
+	private ArrayList<Vector3f> collisions = new ArrayList<Vector3f>();
+	private ArrayList<Float> collisionTimes = new ArrayList<Float>(); 
+	private Spatial model;
+	private boolean numChanged = false;
+	private boolean enabled = true;
+        private boolean work = false;
+        private float timer = 0;
+        private float timerSize;
 	/**
 	 * Max number of hits displayed
 	 * I've experienced crashes with 7 or 8 hits 
 	 */
-	protected final int MAX_HITS = 4;
+	private final int MAX_HITS = 4;
 	
 
 	public ForceShieldControl(AssetManager assetManager){
@@ -58,13 +59,13 @@ public class ForceShieldControl implements Control {
 	
 	@Override
 	public void update(float tpf) {
-            if (enabled) {
+            if (work && enabled) {
                 
 //                System.out.println(timer);
                 
                 if (timer > timerSize) {
                     timer = 0f;
-                    enabled = false;
+                    work = false;
                     return;
                 }
                 
@@ -95,11 +96,11 @@ public class ForceShieldControl implements Control {
 	 * @param position - world space position
 	 */
 	public void registerHit(Vector3f position){
-//		if (!enabled)
-//			return;
+		if (!enabled)
+			return;
             
                 timer = 0f;
-                enabled = true;
+                work = true;
 		Vector3f lposition = new Vector3f();
 		model.worldToLocal(position, lposition);
 		collisions.add(new Vector3f(lposition.x, lposition.y, lposition.z));
