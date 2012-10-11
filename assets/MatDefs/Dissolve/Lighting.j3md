@@ -16,7 +16,7 @@ MaterialDef Phong Lighting {
         Boolean UseAlpha
 
         // Apha threshold for fragment discarding
-        Float AlphaDiscardThreshold
+        Float AlphaDiscardThreshold (AlphaTestFallOff)
 
         // Normal map is in BC5/ATI2n/LATC/3Dc compression format
         Boolean LATC
