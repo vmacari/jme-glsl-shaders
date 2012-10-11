@@ -100,8 +100,8 @@ public class BasicSSAO extends Filter{
     }
  
     @Override
-//protected void postQueue(RenderQueue queue) {    
-    protected void postQueue(RenderManager renderManager, ViewPort viewPort) {
+protected void postQueue(RenderQueue queue) {    
+//    protected void postQueue(RenderManager renderManager, ViewPort viewPort) {
         Renderer r = renderManager.getRenderer();
         r.setFrameBuffer(normalPass.getRenderFrameBuffer());
         renderManager.getRenderer().clearBuffers(true, true, true);

@@ -46,6 +46,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.post.Filter;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.texture.Image.Format;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.MagFilter;
@@ -175,7 +176,8 @@ public class SimpleRefractionFilter extends Filter {
     }
 
     @Override
-    protected void postQueue(RenderManager renderManager, ViewPort viewPort) {
+    protected void postQueue(RenderQueue queue) {
+//    protected void postQueue(RenderManager renderManager, ViewPort viewPort) {
 //        renderManager.getRenderer().setBackgroundColor(ColorRGBA.BlackNoAlpha);
 //        renderManager.getRenderer().setFrameBuffer(refractPass.getRenderFrameBuffer());
 //        renderManager.getRenderer().clearBuffers(true, true, true);

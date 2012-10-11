@@ -25,7 +25,8 @@ varying vec2 texCoordAni;
 
 
 void main(){
-    gl_Position = g_WorldViewProjectionMatrix * vec4(inPosition, 1.0);
+    vec4 pos = vec4(inPosition, 1.0);
+    gl_Position = g_WorldViewProjectionMatrix * pos;
 
 
 #if defined (ANY_DIR_Y) || defined (ANY_DIR_X) 
