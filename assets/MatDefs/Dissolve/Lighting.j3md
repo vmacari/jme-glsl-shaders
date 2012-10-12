@@ -310,6 +310,7 @@ Technique PostShadow15{
         }
 
         Defines {
+            NEED_TEXCOORD1
             HAS_GLOWMAP : GlowMap
             HAS_GLOWCOLOR : GlowColor
         }
