@@ -36,24 +36,4 @@ MaterialDef SimpleSprite {
         }
     }
 
- 
-    Technique {
-    }
- 
-
-    Technique Glow {
-
-        VertexShader GLSL100:   Common/MatDefs/Misc/Unshaded.vert
-        FragmentShader GLSL100: Shaders/PostBlow/GlowBlow.frag
-
-        WorldParameters {
-            WorldViewProjectionMatrix
-        }
-
-        Defines {
-            HAS_GLOWMAP : GlowMap
-            HAS_GLOWCOLOR : GlowColor
-        }
-    } 
-
 }
