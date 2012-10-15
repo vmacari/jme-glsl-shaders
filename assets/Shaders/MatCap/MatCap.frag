@@ -11,7 +11,7 @@ uniform float m_texturesize;
 #endif
 
   varying vec3 vNormal;
-  varying vec3 diffuseColor;
+  vec3 diffuseColor;
 
 
 #ifdef TOON_EDGES
