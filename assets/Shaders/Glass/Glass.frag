@@ -16,7 +16,7 @@ uniform float m_texturesize;
   varying vec3 vNormal;
 
 #ifdef SPECULAR
-  varying vec3 specularColor;
+  vec3 specularColor;
   uniform sampler2D m_MatCapSpecular;
   uniform float m_specularIntensity;
 #endif
