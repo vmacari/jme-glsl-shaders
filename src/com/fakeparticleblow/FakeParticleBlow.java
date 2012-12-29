@@ -1,5 +1,4 @@
 
-
 package com.fakeparticleblow;
 
 import com.jme3.app.SimpleApplication;
@@ -39,12 +38,16 @@ public class FakeParticleBlow extends SimpleApplication {
        
       Spatial fire = assetManager.loadModel("Models/FakeParticleBlow/FakeParticleBlow.j3o");
        Material mat = assetManager.loadMaterial("Materials/FakeParticleBlow/FakeParticleBlow.j3m");
+       mat.getAdditionalRenderState().setDepthTest(true);
+       mat.getAdditionalRenderState().setDepthWrite(false);
        fire.setMaterial(mat);
        fire.setQueueBucket(Bucket.Transparent); 
       rootNode.attachChild(fire);
 
        Spatial fire2 = assetManager.loadModel("Models/FakeParticleBlow/FakeParticleBlow.j3o");
        Material mat2 = assetManager.loadMaterial("Materials/FakeParticleBlow/FakeParticleBlow_2.j3m");
+       mat2.getAdditionalRenderState().setDepthTest(true);
+       mat2.getAdditionalRenderState().setDepthWrite(false);       
        fire2.setMaterial(mat2);
        fire2.setQueueBucket(Bucket.Transparent); 
        fire2.setLocalTranslation(2, 0, 0);
