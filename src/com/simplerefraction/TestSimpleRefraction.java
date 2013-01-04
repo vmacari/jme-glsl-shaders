@@ -32,15 +32,11 @@
 package com.simplerefraction;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.input.KeyInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
+import com.jme3.asset.plugins.FileLocator;
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
-import com.jme3.post.FilterPostProcessor;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
@@ -68,11 +64,14 @@ public class TestSimpleRefraction extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        
+        assetManager.registerLocator("assets", FileLocator.class);
+        
         initScene();
 
         //create processor
         SimpleRefractionProcessor refract = new SimpleRefractionProcessor(assetManager);
-        refract.setRefractionScene(sceneNode);
+        refract.setRefractionScene(rootNode);
         refract.setDebug(true);
         refract.setRenderSize(256, 256);
         viewPort.addProcessor(refract);
