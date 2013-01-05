@@ -21,29 +21,30 @@ uniform sampler2D m_AniTexMap;
 
 void main(){
 
-float Mask = texture2D(m_MaskMap, texCoord).r;
-vec3 AniTex = texture2D(m_AniTexMap, vec2(texCoordAni)).rgb;
+    float Mask = texture2D(m_MaskMap, texCoord).r;
+    vec3 AniTex = texture2D(m_AniTexMap, vec2(texCoordAni)).rgb;
 
-        gl_FragColor.rgb = m_BaseColor.rgb * Mask * AniTex;
+    gl_FragColor.rgb = m_BaseColor.rgb * Mask * AniTex;
 
+    #ifdef FOG
+        fogColor = m_FogColor;
 
-#ifdef FOG
-fogColor = m_FogColor;
+        #ifdef FOG_SKY
+            fogColor.rgb = Optics_GetEnvColor(m_FogSkyBox, I).rgb;
+        #endif
 
-    #ifdef FOG_SKY
-fogColor.rgb = Optics_GetEnvColor(m_FogSkyBox, I).rgb;
+       float fogDistance = fogColor.a;
+       float depth = (fog_z - fogDistance) / fogDistance;
+       depth = max(depth, 0.0);
+       fogFactor = exp2(-depth*depth);
+       fogFactor = clamp(fogFactor, 0.05, 1.0);
+
+       gl_FragColor.rgb = mix(fogColor.rgb,gl_FragColor.rgb,vec3(fogFactor));
     #endif
 
-float fogDistance = fogColor.a;
-float depth = (fog_z - fogDistance)/ fogDistance;
-depth = max(depth, 0.0);
-fogFactor = exp2(-depth*depth);
-fogFactor = clamp(fogFactor, 0.05, 1.0);
+    if(Mask < 0.02){
+        discard;
+    }
 
-gl_FragColor.rgb = mix(fogColor.rgb,gl_FragColor.rgb,vec3(fogFactor));
-
-#endif
-
-
-        gl_FragColor.a = Mask;
+    gl_FragColor.a = Mask;
 }
