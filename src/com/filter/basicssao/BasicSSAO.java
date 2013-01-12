@@ -137,7 +137,7 @@ protected void postQueue(RenderQueue queue) {
         frustumNearFar.y = vp.getCamera().getFrustumFar();
  
         //ssao Pass
-        ssaoMat = new Material(manager, "MatDefs/Filters/BasicSSAO/BasicSSAO.j3md");
+        ssaoMat = new Material(manager, "ShaderBlow/MatDefs/Filters/BasicSSAO/BasicSSAO.j3md");
         ssaoMat.setTexture("Normals", normalPass.getRenderedTexture());
  
         ssaoPass = new Pass() {
@@ -161,7 +161,7 @@ protected void postQueue(RenderQueue queue) {
         float yScale = 1.0f / h;
         float blurScale = 6.75f;
  
-        material = new Material(manager, "MatDefs/Filters/BasicSSAO/BasicSSAOBlur.j3md");
+        material = new Material(manager, "ShaderBlow/MatDefs/Filters/BasicSSAO/BasicSSAOBlur.j3md");
         material.setTexture("SSAOMap", ssaoPass.getRenderedTexture());
         material.setVector2("FrustumNearFar", frustumNearFar);
         material.setBoolean("UseAo", useAo);

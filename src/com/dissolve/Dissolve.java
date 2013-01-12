@@ -47,35 +47,35 @@ public class Dissolve extends SimpleApplication {
         
         
         // linear dissolve               
-        addTestCube(-3f,3f,assetManager.loadTexture("Textures/Dissolve/linear.png"), DSParams);
+        addTestCube(-3f,3f,assetManager.loadTexture("ShaderBlow/Textures/Dissolve/linear.png"), DSParams);
 
         // organic dissolve   
-        addTestCube(0,3f,assetManager.loadTexture("Textures/Dissolve/burnMap.png"), DSParamsInv);
+        addTestCube(0,3f,assetManager.loadTexture("ShaderBlow/Textures/Dissolve/burnMap.png"), DSParamsInv);
         
         // pixel dissolve        
-        t = assetManager.loadTexture("Textures/Dissolve/pixelMap.png");
+        t = assetManager.loadTexture("ShaderBlow/Textures/Dissolve/pixelMap.png");
         t.setMagFilter(Texture.MagFilter.Nearest); // this is needed to retain the crisp pixelated look
         addTestCube(3f, 3f, t, DSParams);        
                
         // organic growth
-        mat = addTestCube(-3f,0,assetManager.loadTexture("Textures/Dissolve/growMap.png"), DSParamsInv).getMaterial();
+        mat = addTestCube(-3f,0,assetManager.loadTexture("ShaderBlow/Textures/Dissolve/growMap.png"), DSParamsInv).getMaterial();
         mat.setColor("Ambient", ColorRGBA.Green);
-        mat.setTexture("DiffuseMap", assetManager.loadTexture("Textures/Dissolve/growMap.png"));
+        mat.setTexture("DiffuseMap", assetManager.loadTexture("ShaderBlow/Textures/Dissolve/growMap.png"));
 
-        addTestCube(-3f,0,assetManager.loadTexture("Textures/Dissolve/growMap.png"), DSParams);
+        addTestCube(-3f,0,assetManager.loadTexture("ShaderBlow/Textures/Dissolve/growMap.png"), DSParams);
     
         // texture mask
-        mat = addTestCube(0,0,assetManager.loadTexture("Textures/Dissolve/streetBurn.png"), DSParams).getMaterial();
-        mat.setTexture("DiffuseMap", assetManager.loadTexture("Textures/Dissolve/streetClean.png"));
+        mat = addTestCube(0,0,assetManager.loadTexture("ShaderBlow/Textures/Dissolve/streetBurn.png"), DSParams).getMaterial();
+        mat.setTexture("DiffuseMap", assetManager.loadTexture("ShaderBlow/Textures/Dissolve/streetClean.png"));
         mat.setColor("Ambient",  ColorRGBA.White);
                
-        mat = addTestCube(0f,0f,assetManager.loadTexture("Textures/Dissolve/streetBurn.png"), DSParamsInv).getMaterial();
-        mat.setTexture("DiffuseMap", assetManager.loadTexture("Textures/Dissolve/street.png"));
+        mat = addTestCube(0f,0f,assetManager.loadTexture("ShaderBlow/Textures/Dissolve/streetBurn.png"), DSParamsInv).getMaterial();
+        mat.setTexture("DiffuseMap", assetManager.loadTexture("ShaderBlow/Textures/Dissolve/street.png"));
         mat.setColor("Ambient",  ColorRGBA.White);
 
         // organic burn
-        addTestCube(3f, 0, assetManager.loadTexture("Textures/Dissolve/burnMap.png"), DSParamsBurn).getMaterial().setColor("Ambient",  ColorRGBA.Red);
-        addTestCube(3f, 0, assetManager.loadTexture("Textures/Dissolve/burnMap.png"), DSParams);
+        addTestCube(3f, 0, assetManager.loadTexture("ShaderBlow/Textures/Dissolve/burnMap.png"), DSParamsBurn).getMaterial().setColor("Ambient",  ColorRGBA.Red);
+        addTestCube(3f, 0, assetManager.loadTexture("ShaderBlow/Textures/Dissolve/burnMap.png"), DSParams);
 
 
         AmbientLight a = new AmbientLight();
@@ -92,7 +92,7 @@ public class Dissolve extends SimpleApplication {
         Geometry geom = new Geometry("Box", b);
         geom.setLocalTranslation(new Vector3f(xPos,yPos,0));
 
-        Material mat = new Material(assetManager, "MatDefs/Dissolve/Lighting.j3md");
+        Material mat = new Material(assetManager, "ShaderBlow/MatDefs/Dissolve/Lighting.j3md");
         mat.setColor("Ambient",  ColorRGBA.Blue);
         mat.setColor("Diffuse",  ColorRGBA.White);
         mat.setColor("Specular", ColorRGBA.Black);

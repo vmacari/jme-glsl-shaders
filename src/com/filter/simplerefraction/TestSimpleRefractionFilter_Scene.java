@@ -29,12 +29,15 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.simplerefraction;
+package com.filter.simplerefraction;
+
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState;
 import com.jme3.math.Vector3f;
+import com.jme3.post.FilterPostProcessor;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
@@ -42,11 +45,12 @@ import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
 import com.jme3.util.SkyFactory;
 
+
 /**
  *
  * @author normenhansen
  */
-public class TestSimpleRefraction extends SimpleApplication {
+public class TestSimpleRefractionFilter_Scene extends SimpleApplication {
 
     Material mat;
     Geometry jmeSphere;
@@ -55,7 +59,7 @@ public class TestSimpleRefraction extends SimpleApplication {
     private Vector3f lightPos = new Vector3f(33, 12, -29);
 
     public static void main(String[] args) {
-        TestSimpleRefraction app = new TestSimpleRefraction();
+        TestSimpleRefractionFilter_Scene app = new TestSimpleRefractionFilter_Scene();
         AppSettings aps = new AppSettings(true);
         aps.setVSync(false);
         app.setSettings(aps);
@@ -64,48 +68,40 @@ public class TestSimpleRefraction extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        
+
         assetManager.registerLocator("assets", FileLocator.class);
         
         initScene();
+        
+        FilterPostProcessor fpp=new FilterPostProcessor(assetManager);
+        SimpleRefractionFilter refract = new SimpleRefractionFilter(assetManager, SimpleRefractionFilter.RefractMode.Scene);
+        fpp.addFilter(refract);
+        viewPort.addProcessor(fpp);
+        // fpp.setNumSamples(4);
 
-        //create processor
-        SimpleRefractionProcessor refract = new SimpleRefractionProcessor(assetManager);
-        refract.setRefractionScene(sceneNode);
-        refract.setDebug(true);
-        refract.setRenderSize(256, 256);
-        viewPort.addProcessor(refract);
+        flyCam.setMoveSpeed(70f);
+//        flyCam.setDragToRotate(true);
 
-        
-        
-//        FilterPostProcessor fpp=new FilterPostProcessor(assetManager);
-//        SimpleRefractionFilter refract = new SimpleRefractionFilter(assetManager);
-//        fpp.addFilter(refract);
-//        viewPort.addProcessor(fpp);
-//        // fpp.setNumSamples(4);
-        
         
         Node nd = new Node("nd");
-
+        
 //        Box quad = new Box(10f, 10f, 10f);
         Sphere quad = new Sphere(10, 10, 20);
         Geometry geom = new Geometry("WaterGeometry", quad);
-        geom.setMaterial(refract.getMaterial());
-        nd.attachChild(geom);
+        Material matref = new Material(assetManager, "ShaderBlow/MatDefs/Filters/SimpleRefraction/Refract.j3md");
+        matref.setBoolean("DoRefract", true);
+        matref.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
+//        matref.setBoolean("DoRefract", true);
+        geom.setMaterial(matref);
         
-
-
         for (int i = 0; i < 50; i++) {
             Geometry geo = geom.clone(false);
             geo.move(30f * i, 0f, 0f);
             rootNode.attachChild(geo);
         }
 
-        rootNode.attachChild(nd);
-
-        flyCam.setMoveSpeed(70f);
-//        flyCam.setDragToRotate(true);
-
+        rootNode.attachChild(nd);        
+        
     }
 
     private void initScene() {

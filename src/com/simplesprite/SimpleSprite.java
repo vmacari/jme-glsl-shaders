@@ -22,15 +22,15 @@ public class SimpleSprite extends SimpleApplication {
   @Override
   public void simpleInitApp() {
 
-    Spatial char_boy1 = assetManager.loadModel("Models/SimpleSprite/SimpleSprite.blend");
-    Material mat1 = assetManager.loadMaterial("Materials/SimpleSprite/SimpleSprite_1.j3m");
+    Spatial char_boy1 = assetManager.loadModel("ShaderBlow/Models/SimpleSprite/SimpleSprite.blend");
+    Material mat1 = assetManager.loadMaterial("ShaderBlow/Materials/SimpleSprite/SimpleSprite_1.j3m");
     char_boy1.setMaterial(mat1);
     char_boy1.setLocalTranslation(0,0,0);
     TangentBinormalGenerator.generate(char_boy1);
     rootNode.attachChild(char_boy1);
 
-    Spatial char_boy2 = assetManager.loadModel("Models/SimpleSprite/SimpleSprite.blend");
-    Material mat2 = assetManager.loadMaterial("Materials/SimpleSprite/SimpleSprite_2.j3m");
+    Spatial char_boy2 = assetManager.loadModel("ShaderBlow/Models/SimpleSprite/SimpleSprite.blend");
+    Material mat2 = assetManager.loadMaterial("ShaderBlow/Materials/SimpleSprite/SimpleSprite_2.j3m");
     char_boy2.setMaterial(mat2);
     char_boy2.setLocalTranslation(1,0,0);
     char_boy2.setLocalScale(0.5f, 1, 1);    

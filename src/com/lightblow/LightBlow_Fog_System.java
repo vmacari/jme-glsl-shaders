@@ -31,7 +31,7 @@ public class LightBlow_Fog_System extends SimpleApplication {
   @Override
   public void simpleInitApp() {
 
-      TextureKey skyhi = new TextureKey("Textures/Water256.dds", true);
+      TextureKey skyhi = new TextureKey("ShaderBlow/Textures/Water256.dds", true);
         skyhi.setGenerateMips(true);
         skyhi.setAsCube(true);
       final  Texture texhi = assetManager.loadTexture(skyhi);
@@ -45,8 +45,8 @@ public class LightBlow_Fog_System extends SimpleApplication {
 
          
          
-    Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow.mesh.xml");
-    Material mat = assetManager.loadMaterial("Materials/LightBlow/Fog_System/LightBlow_Fog.j3m");
+    Spatial char_boy = assetManager.loadModel("ShaderBlow/Models/LightBlow/jme_lightblow.mesh.xml");
+    Material mat = assetManager.loadMaterial("ShaderBlow/Materials/LightBlow/Fog_System/LightBlow_Fog.j3m");
     char_boy.setMaterial(mat);
     TangentBinormalGenerator.generate(char_boy);
 //    rootNode.attachChild(char_boy);
@@ -64,8 +64,8 @@ public class LightBlow_Fog_System extends SimpleApplication {
     
     
     
-    Spatial char_boy2 = assetManager.loadModel("Models/LightBlow/jme_lightblow.mesh.xml");
-    Material mat2 = assetManager.loadMaterial("Materials/LightBlow/Fog_System/LightBlow_Fog_Skybox.j3m");
+    Spatial char_boy2 = assetManager.loadModel("ShaderBlow/Models/LightBlow/jme_lightblow.mesh.xml");
+    Material mat2 = assetManager.loadMaterial("ShaderBlow/Materials/LightBlow/Fog_System/LightBlow_Fog_Skybox.j3m");
     char_boy2.setMaterial(mat2);
     char_boy2.setLocalTranslation(2.0f, 0, 0);
     TangentBinormalGenerator.generate(char_boy2);

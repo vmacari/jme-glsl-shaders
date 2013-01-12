@@ -54,8 +54,8 @@ public class TestSimpleSpriteParticle extends SimpleApplication
       updateParticleData(mesh,sprites);
  
       Geometry geom = new Geometry("", mesh);
-      Material mat = new Material(assetManager, "MatDefs/SimpleSpriteParticle/SimpleSpriteParticle.j3md");
-      mat.setTexture("Texture", assetManager.loadTexture("Textures/matcaps/Gold.jpg"));
+      Material mat = new Material(assetManager, "ShaderBlow/MatDefs/SimpleSpriteParticle/SimpleSpriteParticle.j3md");
+      mat.setTexture("Texture", assetManager.loadTexture("ShaderBlow/Textures/matcaps/Gold.jpg"));
       geom.setMaterial(mat);
  
       rootNode.attachChild(geom);

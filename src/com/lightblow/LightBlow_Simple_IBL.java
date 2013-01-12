@@ -42,7 +42,7 @@ public class LightBlow_Simple_IBL extends SimpleApplication {
          
          
         // Material
-        Material mat = assetManager.loadMaterial("Materials/LightBlow/Simple_IBL/Simple_IBL.j3m"); 
+        Material mat = assetManager.loadMaterial("ShaderBlow/Materials/LightBlow/Simple_IBL/Simple_IBL.j3m"); 
         
            
         Mesh sph_test = new Sphere(20, 20, 5);

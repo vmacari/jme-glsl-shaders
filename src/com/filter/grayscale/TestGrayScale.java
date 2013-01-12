@@ -44,8 +44,8 @@ public class TestGrayScale extends SimpleApplication {
         // create the geometry and attach it
         // load the level from zip or http zip
 
-    Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow.mesh.xml");
-    Material mat = assetManager.loadMaterial("Materials/LightBlow/Shading_System/LightBlow_ibl.j3m");
+    Spatial char_boy = assetManager.loadModel("ShaderBlow/Models/LightBlow/jme_lightblow.mesh.xml");
+    Material mat = assetManager.loadMaterial("ShaderBlow/Materials/LightBlow/Shading_System/LightBlow_ibl.j3m");
     char_boy.setMaterial(mat);
     TangentBinormalGenerator.generate(char_boy);
     rootNode.attachChild(char_boy);        

@@ -53,7 +53,7 @@ public class BasicSSAO_run extends SimpleApplication {
     public void simpleInitApp() {
 
 
-        Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow.mesh.xml");
+        Spatial char_boy = assetManager.loadModel("ShaderBlow/Models/LightBlow/jme_lightblow.mesh.xml");
         Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         char_boy.setMaterial(mat);
         TangentBinormalGenerator.generate(char_boy);
@@ -66,7 +66,7 @@ public class BasicSSAO_run extends SimpleApplication {
         geom.setLocalTranslation(0, 2, 1);
         rootNode.attachChild(geom);
 
-        Spatial char_boy2 = assetManager.loadModel("Models/LightBlow/jme_lightblow.mesh.xml");
+        Spatial char_boy2 = assetManager.loadModel("ShaderBlow/Models/LightBlow/jme_lightblow.mesh.xml");
         Material mat2 = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         char_boy2.setMaterial(mat2);
         char_boy2.setLocalTranslation(-2f, 0, 0);

@@ -56,7 +56,7 @@ public class Shield extends SimpleApplication implements ActionListener {
 		shield.addControl(forceShieldControl);
 		forceShieldControl.setEffectSize(1f);
 		forceShieldControl.setColor(new ColorRGBA(0, 0, 1, 3));
-		forceShieldControl.setTexture(assetManager.loadTexture("Textures/ForceShield/fs_texture.png"));
+		forceShieldControl.setTexture(assetManager.loadTexture("ShaderBlow/Textures/ForceShield/fs_texture.png"));
 		forceShieldControl.setVisibility(0.1f);
 		
 		rootNode.attachChild(shield);

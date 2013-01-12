@@ -28,7 +28,7 @@ public class FakeParticleBlow extends SimpleApplication {
   public void simpleInitApp() {
 
       
-      TextureKey skylow = new TextureKey("Textures/Water32.dds", true);
+      TextureKey skylow = new TextureKey("ShaderBlow/Textures/Water32.dds", true);
         skylow.setGenerateMips(true);
         skylow.setAsCube(true);
       final  Texture texlow = assetManager.loadTexture(skylow);
@@ -36,16 +36,16 @@ public class FakeParticleBlow extends SimpleApplication {
        rootNode.attachChild(SkyFactory.createSky(assetManager, texlow, false));
 
        
-      Spatial fire = assetManager.loadModel("Models/FakeParticleBlow/FakeParticleBlow.j3o");
-       Material mat = assetManager.loadMaterial("Materials/FakeParticleBlow/FakeParticleBlow.j3m");
+      Spatial fire = assetManager.loadModel("ShaderBlow/Models/FakeParticleBlow/FakeParticleBlow.j3o");
+       Material mat = assetManager.loadMaterial("ShaderBlow/Materials/FakeParticleBlow/FakeParticleBlow.j3m");
        mat.getAdditionalRenderState().setDepthTest(true);
        mat.getAdditionalRenderState().setDepthWrite(false);
        fire.setMaterial(mat);
        fire.setQueueBucket(Bucket.Transparent); 
       rootNode.attachChild(fire);
 
-       Spatial fire2 = assetManager.loadModel("Models/FakeParticleBlow/FakeParticleBlow.j3o");
-       Material mat2 = assetManager.loadMaterial("Materials/FakeParticleBlow/FakeParticleBlow_2.j3m");
+       Spatial fire2 = assetManager.loadModel("ShaderBlow/Models/FakeParticleBlow/FakeParticleBlow.j3o");
+       Material mat2 = assetManager.loadMaterial("ShaderBlow/Materials/FakeParticleBlow/FakeParticleBlow_2.j3m");
        mat2.getAdditionalRenderState().setDepthTest(true);
        mat2.getAdditionalRenderState().setDepthWrite(false);       
        fire2.setMaterial(mat2);
