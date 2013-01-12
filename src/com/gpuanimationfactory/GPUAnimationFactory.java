@@ -30,20 +30,20 @@ public class GPUAnimationFactory extends SimpleApplication {
     @Override
     public void simpleInitApp() {
 
-Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow.mesh.xml");        
+Spatial char_boy = assetManager.loadModel("ShaderBlow/Models/LightBlow/jme_lightblow.mesh.xml");        
         
-Material mat_1D = new Material(assetManager, "MatDefs/GPUAnimationFactory/GPUAnimationFactory.j3md");
+Material mat_1D = new Material(assetManager, "ShaderBlow/MatDefs/GPUAnimationFactory/GPUAnimationFactory.j3md");
  
 //// Standard uniforms for lighting
 mat_1D.setBoolean("SteepParallax", true);
 
-TextureKey tkDif = new TextureKey("Textures/Terrain_Textures/pattern_69/pattern_69_diffus.png", false);
+TextureKey tkDif = new TextureKey("ShaderBlow/Textures/Terrain_Textures/pattern_69/pattern_69_diffus.png", false);
 tkDif.setAnisotropy(2);
 Texture diffuseTex = assetManager.loadTexture(tkDif);
 diffuseTex.setWrap(Texture.WrapMode.Repeat);
 mat_1D.setTexture("DiffuseMap", diffuseTex);
 
-TextureKey tkNor = new TextureKey("Textures/Terrain_Textures/pattern_69/pattern_69_normal.png", false);
+TextureKey tkNor = new TextureKey("ShaderBlow/Textures/Terrain_Textures/pattern_69/pattern_69_normal.png", false);
 tkNor.setAnisotropy(2);
 Texture normalTex = assetManager.loadTexture(tkNor);
 normalTex.setWrap(Texture.WrapMode.Repeat);

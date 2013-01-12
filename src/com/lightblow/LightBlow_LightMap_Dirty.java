@@ -32,7 +32,7 @@ public class LightBlow_LightMap_Dirty extends SimpleApplication {
   @Override
   public void simpleInitApp() {
 
-      TextureKey skyhi = new TextureKey("Textures/Water256.dds", true);
+      TextureKey skyhi = new TextureKey("ShaderBlow/Textures/Water256.dds", true);
         skyhi.setGenerateMips(true);
         skyhi.setAsCube(true);
       final  Texture texhi = assetManager.loadTexture(skyhi);
@@ -46,15 +46,15 @@ public class LightBlow_LightMap_Dirty extends SimpleApplication {
 
          
          
-    Spatial char_boy = assetManager.loadModel("Models/LightBlow/lightmap/lightmap.mesh.xml");
-    Material mat = assetManager.loadMaterial("Materials/LightBlow/lightmap/lightmap.j3m");
+    Spatial char_boy = assetManager.loadModel("ShaderBlow/Models/LightBlow/lightmap/lightmap.mesh.xml");
+    Material mat = assetManager.loadMaterial("ShaderBlow/Materials/LightBlow/lightmap/lightmap.j3m");
     char_boy.setMaterial(mat);
     TangentBinormalGenerator.generate(char_boy);
     rootNode.attachChild(char_boy);
     
     
-    Spatial char_boy2 = assetManager.loadModel("Models/LightBlow/lightmap/lightmap.mesh.xml");
-    Material mat2 = assetManager.loadMaterial("Materials/LightBlow/lightmap/lightmap_dirty.j3m");
+    Spatial char_boy2 = assetManager.loadModel("ShaderBlow/Models/LightBlow/lightmap/lightmap.mesh.xml");
+    Material mat2 = assetManager.loadMaterial("ShaderBlow/Materials/LightBlow/lightmap/lightmap_dirty.j3m");
     char_boy2.setMaterial(mat2);
     TangentBinormalGenerator.generate(char_boy2);
     char_boy2.move(7f,0f,0f);

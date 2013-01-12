@@ -30,7 +30,7 @@ public class LightBlow_Terrain_System_Vertex_Colors extends SimpleApplication {
   @Override
   public void simpleInitApp() {
 
-      TextureKey skyhi = new TextureKey("Textures/Water256.dds", true);
+      TextureKey skyhi = new TextureKey("ShaderBlow/Textures/Water256.dds", true);
         skyhi.setGenerateMips(true);
         skyhi.setAsCube(true);
       final  Texture texhi = assetManager.loadTexture(skyhi);
@@ -44,8 +44,8 @@ public class LightBlow_Terrain_System_Vertex_Colors extends SimpleApplication {
 
          
          
-    Spatial char_boy = assetManager.loadModel("Models/LightBlow/jme_lightblow_terrain.mesh.xml");
-    Material mat = assetManager.loadMaterial("Materials/LightBlow/Terrain_System/Terrain_System_Vertex.j3m");
+    Spatial char_boy = assetManager.loadModel("ShaderBlow/Models/LightBlow/jme_lightblow_terrain.mesh.xml");
+    Material mat = assetManager.loadMaterial("ShaderBlow/Materials/LightBlow/Terrain_System/Terrain_System_Vertex.j3m");
     char_boy.setMaterial(mat);
     TangentBinormalGenerator.generate(char_boy);
     rootNode.attachChild(char_boy);

@@ -1,4 +1,36 @@
+/*
+ * Copyright (c) 2009-2012 ShaderBlow
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ * * Redistributions of source code must retain the above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ *
+ * * Redistributions in binary form must reproduce the above copyright
+ *   notice, this list of conditions and the following disclaimer in the
+ *   documentation and/or other materials provided with the distribution.
+ *
+ * * Neither the name of 'ShaderBlow' nor the names of its contributors
+ *   may be used to endorse or promote products derived from this software
+ *   without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package com.forceshield;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -16,195 +48,201 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.jme3.shader.VarType;
 import com.jme3.texture.Texture;
+
 /**
- * Force shield effect. It sets material to controlled object.
- * If you experience problems, try higher polygon object.
- * @author Stanislav Fifik 
+ * Force shield effect. It sets material to controlled object. If you experience problems, try higher polygon object.
+ * 
+ * @author Stanislav Fifik
  */
 public class ForceShieldControl implements Control {
 
-	private Material material;
-	private float maxTime = 0.5f;
-	private ArrayList<Vector3f> collisions = new ArrayList<Vector3f>();
-	private ArrayList<Float> collisionTimes = new ArrayList<Float>(); 
-	private Spatial model;
-	private boolean numChanged = false;
-	private boolean enabled = true;
-        private boolean work = false;
-        private float timer = 0;
-        private float timerSize;
-	/**
-	 * Max number of hits displayed
-	 * I've experienced crashes with 7 or 8 hits 
-	 */
-	private final int MAX_HITS = 4;
-	
+    private final Material material;
+    private float maxTime = 0.5f;
+    private final ArrayList<Vector3f> collisions = new ArrayList<Vector3f>();
+    private final ArrayList<Float> collisionTimes = new ArrayList<Float>();
+    private Spatial model;
+    private boolean numChanged = false;
+    private boolean enabled = true;
+    private boolean work = false;
+    private float timer = 0;
+    private final float timerSize;
 
-	public ForceShieldControl(AssetManager assetManager){
-		material = new Material(assetManager,"MatDefs/ForceShield/ForceShield.j3md");
-		material.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-		material.setFloat("MaxDistance", 1);
-                timerSize = 4f;
-	}
-	
-	/**
-	 * 
-	 * @param assetManager
-	 * @param duration - effect duration (Default is 0.5s)
-	 */
-	public ForceShieldControl(AssetManager assetManager, float duration) {
-		this(assetManager);
-		this.maxTime = duration;
-	}
-	
-	@Override
-	public void update(float tpf) {
-            if (work && enabled) {
-                
-//                System.out.println(timer);
-                
-                if (timer > timerSize) {
-                    timer = 0f;
-                    work = false;
-                    return;
-                }
-                
-                timer += tpf * 3f;
-                
-		for (int i = 0; i < collisionTimes.size(); i++) {
-			float time = collisionTimes.get(i);
-			time -= tpf;
-			if (time <= 0){
-				collisionTimes.remove(i);
-				collisions.remove(i--);
-				numChanged = true;
-				continue;
-			}
-			collisionTimes.set(i, time);
-		}
-		if (numChanged)
-			updateCollisionPoints();
-                        updateCollisionAlpha();
-		
-		numChanged = false;
-                
-            }
-	}
-	
-	/**
-	 * Adds hit to display.
-	 * @param position - world space position
-	 */
-	public void registerHit(Vector3f position){
-		if (!enabled)
-			return;
-            
+    /** Max number of hits displayed I've experienced crashes with 7 or 8 hits */
+    private final int MAX_HITS = 4;
+
+    public ForceShieldControl(final AssetManager assetManager) {
+        this.material = new Material(assetManager, "ShaderBlow/MatDefs/ForceShield/ForceShield.j3md");
+        this.material.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+        this.material.setFloat("MaxDistance", 1);
+        this.timerSize = 4f;
+    }
+
+    /**
+     * 
+     * @param assetManager
+     * @param duration
+     *            - effect duration (Default is 0.5s)
+     */
+    public ForceShieldControl(final AssetManager assetManager, final float duration) {
+        this(assetManager);
+        this.maxTime = duration;
+    }
+
+    @Override
+    public void update(final float tpf) {
+        if (this.work && this.enabled) {
+
+            if (this.timer > this.timerSize) {
                 timer = 0f;
-                work = true;
-		Vector3f lposition = new Vector3f();
-		model.worldToLocal(position, lposition);
-		collisions.add(new Vector3f(lposition.x, lposition.y, lposition.z));
-		collisionTimes.add(maxTime);
-		numChanged = true;
-		updateCollisionPoints();
-	}
-	
-	
-	/**
-	 * Color of the shield
-	 * @param color
-	 */
-	public void setColor(ColorRGBA color){
-		material.setColor("Color", color);
-	}
-	
-	/**
-	 * Visibility of inactive shield
-	 * @param percent
-	 */
-	public void setVisibility(float percent){
-		material.setFloat("MinAlpha", percent);
-	}
-	
-	/**
-	 * Shield texture
-	 * @param texture
-	 */
-	public void setTexture(Texture texture){
-		material.setTexture("ColorMap", texture);
-	}
-	
-	/**
-	 * material displaying effect
-	 */
-	public Material getMaterial(){
-		return material;
-	}
-	
-	/**
-	 * Maximum distance from contact point where effect is visible 
-	 * Has to be set after setting control to object!
-	 * @param size
-	 */
-	public void setEffectSize(float size){
-		material.setFloat("MaxDistance", size/model.getLocalScale().x);
-	}
-	
-	protected void updateCollisionAlpha(){
-		float[] alphas = new float[Math.min(collisionTimes.size(),MAX_HITS)];
-		for (int i = 0; i < alphas.length && i<MAX_HITS; i++) {
-			alphas[i] = collisionTimes.get(collisions.size()-1-i)/maxTime;
-		}
-		material.setParam("CollisionAlphas", VarType.FloatArray, alphas);
-	}
-	
-	protected void updateCollisionPoints(){
-		Vector3f[] collisionsArray = new Vector3f[Math.min(collisions.size(),MAX_HITS)];
-		for (int i = 0; i < collisions.size() && i < MAX_HITS; i++) {
-			collisionsArray[i] = collisions.get(collisions.size()-1-i);
-		}
-		material.setParam("Collisions", VarType.Vector3Array, collisionsArray);
-		material.setInt("CollisionNum",Math.min(collisions.size(),MAX_HITS));
-	}
-	
-	@Override
-	public void read(JmeImporter arg0) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
+                collisions.clear();
+                collisionTimes.clear();
+                numChanged = false;
+                material.setBoolean("Work", false);
+                work = false;
+                return;
+            }
 
-	@Override
-	public void write(JmeExporter arg0) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
+            this.timer += tpf * 3f;
 
-	@Override
-	public Control cloneForSpatial(Spatial spatial) {
-		return null;
-	}
+            for (int i = 0; i < this.collisionTimes.size(); i++) {
+                float time = this.collisionTimes.get(i);
+                time -= tpf;
+                if (time <= 0) {
+                    this.collisionTimes.remove(i);
+                    this.collisions.remove(i--);
+                    this.numChanged = true;
+                    continue;
+                }
+                this.collisionTimes.set(i, time);
+            }
+            if (this.numChanged) {
+                updateCollisionPoints();
+            }
+            updateCollisionAlpha();
 
-	
-	public boolean isEnabled() {
-		return enabled;
-	}
+            this.numChanged = false;
 
-	@Override
-	public void render(RenderManager arg0, ViewPort arg1) {
-		
-	}
+        }
+    }
 
-	
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
+    /**
+     * Adds hit to display.
+     * 
+     * @param position
+     *            - world space position
+     */
+    public void registerHit(final Vector3f position) {
+        if (!this.enabled) {
+            return;
+        }
 
-	@Override
-	public void setSpatial(Spatial model) {
-		this.model = model;
-		model.setMaterial(material);
-		model.setQueueBucket(Bucket.Transparent);
-		
-	}
+        timer = 0f;
+        material.setBoolean("Work", true);
+        work = true;
+
+        Vector3f lposition = new Vector3f();
+        model.worldToLocal(position.clone(), lposition);
+        collisions.add(new Vector3f(lposition.x, lposition.y, lposition.z));
+        collisionTimes.add(maxTime);
+        numChanged = true;
+        updateCollisionPoints();
+    }
+
+    /**
+     * Color of the shield
+     * 
+     * @param color
+     */
+    public void setColor(final ColorRGBA color) {
+        this.material.setColor("Color", color);
+    }
+
+    /**
+     * Visibility of inactive shield
+     * 
+     * @param percent
+     */
+    public void setVisibility(final float percent) {
+        this.material.setFloat("MinAlpha", percent);
+    }
+
+    /**
+     * Shield texture
+     * 
+     * @param texture
+     */
+    public void setTexture(final Texture texture) {
+        this.material.setTexture("ColorMap", texture);
+    }
+
+    /**
+     * material displaying effect
+     */
+    public Material getMaterial() {
+        return this.material;
+    }
+
+    /**
+     * Maximum distance from contact point where effect is visible Has to be set after setting control to object!
+     * 
+     * @param size
+     */
+    public void setEffectSize(final float size) {
+        this.material.setFloat("MaxDistance", size / this.model.getLocalScale().x);
+    }
+
+    protected void updateCollisionAlpha() {
+        final float[] alphas = new float[Math.min(this.collisionTimes.size(), this.MAX_HITS)];
+        for (int i = 0; i < alphas.length && i < this.MAX_HITS; i++) {
+            alphas[i] = this.collisionTimes.get(this.collisions.size() - 1 - i) / this.maxTime;
+        }
+        this.material.setParam("CollisionAlphas", VarType.FloatArray, alphas);
+    }
+
+    protected void updateCollisionPoints() {
+        final Vector3f[] collisionsArray = new Vector3f[Math.min(this.collisions.size(), this.MAX_HITS)];
+        for (int i = 0; i < this.collisions.size() && i < this.MAX_HITS; i++) {
+            collisionsArray[i] = this.collisions.get(this.collisions.size() - 1 - i);
+        }
+        this.material.setParam("Collisions", VarType.Vector3Array, collisionsArray);
+        this.material.setInt("CollisionNum", Math.min(this.collisions.size(), this.MAX_HITS));
+    }
+
+    @Override
+    public void read(final JmeImporter arg0) throws IOException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void write(final JmeExporter arg0) throws IOException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public Control cloneForSpatial(final Spatial spatial) {
+        return null;
+    }
+
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    @Override
+    public void render(final RenderManager rm, final ViewPort vp) {
+    }
+
+    public void setEnabled(final boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @Override
+    public void setSpatial(final Spatial model) {
+        this.model = model;
+        model.setMaterial(this.material);
+        model.setQueueBucket(Bucket.Transparent);
+
+    }
 
 }
