@@ -10,6 +10,11 @@ MaterialDef Electricity2_2 {
         Float noiseAmount
         Color color
         Texture2D noise
+
+        // Refraction Filter
+        Boolean DoRefract : False
+        Float Distance : 200.0
+        Texture2D Mask_Texture  
     }
 
     Technique {
@@ -34,5 +39,21 @@ MaterialDef Electricity2_2 {
             ColorWrite On
         }
     }
+
+Technique Refract {
+
+VertexShader GLSL100:   ShaderBlow/Filters/SimpleRefraction/Refract.vert
+FragmentShader GLSL100: ShaderBlow/Filters/SimpleRefraction/Refract.frag
+
+WorldParameters {
+WorldViewProjectionMatrix
+}
+
+Defines {
+DO_REFRACT : DoRefract
+MASK_TEXTURE : Mask_Texture
+}
+}
+
 }
     
