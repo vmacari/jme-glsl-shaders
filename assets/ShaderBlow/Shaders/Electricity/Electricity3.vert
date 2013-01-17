@@ -13,11 +13,21 @@ varying float viewDir;
 uniform float m_width;
 uniform vec2 m_texScale;
 
+#ifdef FOG
+    varying float fog_z;
+#endif
+
+
 void main() { 
-    vec4 vertex = vec4(inPosition, 1) + vec4(inNormal * m_width, 0);
+    vec4 vertex = vec4(inPosition, 1.0) + vec4(inNormal * m_width, 0.0);
     gl_Position = g_WorldViewProjectionMatrix * vertex;
-    scaledUV = inTexCoord * m_texScale;
+    scaledUV = inTexCoord * vec2(m_texScale);
     uv = inTexCoord;
-    vec4 objectSpaceCamPos = g_WorldViewMatrixInverse * vec4(0,0,0,1);
-    viewDir = 1 - abs(dot(inNormal, normalize(objectSpaceCamPos.xyz - inPosition)));
+    vec4 objectSpaceCamPos = g_WorldViewMatrixInverse * vec4(0.0, 0.0, 0.0, 1.0);
+    viewDir = 1.0 - abs(dot(inNormal, normalize(objectSpaceCamPos.xyz - inPosition)));
+
+    #ifdef FOG
+        fog_z = gl_Position.z;
+    #endif
+
 }

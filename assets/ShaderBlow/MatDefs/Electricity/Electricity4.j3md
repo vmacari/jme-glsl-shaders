@@ -10,6 +10,9 @@ MaterialDef Electricity4 {
         Color color
         Texture2D noise
 
+        // Fog
+        Float Fog
+
         // Refraction Filter
         Boolean DoRefract : False
         Float Distance : 200.0
@@ -30,6 +33,7 @@ MaterialDef Electricity4 {
         }
 
         Defines {
+            FOG : Fog
         }
 
         RenderState {

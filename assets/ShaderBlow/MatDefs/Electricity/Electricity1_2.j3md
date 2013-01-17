@@ -11,6 +11,9 @@ MaterialDef Electricity1 {
         Texture2D noise
         Texture2D ramp
 
+        // Fog
+        Float Fog
+
         // Refraction Filter
         Boolean DoRefract : False
         Float Distance : 200.0
@@ -31,6 +34,7 @@ MaterialDef Electricity1 {
         }
 
         Defines {
+            FOG : Fog
         }
 
         RenderState {

@@ -37,6 +37,7 @@ public class Electricity extends SimpleApplication {
         electro_03_line2();
         electro_03_line3();
         electro_05_2();
+        electro_04();
         
         
         DirectionalLight light = new DirectionalLight();
@@ -230,7 +231,29 @@ public class Electricity extends SimpleApplication {
         rootNode.attachChild(man);        
     }        
     
-    
+
+     void electro_04() {
+        Spatial man = assetManager.loadModel("ShaderBlow/Models/LightBlow/jme_lightblow.mesh.xml");
+        Material matMan = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        man.setMaterial(matMan);
+        
+        Material mat = assetManager.loadMaterial("ShaderBlow/Materials/Electricity/electricity4.j3m");
+        
+        for (Spatial child : ((Node)man).getChildren()){
+            if (child instanceof Geometry){
+                Geometry electricity = new Geometry("electrified_" + child.getName());
+                electricity.setQueueBucket(Bucket.Transparent);
+                electricity.setMesh(((Geometry)child).getMesh());
+                electricity.setMaterial(mat);
+                ((Node)man).attachChild(electricity);
+            }
+        }
+        
+        man.move(10.5f, 0, 0);
+
+        rootNode.attachChild(man);        
+    }             
+     
     @Override
     public void simpleUpdate(float tpf) {
         //TODO: add update code
