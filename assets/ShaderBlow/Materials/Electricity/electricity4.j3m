@@ -7,6 +7,7 @@ Material My Material : ShaderBlow/MatDefs/Electricity/Electricity4.j3md {
         noiseAmount : 1.0
         color : 0.6 0.8745098 0.96862745 0.8
         Fog : 10.0
+
      }
     AdditionalRenderState {
       FaceCull Off
