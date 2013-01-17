@@ -2,11 +2,12 @@ Material My Material : ShaderBlow/MatDefs/Electricity/Electricity1.j3md {
      MaterialParameters {
         speed : 0.01
         outlineColorFallOff : 2.5
-        fallOff : 0.90000004
+        fallOff : 1.1
         width : 0.01
-        outlineColor : 0.2 0.7921569 1.0 0.3
+        outlineColor : 0.2 0.6 0.9 0.3
         noise : Repeat ShaderBlow/Textures/Electricity/noise.png
         ramp : ShaderBlow/Textures/Electricity/ramp2.png
+        Fog : 10.0
      }
     AdditionalRenderState {
       FaceCull Off
