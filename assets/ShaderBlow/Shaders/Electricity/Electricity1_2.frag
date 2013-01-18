@@ -31,7 +31,7 @@ void main() {
     vec4 outline = m_outlineColor;
     outline.a *= pow(viewDir, m_outlineColorFallOff);
     gl_FragColor.rgb = col.rgb + outline.rgb;
-    float alpha = min(outline.a * col.a, 1.0);
+    float alpha = min(min(outline.a, col.a), 1.0);
 
     if(alpha < 0.015){
         discard;
