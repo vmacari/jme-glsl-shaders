@@ -7,7 +7,7 @@ MaterialDef Electricity2 {
         Float speed
         Float fallOff
         Float width
-        Float noiseAmount
+        Float noiseAmount : 1.0
         Color color
         Texture2D noise
 

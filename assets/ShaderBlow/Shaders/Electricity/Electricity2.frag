@@ -23,8 +23,8 @@ varying float viewAngle;
 
 
 void main() {
-    vec2 uvOffset1 = vec2(g_Time,g_Time * 2.0) * vec2(m_noiseAmount);
-    vec2 uvOffset2 = -vec2(g_Time,g_Time) * vec2(m_noiseAmount);
+    vec2 uvOffset1 = vec2(g_Time,g_Time * 2.0) * vec2(m_speed);
+    vec2 uvOffset2 = -vec2(g_Time,g_Time) * vec2(m_speed);
     vec4 noiseColor1 = texture2D(m_noise, uv + uvOffset1);
     vec4 noiseColor2 = texture2D(m_noise, uv + uvOffset2);
     float noise = (dot(noiseColor1, noiseColor2) - 1.0) * m_noiseAmount;

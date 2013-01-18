@@ -5,7 +5,7 @@ Material My Material : ShaderBlow/MatDefs/Electricity/Electricity2_2.j3md {
         lines : 0.3
         width : 0.02
         fallOff : 1.5
-        speed : 0.01
+        speed : 0.10999999
         noiseAmount : 0.07
         Fog : 10.0
      }
