@@ -5,12 +5,12 @@ Material My Material : ShaderBlow/MatDefs/Electricity/Electricity3.j3md {
         fallOff : 0.6
         speed : -0.1
         noiseAmount : 1.4200001
-        color : 0.1 0.3 0.7 0.5
+        color : 0.1 0.3 0.7 0.9
         texScale : 20 20
         Fog : 10.0
      }
     AdditionalRenderState {
-      FaceCull Off
+      FaceCull Back
       Blend AlphaAdditive
       DepthTest On
       ColorWrite On
