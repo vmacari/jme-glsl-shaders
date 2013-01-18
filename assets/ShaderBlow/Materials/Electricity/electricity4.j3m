@@ -1,11 +1,11 @@
 Material My Material : ShaderBlow/MatDefs/Electricity/Electricity4.j3md {
      MaterialParameters {
         noise : Repeat ShaderBlow/Textures/Electricity/noise3.png
-        speed : 0.029999994
-        width : 0.040000003
+        speed : 0.1
+        width : 0.15
         thickness : 0.132
-        noiseAmount : 1.0
-        color : 0.6 0.8745098 0.96862745 0.7
+        noiseAmount : 1.7
+        color : 0.2 0.6 0.8 0.7
         Fog : 10.0
 
      }
@@ -13,7 +13,7 @@ Material My Material : ShaderBlow/MatDefs/Electricity/Electricity4.j3md {
       FaceCull Off
       DepthTest On
       ColorWrite On
-      Blend Alpha
+      Blend AlphaAdditive
       DepthWrite Off
     }
 }
