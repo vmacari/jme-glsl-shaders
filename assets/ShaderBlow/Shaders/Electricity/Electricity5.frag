@@ -35,7 +35,7 @@ void main() {
     
     float o = g_Time + (cos(u + 10.0 * noiseDotted + m_layer * 30.0 * (a+s) + fract(g_Time) + s) * noiseDotted) * 0.05;
 
-    vec2 t = step(0.85 - m_thickness + m_layer * m_thickness, fract(UV * 200.0 + vec2(o,o)));
+    vec2 t = step(0.85 - m_thickness + m_layer * m_thickness, fract(UV * 200.0 + vec2(o,o))) * vec2(m_noiseAmount);
 
     gl_FragColor = vec4(m_color.r, m_color.g, m_color.b, m_color.a * t.r * t.g * t *(s*0.5+0.5) * (0.9-fract(u + g_Time*m_speed)));
     float alpha = min (gl_FragColor.a, 1.0);

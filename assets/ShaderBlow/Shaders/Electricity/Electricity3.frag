@@ -32,7 +32,7 @@ void main() {
     float v = max(sUV2.x,sUV2.y);
     gl_FragColor.rgb = m_color.rgb * vec3(v);
 
-    float alpha = min(m_color.a * v, 1.0);
+    float alpha = min(m_color.a * v * min(pow(viewDir * 3.0, m_fallOff), 1.0) , 1.0);
 
     if(alpha < 0.015){
         discard;

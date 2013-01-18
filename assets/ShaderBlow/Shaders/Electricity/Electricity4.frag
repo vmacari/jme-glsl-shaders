@@ -1,12 +1,14 @@
 // author: cvlad
 
 varying vec2 uv;
+varying float viewDir;
 
 uniform sampler2D m_noise;
 uniform float m_speed;
 uniform float m_noiseAmount;
 uniform vec4 m_color;
 uniform float m_thickness;
+uniform float m_fallOff;
 
 uniform float g_Time;
 
@@ -30,7 +32,7 @@ void main() {
     rr = pow(rr + 0.4, 30.0);
     rr = step(0.5 - m_thickness, rr) * step(rr, 0.5 + m_thickness);
     gl_FragColor.rgb = m_color.rgb * vec3(rr);
-    float alpha = min(m_color.a * rr, 1.0);
+    float alpha = min(m_color.a * rr * min(pow(viewDir * 3.0, m_fallOff), 1.0), 1.0);
 
     if(alpha < 0.015){
         discard;

@@ -5,7 +5,8 @@ MaterialDef Electricity4 {
     MaterialParameters {
         Float speed
         Float width
-        Float noiseAmount
+        Float fallOff
+        Float noiseAmount : 1.0
         Float thickness
         Color color
         Texture2D noise

@@ -5,7 +5,7 @@ MaterialDef Electricity5 {
     MaterialParameters {
         Float speed
         Float width
-        Float noiseAmount
+        Float noiseAmount : 1.0
         Float thickness
         Float layer
         Color color
