@@ -6,7 +6,7 @@ Material My Material : ShaderBlow/MatDefs/Electricity/Electricity2.j3md {
         noise : Repeat ShaderBlow/Textures/Electricity/Unbenannt.png
         lines : 0.514
         noiseAmount : 0.14
-        color : 0.1 0.8 1.0 0.8
+        color : 0.1 0.8 1.0 0.5
         Fog : 10.0
      }
     AdditionalRenderState {

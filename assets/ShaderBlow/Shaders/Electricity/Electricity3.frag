@@ -23,16 +23,16 @@ uniform float g_Time;
 void main() {
     vec4 noiseColor1 = texture2D(m_noise, uv + vec2(g_Time, g_Time * 2.0) * vec2(m_speed));
     vec4 noiseColor2 = texture2D(m_noise, uv - vec2(g_Time * 2.0, g_Time) * vec2(m_speed));
-    float x = dot(noiseColor1, noiseColor2);
+    float x = dot(noiseColor1.rgb, noiseColor2.rgb);
     vec4 noiseColor3 = texture2D(m_noise, uv + vec2(g_Time, g_Time) * vec2(m_speed));
     vec4 noiseColor4 = texture2D(m_noise, uv - vec2(g_Time, g_Time * 1.5) * vec2(m_speed));
-    float y = dot(noiseColor3, noiseColor4);
+    float y = dot(noiseColor3.rgb, noiseColor4.rgb);
     vec2 sUV = fract(scaledUV + vec2(x,y) * vec2(m_noiseAmount));
     vec2 sUV2 = step(0.9, sUV);
     float v = max(sUV2.x,sUV2.y);
     gl_FragColor.rgb = m_color.rgb * vec3(v);
 
-    float alpha = min(m_color.a * v, 1.0);
+    float alpha = min(max(m_color.a, v), 1.0);
 
     if(alpha < 0.015){
         discard;

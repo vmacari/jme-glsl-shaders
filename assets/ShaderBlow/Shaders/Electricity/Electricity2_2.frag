@@ -33,7 +33,7 @@ void main() {
     noiseColor1 = texture2D(m_noise, uv * vec2(6.0) + uvOffset1);
     noiseColor2 = texture2D(m_noise, uv * vec2(6.0) + uvOffset2);
 //    col.a *= clamp(1.3-(noiseColor1.g+noiseColor2.g),0.0,1.0) * pow(viewAngle,m_fallOff) * 15.0;
-    col.a *= clamp(noiseColor1.g+noiseColor2.g ,0.0, 1.0)* pow(viewAngle,m_fallOff)*1.5;
+    col.a *= clamp(max(noiseColor1.g, noiseColor2.g) ,0.0, 1.0)* pow(viewAngle,m_fallOff)*1.5;
     gl_FragColor =  col * m_color * 1.5;
     float alpha = min(col.a * m_color.a, 1.0);
 
