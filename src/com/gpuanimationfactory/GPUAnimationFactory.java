@@ -35,7 +35,9 @@ Spatial char_boy = assetManager.loadModel("ShaderBlow/Models/LightBlow/jme_light
 Material mat_1D = new Material(assetManager, "ShaderBlow/MatDefs/GPUAnimationFactory/GPUAnimationFactory.j3md");
  
 //// Standard uniforms for lighting
-mat_1D.setBoolean("SteepParallax", true);
+//mat_1D.setBoolean("SteepParallax", true);
+mat_1D.setFloat("Scale", 3.0f);
+
 
 TextureKey tkDif = new TextureKey("ShaderBlow/Textures/Terrain_Textures/pattern_69/pattern_69_diffus.png", false);
 tkDif.setAnisotropy(2);
@@ -51,8 +53,8 @@ mat_1D.setTexture("NormalMap", normalTex);
  
 // Applying movement to the texture
 mat_1D.setBoolean("Texture_Move",true);
-mat_1D.setFloat("MoveF_Speed", 3f);
-mat_1D.setFloat("MoveF_Rotation", 23);
+mat_1D.setFloat("MoveF_Speed", 1f);
+mat_1D.setFloat("MoveF_Rotation", 10);
  
 // Turn on & Animate texture deformation
 mat_1D.setBoolean("Texture_Deform",true);
@@ -60,12 +62,12 @@ mat_1D.setBoolean("Texture_Animate",true);
  
 // Applying texture ripple
 mat_1D.setBoolean("DeformF_Wave", true);
-mat_1D.setFloat("DeformF_Wave_SizeX",12f);
-mat_1D.setFloat("DeformF_Wave_SizeY",12f);
-mat_1D.setFloat("DeformF_Wave_DepthX",12f);
-mat_1D.setFloat("DeformF_Wave_DepthY",12f);
-mat_1D.setFloat("DeformF_Wave_SpeedX",1f);
-mat_1D.setFloat("DeformF_Wave_SpeedY",1f);
+mat_1D.setFloat("DeformF_Wave_SizeX",5f);
+mat_1D.setFloat("DeformF_Wave_SizeY",5f);
+mat_1D.setFloat("DeformF_Wave_DepthX",5f);
+mat_1D.setFloat("DeformF_Wave_DepthY",5f);
+mat_1D.setFloat("DeformF_Wave_SpeedX",0.5f);
+mat_1D.setFloat("DeformF_Wave_SpeedY",0.5f);
  
 //// Applying texture warp
 //mat_1D.setBoolean("DeformF_Warp", true);
@@ -97,8 +99,8 @@ mat_1D.setBoolean("DeformX_Swell", true);
  
 // Global X axis settings
 mat_1D.setInt("DirX", 180);
-mat_1D.setFloat("SpeedX", 10f);
-mat_1D.setFloat("SizeX", 20f);
+mat_1D.setFloat("SpeedX", 5f);
+mat_1D.setFloat("SizeX", 10f);
 mat_1D.setFloat("DepthX", .02f);
  
 // Mirror deforms along X axis
