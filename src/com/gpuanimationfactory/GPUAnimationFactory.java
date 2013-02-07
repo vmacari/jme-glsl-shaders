@@ -125,7 +125,7 @@ mat_1D.setFloat("RotF_Angle", 35f); // pick an angle
 
 
         char_boy.setMaterial(mat_1D);
-        char_boy.setLocalTranslation(0,2,1);
+//        char_boy.setLocalTranslation(0,2,1);
         rootNode.attachChild(char_boy);
         
         DirectionalLight dl = new DirectionalLight();
