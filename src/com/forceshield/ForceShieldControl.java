@@ -50,8 +50,9 @@ import com.jme3.shader.VarType;
 import com.jme3.texture.Texture;
 
 /**
- * Force shield effect. It sets material to controlled object. If you experience problems, try higher polygon object.
- * 
+ * Force shield effect. It sets material to controlled object. If you experience
+ * problems, try higher polygon object.
+ *
  * @author Stanislav Fifik
  */
 public class ForceShieldControl implements Control {
@@ -61,13 +62,14 @@ public class ForceShieldControl implements Control {
     private final ArrayList<Vector3f> collisions;
     private final ArrayList<Float> collisionTimes;
     private Spatial model;
-    private boolean numChanged = false;
-    private boolean enabled = true;
-    private boolean work = false;
+    private boolean numChanged;
+    private boolean enabled;
+    private boolean work;
     private float timer;
     private final float timerSize;
-
-    /** Max number of hits displayed I've experienced crashes with 7 or 8 hits */
+    /**
+     * Max number of hits displayed I've experienced crashes with 7 or 8 hits
+     */
     private final int MAX_HITS;
 
     public ForceShieldControl(final AssetManager assetManager) {
@@ -75,19 +77,21 @@ public class ForceShieldControl implements Control {
         this.material.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
         this.material.setFloat("MaxDistance", 1);
 
+        numChanged = false;
+        enabled = true;
+        work = false;
         timerSize = 4f;
-        maxTime  = 0.5f;
+        maxTime = 0.5f;
         collisionTimes = new ArrayList<Float>();
-        collisions  = new ArrayList<Vector3f>();
-        MAX_HITS  = 4;
-        timer  = 0;
+        collisions = new ArrayList<Vector3f>();
+        MAX_HITS = 4;
+        timer = 0;
     }
 
     /**
-     * 
+     *
      * @param assetManager
-     * @param duration
-     *            - effect duration (Default is 0.5s)
+     * @param duration - effect duration (Default is 0.5s)
      */
     public ForceShieldControl(final AssetManager assetManager, final float duration) {
         this(assetManager);
@@ -133,9 +137,8 @@ public class ForceShieldControl implements Control {
 
     /**
      * Adds hit to display.
-     * 
-     * @param position
-     *            - world space position
+     *
+     * @param position - world space position
      */
     public void registerHit(final Vector3f position) {
         if (!this.enabled) {
@@ -156,7 +159,7 @@ public class ForceShieldControl implements Control {
 
     /**
      * Color of the shield
-     * 
+     *
      * @param color
      */
     public void setColor(final ColorRGBA color) {
@@ -165,7 +168,7 @@ public class ForceShieldControl implements Control {
 
     /**
      * Visibility of inactive shield
-     * 
+     *
      * @param percent
      */
     public void setVisibility(final float percent) {
@@ -174,7 +177,7 @@ public class ForceShieldControl implements Control {
 
     /**
      * Shield texture
-     * 
+     *
      * @param texture
      */
     public void setTexture(final Texture texture) {
@@ -189,8 +192,9 @@ public class ForceShieldControl implements Control {
     }
 
     /**
-     * Maximum distance from contact point where effect is visible Has to be set after setting control to object!
-     * 
+     * Maximum distance from contact point where effect is visible Has to be set
+     * after setting control to object!
+     *
      * @param size
      */
     public void setEffectSize(final float size) {
@@ -217,13 +221,11 @@ public class ForceShieldControl implements Control {
     @Override
     public void read(final JmeImporter arg0) throws IOException {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void write(final JmeExporter arg0) throws IOException {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -250,5 +252,4 @@ public class ForceShieldControl implements Control {
         model.setQueueBucket(Bucket.Transparent);
 
     }
-
 }
